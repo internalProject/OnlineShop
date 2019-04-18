@@ -35,7 +35,7 @@ module.exports = {
 					{
 					  loader: 'image-webpack-loader',
 					  options: {
-						path: './src/Components/Main/Game/',
+						path: './assets',
 						outputPath: 'dist',
 						name: '[path][name].[ext]',
 						emitFile: true,
@@ -79,6 +79,8 @@ module.exports = {
 	mode: 'development',
 	devtool: 'eval-source-map',
 	devServer: {
-		watchContentBase: true
+		watchContentBase: true,
+		compress: true,
+		port: 4000
 	},
 };

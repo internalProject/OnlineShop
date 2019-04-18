@@ -1,8 +1,27 @@
 import React from 'react';
 import reactDOM from 'react-dom';
+import { composeWithDevTools } from 'redux-devtools-extension';
+import {applyMiddleware, combineReducers, createStore} from 'redux';
+import thunkMiddleware from 'redux-thunk';
+import {Provider} from 'react-redux';
+import {routerReducer} from 'react-router-redux';
 import App from './components/App.jsx';
+import {ctrlReducer} from './reducers/controlsReducer.js';
+
+const store = createStore(
+    combineReducers({
+        // ... reducers,
+        ctrlReducer,
+        'router': routerReducer
+    }),
+    composeWithDevTools(applyMiddleware(
+        ...[thunkMiddleware]
+    ))
+)
 
 reactDOM.render(
-    <App />,
+    <Provider store={store}>
+        <App />
+    </Provider>,
     document.getElementById('app')
 )
