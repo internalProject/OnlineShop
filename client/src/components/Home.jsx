@@ -1,15 +1,15 @@
 import React from 'react';
 import {withStyles, withTheme} from '@material-ui/core';
-import bullets from '../../assets/bullets.jpg';
 import Header from './bricks/Header.jsx';
 
 const styles = theme => ({
     page: {
         height: '100%',
+        maxHeight: 'inherit',
         color: 'white',
     },
     main: {
-        height: 'calc(100% - 100px)',
+        minHeight: 'calc(100% - 200px)',
         color: 'black'
     },
     footer: {
@@ -26,6 +26,14 @@ const styles = theme => ({
         width: '100%',
         position: 'absolute',
         top: '-275px',
+    },
+    columnHolder: {
+        display: 'felx',
+        flexDirection: 'column',
+        flexItems: 'center',
+    },
+    columnRow: {
+        height: '250px',
     }
 });
 
@@ -34,9 +42,13 @@ const Home = props => {
     return <div className={classes.page}>
         <Header/>
         <main className={classes.main}>
-            <figure className={classes.banner}>
-                <img className={classes.bannerImg} src={bullets} alt="Storefront Banner With Bullets" />
-            </figure>
+            <div className={classes.columnHolder}>
+                <div className={classes.columnRow}></div>
+                <div className={classes.columnRow}></div>
+                <div className={classes.columnRow}></div>
+                <div className={classes.columnRow}></div>
+                <div className={classes.columnRow}></div>
+            </div>
         </main>
         <footer className={classes.footer}>footer</footer>
     </div>
