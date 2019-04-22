@@ -1,7 +1,13 @@
 import React from 'react';
+import {connect} from 'react-redux';
+import {compose} from 'redux';
 import {withStyles} from '@material-ui/core';
 import {Link} from 'react-router-dom';
 import UserBtn from './UserBtn.jsx';
+import Unregistered from './Unregistered.jsx';
+import {getUserData, isLoggedIn} from '../../actions/userActions.js';
+
+// let isLoggedIn = false;
 
 const styles = {
     navBar: {
@@ -47,6 +53,16 @@ class Nav extends React.Component {
         super(props);
     }
 
+    componentDidMount = () => {
+        this.props.getUserData();
+    }
+
+    componentDidUpdate = () => {
+        if (this.props.user.name) {
+            this.props.checkLogin(this.props.user);
+        }
+    }
+
     render = () => {
         const {classes} = this.props;
 
@@ -68,9 +84,24 @@ class Nav extends React.Component {
                 </Link>
             </li>
         </ul>
-        <UserBtn/>
+        {this.props.isLoggedIn ? <UserBtn/> : <Unregistered/>}
     </nav>
     }
 }
 
-export default withStyles(styles)(Nav);
+const mapStateToProps = state => ({
+    isLoggedIn: state.userReducer.isLoggedIn,
+    user: state.userReducer.user,
+});
+
+const mapDispatchToProps = dispatch => ({
+    'getUserData': () => dispatch(getUserData()),
+    'checkLogin': (user) => dispatch(isLoggedIn(user)), 
+})
+
+
+
+export default compose(
+    withStyles(styles),
+    connect(mapStateToProps, mapDispatchToProps)
+)(Nav);

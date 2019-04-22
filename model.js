@@ -1,22 +1,14 @@
 module.exports.user = function (DataTypes) {
     return {
         id:{
-        type: DataTypes.INTEGER,
-        allowNull: false,
-        primaryKey: true,
+            type: DataTypes.INTEGER,
+            allowNull: false,
+            primaryKey: true,
         },
         userName: {
             type: DataTypes.STRING,
             allowNull: false,
             unique: true
-        },
-        firstName: {
-            type: DataTypes.STRING,
-            allowNull: false
-        },
-        lastName: {
-            type: DataTypes.STRING
-            // allowNull defaults to true
         },
         email:{
             type: DataTypes.STRING,
@@ -25,28 +17,52 @@ module.exports.user = function (DataTypes) {
             },
             unique: true
         },
-        birthDate: {
-            type: DataTypes.DATE
+        password: {
+            type: DataTypes.TEXT,
         }
+        // birthDate: {
+        //     type: DataTypes.DATE
+        // },
+        // firstName: {
+        //     type: DataTypes.STRING,
+        //     allowNull: false
+        // },
+        // lastName: {
+        //     type: DataTypes.STRING
+        // },
     }
 };
   
 module.exports.order = function(DataTypes){
     return {
-         id:{
-             type: DataTypes.INTEGER,
-             allowNull: false,
-             primaryKey: true,
-         },
-         productId: {
-             type: DataTypes.INTEGER,
-             allowNull: false
-         },
-         delivery: {
-             type: DataTypes.BOOLEAN
-         },
-         requestDate: {
-             type: DataTypes.DATE
-         }
+        //  delivery: {
+        //      type: DataTypes.BOOLEAN
+        //  },
+        //  requestDate: {
+        //      type: DataTypes.DATE
+        //  }
+        userId: {
+            type: DataTypes.INTEGER,
+        },
+        productId: {
+            type: DataTypes.INTEGER,
+        }
+
      }
  };
+
+module.exports.product = function(DataTypes) {
+    return {
+        id: {
+            type: DataTypes.INTEGER,
+            primaryKey: true,
+            allowNull: false,
+        },
+        description: {
+            type: DataTypes.TEXT,
+        },
+        image: {
+            type: DataTypes.TEXT,
+        }
+    }
+}

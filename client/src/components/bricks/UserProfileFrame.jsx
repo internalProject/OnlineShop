@@ -1,17 +1,7 @@
 import React from 'react';
-import {withStyles} from '@material-ui/core';
+import cn from 'classnames';
+import '../bricks/bricks styles/UserProfileFrame.scss';
 
-const styles = {
-    dropsMenu: {
-        width: '200px',
-        backgroundColor: '#333',
-        border: '2px solid white',
-        borderTop: '2px solid #333',
-        position: 'absolute',
-        top: '46px',
-        left: '-2px',
-    }
-}
 
 class UserProfileFrame extends React.Component {
     constructor(props) {
@@ -19,18 +9,26 @@ class UserProfileFrame extends React.Component {
     }
 
     render = () => {
-        const {classes} = this.props;
 
         return <div
-        className={classes.dropsMenu}
-        style={{
-            display: this.props.showUPF ? 'block': 'none',
-        }}>
-            drops menu
+        className={cn(
+            'drops-menu',
+            this.props.showUPF ? 'higher': ''
+        )}
+        >
+            {this.props.showUPF ?
+            <>
+                <div className={cn(
+                    'inner-drop-menu',
+                    this.props.showUPF ? 'go-down': ''
+                )}>
+                    inner drop
+                </div>
+            </> : null}
         </div>
     }
 }
 
-export default withStyles(styles)(UserProfileFrame);
+export default UserProfileFrame;
 
 

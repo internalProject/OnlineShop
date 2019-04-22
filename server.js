@@ -33,8 +33,13 @@ sequelize
       modelName: 'order'
     })
 
-    User.hasMany(Order, { onDelete: 'CASCADE' });
-    Order.belongsTo(User); // DIDN'T BOUND?
+    class Product extends Model {}
+    Product.init(model.product(Sequelize), {
+      sequelize, modelName: 'product'
+    })
+
+    User.belongsToMany(Product, {through: Order});
+    Product.belongsTo(User, {through: Order});
 
     // #endregion
     User.sync({ force: true })
@@ -46,16 +51,23 @@ sequelize
         lastName: 'Doe',
         email: "noname@mail.com",
         birthDate: new Date(1977, 3, 20),
-        //  NOT WORKING !!!
-      //   orders: [{
-      //     id:1,
-      //     productId: 123,
-      //     delivery: false,
-      //     requestDate: new Date()
-      //   }]
       }, 
-      // {include: Order}
       ).then(()=>User.findAll().then(users => console.dir(users)).catch(error => console.log(error)));
+    });
+
+    Product.sync({force: true}).then(() => {
+      return Product.create({
+        id: 1,
+        description: 'some product description',
+        image: './client/assets/bullets.jpg',
+      })
+    })
+
+    Order.sync({force: true}).then(() => {
+      return Order.create({
+        userId: 1,
+        orderId: 1,
+      });
     });
   })
   .catch(err => {

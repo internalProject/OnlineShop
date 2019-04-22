@@ -1,6 +1,9 @@
 import React from 'react';
-import {withStyles, withTheme} from '@material-ui/core';
+import {connect} from 'react-redux';
+import {compose} from 'redux';
+import {withStyles} from '@material-ui/core';
 import Header from './bricks/Header.jsx';
+import {getUserData} from '../actions/userActions.js';
 
 const styles = theme => ({
     page: {
@@ -37,9 +40,15 @@ const styles = theme => ({
     }
 });
 
-const Home = props => {
-    const {classes} = props;
-    return <div className={classes.page}>
+class Home extends React.Component {
+    constructor(props){
+        super(props);
+    }
+
+    render = () => {
+        const {classes} = this.props;
+
+        return <div className={classes.page}>
         <Header/>
         <main className={classes.main}>
             <div className={classes.columnHolder}>
@@ -52,7 +61,18 @@ const Home = props => {
         </main>
         <footer className={classes.footer}>footer</footer>
     </div>
+    }
 }
 
+const mapStateToProps = state => ({
+    usre: state.userReducer.user
+});
 
-export default withStyles(styles)(Home);
+const mapDispatchToProps = dispatch => ({
+    'getUserData': () => dispatch(getUserData()),
+})
+
+export default compose(
+    withStyles(styles),
+    connect(mapStateToProps, mapDispatchToProps),
+)(Home);

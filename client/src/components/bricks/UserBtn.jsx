@@ -13,8 +13,6 @@ const styles = {
         justifyContent: 'space-between',
         alignItems: 'center',
         cursor: 'pointer',
-        // height: '50px', TODO: implement smooth dropdown behavior
-        // transition: '1s height ease'
     }
 }
 
@@ -30,11 +28,6 @@ class UserBtn extends React.Component {
         this.setState((state)=> ({
             showUPF: !state.showUPF,
         }))
-        // if (this.state.showUPF) {
-        //     e.target.style.height = '100px';
-        // } else {
-        //     e.target.style.height = '50px';
-        // } BAD CODE: as a part of smoth dropdown
     }
 
     render = () => {
