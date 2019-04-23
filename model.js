@@ -20,28 +20,12 @@ module.exports.user = function (DataTypes) {
         password: {
             type: DataTypes.TEXT,
         }
-        // birthDate: {
-        //     type: DataTypes.DATE
-        // },
-        // firstName: {
-        //     type: DataTypes.STRING,
-        //     allowNull: false
-        // },
-        // lastName: {
-        //     type: DataTypes.STRING
-        // },
     }
 };
 
 
 module.exports.order = function(DataTypes){
     return {
-        //  delivery: {
-        //      type: DataTypes.BOOLEAN
-        //  },
-        //  requestDate: {
-        //      type: DataTypes.DATE
-        //  }
         userId: {
             type: DataTypes.INTEGER,
         },

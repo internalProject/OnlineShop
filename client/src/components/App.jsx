@@ -11,7 +11,11 @@ const theme = createMuiTheme({
     },
     primary: {
         green: '#4b5320',
+    },
+    secondary: {
+        white: '#ffffff',
     }
+
 })
 
 const App = props => <MuiThemeProvider theme={theme}>

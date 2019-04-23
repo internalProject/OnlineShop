@@ -5,6 +5,7 @@ const initialUserState = {
         password: '',
     },
     isLoggedIn: false,
+    // long: 0
 }
 
 const userReducer = (state = initialUserState, action) => {
