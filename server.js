@@ -38,37 +38,10 @@ sequelize
       sequelize, modelName: 'product'
     })
 
-    User.belongsToMany(Product, {through: Order});
-    Product.belongsTo(User, {through: Order});
+    Product.belongsToMany(User, {through: Order, as: 'orders', foreignKey: 'productId', otherKey: 'userId'});
+    User.belongsToMany(Product, {through: Order, as: 'orders', foreignKey: 'userId', otherKey: 'productId'});
+    
 
-    // #endregion
-    User.sync({ force: true })
-    .then(() => {
-      return User.create({
-        id: 1,
-        userName: 'first user',
-        firstName: 'John',
-        lastName: 'Doe',
-        email: "noname@mail.com",
-        birthDate: new Date(1977, 3, 20),
-      }, 
-      ).then(()=>User.findAll().then(users => console.dir(users)).catch(error => console.log(error)));
-    });
-
-    Product.sync({force: true}).then(() => {
-      return Product.create({
-        id: 1,
-        description: 'some product description',
-        image: './client/assets/bullets.jpg',
-      })
-    })
-
-    Order.sync({force: true}).then(() => {
-      return Order.create({
-        userId: 1,
-        orderId: 1,
-      });
-    });
   })
   .catch(err => {
     console.error('Unable to connect to the database:', err);

@@ -1,7 +1,7 @@
 module.exports.user = function (DataTypes) {
     return {
         id:{
-            type: DataTypes.INTEGER,
+            type: DataTypes.UUID,
             allowNull: false,
             primaryKey: true,
         },
@@ -42,19 +42,18 @@ module.exports.order = function(DataTypes){
         //      type: DataTypes.DATE
         //  }
         userId: {
-            type: DataTypes.INTEGER,
+            type: DataTypes.UUID,
         },
         productId: {
-            type: DataTypes.INTEGER,
+            type: DataTypes.UUID,
         }
-
      }
  };
 
 module.exports.product = function(DataTypes) {
     return {
         id: {
-            type: DataTypes.INTEGER,
+            type: DataTypes.UUID,
             primaryKey: true,
             allowNull: false,
         },

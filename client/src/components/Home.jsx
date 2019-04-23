@@ -65,7 +65,7 @@ class Home extends React.Component {
 }
 
 const mapStateToProps = state => ({
-    usre: state.userReducer.user
+    user: state.userReducer.user
 });
 
 const mapDispatchToProps = dispatch => ({
