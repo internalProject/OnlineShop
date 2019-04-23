@@ -1,17 +1,17 @@
 module.exports.user = function (DataTypes) {
     return {
         id:{
-            type: DataTypes.UUID,
+            type: DataTypes.INTEGER,
             allowNull: false,
             primaryKey: true,
         },
-        userName: {
-            type: DataTypes.STRING,
+        name: {
+            type: DataTypes.TEXT,
             allowNull: false,
             unique: true
         },
         email:{
-            type: DataTypes.STRING,
+            type: DataTypes.TEXT,
             validate: {
                 isEmail: true
             },
@@ -32,7 +32,8 @@ module.exports.user = function (DataTypes) {
         // },
     }
 };
-  
+
+
 module.exports.order = function(DataTypes){
     return {
         //  delivery: {
@@ -42,10 +43,10 @@ module.exports.order = function(DataTypes){
         //      type: DataTypes.DATE
         //  }
         userId: {
-            type: DataTypes.UUID,
+            type: DataTypes.INTEGER,
         },
         productId: {
-            type: DataTypes.UUID,
+            type: DataTypes.INTEGER,
         }
      }
  };
@@ -53,7 +54,7 @@ module.exports.order = function(DataTypes){
 module.exports.product = function(DataTypes) {
     return {
         id: {
-            type: DataTypes.UUID,
+            type: DataTypes.INTEGER,
             primaryKey: true,
             allowNull: false,
         },
