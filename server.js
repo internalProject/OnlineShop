@@ -4,7 +4,7 @@ var app = express();
 const Sequelize = require('sequelize');
 const model = require('./model.js');
 const path = require('path');
-
+const bodyParser = require('body-parser');
 const port = process.env.PORT || 3000;
 
 
@@ -14,38 +14,41 @@ st: 'localhost',
   dialect: 'postgres'
 });
 
+// #region sequelize
 sequelize
-  .authenticate()
-  .then(() => {
-    console.log('Connection has been established successfully.');
+.authenticate()
+.then(() => {
+  console.log('Connection has been established successfully.');
+})
+.catch(err => {
+  console.error('Unable to connect to the database:', err);
+});
 
-    // #region create db
-    const Model = Sequelize.Model;
-    class User extends Model {}
-    User.init(model.user(Sequelize), {
-      sequelize,
-      modelName: 'user'
-    });
+const Model = Sequelize.Model;
+class User extends Model {}
+User.init(model.user(Sequelize), {
+  sequelize,
+  modelName: 'user', timestamps: false,
+});
 
-    class Order extends Model {}
-    Order.init(model.order(Sequelize), {
-      sequelize,
-      modelName: 'order'
-    })
 
-    class Product extends Model {}
-    Product.init(model.product(Sequelize), {
-      sequelize, modelName: 'product'
-    })
+class Order extends Model {}
+Order.init(model.order(Sequelize), {
+  sequelize,
+  modelName: 'order', timestamps: false,
+})
 
-    Product.belongsToMany(User, {through: Order, as: 'orders', foreignKey: 'productId', otherKey: 'userId'});
-    User.belongsToMany(Product, {through: Order, as: 'orders', foreignKey: 'userId', otherKey: 'productId'});
-    
+class Product extends Model {}
+Product.init(model.product(Sequelize), {
+  sequelize, modelName: 'product', timestamps: false,
+})
 
-  })
-  .catch(err => {
-    console.error('Unable to connect to the database:', err);
-  });
+Product.belongsToMany(User, {through: Order, as: 'orders', foreignKey: 'productId', otherKey: 'userId'});
+User.belongsToMany(Product, {through: Order, as: 'orders', foreignKey: 'userId', otherKey: 'productId'});
+// #endregion
+sequelize.sync();
+const jsonParser = bodyParser.json();
+const  urlencodedParser = bodyParser.urlencoded({ extended: false });
 
 app.use(express.static(path.join(__dirname, 'client/dist')));
 app.use(cors());
@@ -53,6 +56,13 @@ app.use(cors());
 app.get('*', (req,res) =>{
     res.sendFile(path.join(__dirname+'/client/dist/index.html'));
 });
+
+app.post('/sign-up', jsonParser, (req, res) => {
+  User.create(req.body).then(data=> {
+    console.log('success');
+    res.send(`user ${req.body.name} was created`);
+}).catch(e => console.log('server error => ',e));
+})
 
 
 app.listen(port);

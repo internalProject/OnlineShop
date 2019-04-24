@@ -1,4 +1,5 @@
 import ls from 'local-storage';
+import {createUser as saveNewUserToDb} from './helpers.js';
 
 export const getUserData = () => async dispatch => {
     let user = await ls.get('me');
@@ -11,4 +12,9 @@ export const isLoggedIn = user => {
         return ({type: 'USER_IS_LOGGED_IN', data: true});
     }
     return ({type: 'USER_IS_LOGGED_IN', data: false});
+}
+
+export const createUser = user => async dispatch => {
+    let data = await saveNewUserToDb(user);
+    dispatch({type: 'CREATE_NEW_USER', data: data});
 }

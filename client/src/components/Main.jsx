@@ -1,9 +1,9 @@
 import React from 'react';
 import {BrowserRouter as Router, Switch, Route} from 'react-router-dom';
-import Home from './Home.jsx';
+import Home from './Home';
 import Cart from './Cart.jsx';
-import SignIn from './bricks/SignIn.jsx';
-import SignUp from './bricks/SignUp.jsx';
+import SignIn from './bricks/SignIn';
+import SignUp from './bricks/SignUp';
 
 class Main extends React.Component {
     constructor(props) {

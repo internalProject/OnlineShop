@@ -10,9 +10,12 @@
   "license": "ISC",
   "dependencies": {
     "@material-ui/core": "^3.9.3",
+    "axios": "^0.18.0",
+    "body-parser": "^1.18.3",
     "classnames": "^2.2.6",
     "clean-webpack-plugin": "^2.0.1",
     "css-loader": "^2.1.1",
+    "formik": "^1.5.2",
     "image-webpack-loader": "^4.6.0",
     "local-storage": "^1.4.2",
     "node-sass": "^4.11.0",
