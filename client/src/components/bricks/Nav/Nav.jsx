@@ -19,7 +19,7 @@ class Nav extends React.Component {
 
     componentDidUpdate = () => {
         if (this.props.user.name) {
-            this.props.checkLogin(this.props.user);
+            this.props.checkLogin();
         }
     }
 
@@ -56,7 +56,7 @@ const mapStateToProps = state => ({
 
 const mapDispatchToProps = dispatch => ({
     'getUserData': () => dispatch(getUserData()),
-    'checkLogin': (user) => dispatch(isLoggedIn(user)), 
+    'checkLogin': () => dispatch(isLoggedIn()), 
 })
 
 export default compose(

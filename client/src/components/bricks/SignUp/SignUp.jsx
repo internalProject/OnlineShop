@@ -1,19 +1,32 @@
 import React from 'react';
+import {Link} from 'react-router-dom';
 import {connect} from 'react-redux';
+import classNames from 'classnames';
 import {compose} from 'redux';
-import {withStyles, Button} from '@material-ui/core';
+import {withStyles, Button, Snackbar, SnackbarContent, Slide, IconButton} from '@material-ui/core';
+import CloseIcon from '@material-ui/icons/Close';
 import styles from './styles.js';
-import {createUser} from '../../../actions/userActions.js';
+import {createUser, isLoggedIn} from '../../../actions/userActions.js';
 import {Formik, Form, Field, ErrorMessage} from 'formik';
+import ls from 'local-storage';
+
+
+const snackTransition = props => <Slide {...props} direction="up" />
 
 class SignUp extends React.Component {
     constructor(props){
         super(props);
         this.state = {
-            name: '',
-            email: '',
-            password: '',
             pending: false,
+            isDisabled: false,
+            isSnackOpen: false,
+            Transition: null,
+        }
+    }
+
+    componentDidMount = () => {
+        if (this.props.isLoggedIn) {
+            window.addEventListener('storage', this.onStorage); // TODO check this
         }
     }
 
@@ -21,72 +34,121 @@ class SignUp extends React.Component {
         if (this.props.serverData) console.log('resp from server',this.props.serverData);
     }
 
-    setName = e => {
-        this.setState({name: e.target.value});
+    showSuccessSnack = Transition => () => {
+        this.setState({isSnackOpen: true, Transition});
     }
 
-    setEmail = e => {
-        this.setState({email: e.target.value});
+    closeSuccessSnack = () => {
+        this.setState({isSnackOpen: false});
     }
 
-    setPassword = e => {
-        this.setState({password: e.target.value});
-    }
-
-    saveUser = e => {
-        e.preventDefault();
-        let userData = {
-            name: this.state.name,
-            email: this.state.email,
-            password: this.state.password,
-        };
-        this.props.createUser(userData);
+    onStorage = () => {
+        this.props.isLoggedIn();
     }
 
     render = () => {
         const {classes} = this.props;
-
         return <div className={classes.signUpPage}>
-            {/* <form onSubmit={this.saveUser} className={classes.registerForm}>
-                <fieldset>
-                    <legend className={classes.regFormLegend}>Fill the fileds to register</legend>
-                    <label className={classes.label}>Name
-                        <input onChange={this.setName} required className={classes.field} type="text"/>
-                    </label>
-                    <label className={classes.label}>Em@il
-                        <input onChange={this.setEmail} required className={classes.field} type="email"/>
-                    </label>
-                    <label className={classes.label}>Password
-                        <input onChange={this.setPassword} required className={classes.field} type="password"/>
-                    </label>
+            
+            <Formik
+                validate={values => {
+                    let errors = {};
+                    if (values.password !== values.confirmPassword) {
+                        errors.passNotMatch = '"Passwrod and Confirm Passwrod aren\'t match"';
+                        this.setState({isDisabled: true});
+                    } else {
+                        this.setState({isDisabled: false});
+                    }
+                    if (values.password.length <3) {
+                        errors.passLength = 'Password is too short';
+                        this.setState({isDisabled: true});
+                    } else {
+                        this.setState({isDisabled: false});
+                    }
+                    if (values.name.length <3) {
+                        errors.nameLength = 'Name is too short';
+                        this.setState({isDisabled: true});
+                    } else {
+                        this.setState({isDisabled: false});
+                    }
+                    return errors;
+                }}
+                initialValues={{name: '', email: '', password: '', confirmPassword: ''}}
 
-                    <Button type="submit" variant="contained" className={classes.saveFormBtn}>Save user</Button>
-                </fieldset>
-            </form> */}
-            <Formik 
-            initialValues={{name: '', email: '', password: ''}}
-            onSubmit={(values, actions) => {
-                this.props.createUser(values)
-                .then(good => {
-                    actions.setSubmitting(false);
-                    console.log('gooood');
-                    console.log(good.data);
-                }).catch(bad => {
-                    actions.setSubmitting(false);
-                    actions.setErrors(bad);
-                    actions.setStatus({ msg: 'Set some arbitrary status or data' });
-                })
-            }}
-            render={({ errors, status, touched, isSubmitting }) => (
-                <Form>
-                    <Field className={classes.field} name="name" />
-                    <Field className={classes.field} name="email" type="email" />
-                    <ErrorMessage name="email" component="div" />
-                    <Field className={classes.field} name="password" type="password" />
-                    <Button type="submit" disabled={isSubmitting} variant="contained" className={classes.saveFormBtn}>Save user</Button>
-                </Form>
-            )}
+                onSubmit={(values, actions) => {
+                    if (values.password !== values.confirmPassword) {
+                        actions.setStatus({msg: 'Password is not match to confirmPassword field!'});
+                        actions.setSubmitting(false);
+
+                        return;
+                    }
+                    this.props.createUser(values)
+                    .then(good => {
+                        actions.setSubmitting(false);
+
+                        this.showSuccessSnack(snackTransition)();
+
+                        ls.set('ws-name', values.name); // TODO and this
+
+                        for(let v in values) {
+                            values[v] = '';
+                        }
+                    }).catch(bad => {
+                        actions.setSubmitting(false);
+                        actions.setErrors(bad);
+                        actions.setStatus({ msg: bad.message });
+                    })
+                }}
+                
+                render={({ errors, status, touched, isSubmitting }) => (<>
+                    <div className={classes.navBar}>
+                        <span className={classes.linkWrapper}>
+                            <Link className={classes.navLink} to="/">Home</Link>
+                        </span>
+                        <span className={classes.linkWrapper}>
+                            <Link className={classes.navLink} to="/sign-in">Sign In</Link>
+                        </span>
+                    </div>
+                    <Form className={classes.registerForm}>
+                        <fieldset>
+                            <legend className={classes.regFormLegend}>Fill the fileds to register</legend>
+                            <label className={classes.label}>Name
+                                <Field required className={classes.field} name="name" />
+                                {errors && touched.name && errors.nameLength && <div className={classes.error}>{errors.nameLength}</div>}
+                            </label>
+                            <label className={classes.label}>Em@il
+                                <Field required className={classes.field} name="email" type="email" />
+                            </label>
+                            <label className={classes.label}>Password
+                                <Field required className={classes.field} name="password" type="password" />
+                                {errors && touched.password && errors.passLength && <div className={classes.error}>{errors.passLength}</div>}
+                            </label>
+                            <label className={classes.label}>Confirm Password
+                                <Field required className={classes.field} name="confirmPassword" type="password" />
+                                {errors && touched.confirmPassword && errors.passNotMatch && <div className={classes.error}>{errors.passNotMatch}</div>}
+                            </label>
+                            <Button  type="submit" disabled={this.state.isDisabled} variant="contained" className={classes.saveFormBtn}>Save user</Button>
+                        </fieldset>
+                    </Form>
+                </>)}
             />
+            <Snackbar
+                className={classes.snackStyles}
+                open={this.state.isSnackOpen}
+                onClose={this.state.closeSuccessSnack}
+                autoHideDuration={6000}
+                TransitionComponent={snackTransition}
+                anchorOrigin={{vertical: 'top', horizontal: 'center'}}
+            >
+                <SnackbarContent className={classNames(classes['success'])}
+                    message={<div className={classes.snackMsg}>
+                        <span style={{display: 'inline-block'}} id="message-id">You have been sign up successfully!</span>
+                        <IconButton style={{display: 'inline-block'}} color="secondary" onClick={this.closeSuccessSnack}>
+                            <CloseIcon/>
+                        </IconButton>
+                    </div>}
+                />
+            </Snackbar>
         </div>;
     }
 }
@@ -97,6 +159,7 @@ const mapStateToProps = state => ({
 
 const mapDispatchToProps = dispatch => ({
     'createUser': user => dispatch(createUser(user)),
+    'isLoggedIn': name => dispatch(isLoggedIn(name)),
 });
 
 export default compose(

@@ -1,3 +1,6 @@
+
+import green from '@material-ui/core/colors/green';
+
 const styles = theme => ({
     signUpPage: {
         height: '100%',
@@ -9,13 +12,34 @@ const styles = theme => ({
         backgroundSize: 'cover',
         backgroundAttachment: 'fixed',
         display: 'flex',
-        justifyContent: 'center',
+        justifyContent: 'flex-start',
+        alignItems: 'center',
+        flexDirection: 'column',
+    },
+    navBar: {
+        height: '50px',
+        backgroundColor: theme.primary.green,
+        width: '100%',
+        paddingLeft: '120px',
+    },
+    linkWrapper: {
+        display: 'inline-block',
+        height: '100%',
+        padding: '15px 30px',
+        '&:hover': {
+            cursor: 'pointer',
+            background: 'radial-gradient(#827717, #111)',
+        }
+    },
+    navLink: {
+        ...theme.link,
+        color: 'white'
     },
     registerForm: {
         width: '100%',
         maxWidth: '400px',
         height: '500px',
-        marginTop: '200px',
+        marginTop: '100px',
         ['@media (max-width: 640px)']: {
             marginTop: '100px',
         }
@@ -57,7 +81,23 @@ const styles = theme => ({
             backgroundColor: '#555',
             color: 'white',
         }
-    }
+    },
+    error: {
+        fontSize: '16px',
+        color: 'red',
+    },
+    success: {
+        backgroundColor: green[600],
+        color: 'white',
+        width: '285px',
+        height: '100px',
+        borderRadius: '10px',
+    },
+    snackMsg: {
+        display: 'flex',
+        justifyContent: 'space-around',
+    },
+
 })
 
 export default styles;

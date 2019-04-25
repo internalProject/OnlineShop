@@ -7,8 +7,10 @@ export const getUserData = () => async dispatch => {
     dispatch({type: 'GET_USER_DATA', data: user});
 };
 
-export const isLoggedIn = user => {
-    if (user.name.length !== undefined && user.name.length > 1) {
+export const isLoggedIn = () => {
+    // TODO check this 
+    let name = ls.get('ws-name');
+    if (name.length !== undefined && name.length > 1) {
         return ({type: 'USER_IS_LOGGED_IN', data: true});
     }
     return ({type: 'USER_IS_LOGGED_IN', data: false});

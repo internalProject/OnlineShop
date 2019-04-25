@@ -15,3 +15,4 @@ export const createUser = async user => {
     let serverResponse = await axios.post('/sign-up', user);
     return serverResponse;
 }
+

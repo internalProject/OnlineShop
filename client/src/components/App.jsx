@@ -14,6 +14,12 @@ const theme = createMuiTheme({
     },
     secondary: {
         white: '#ffffff',
+    },
+    link: {
+        display: 'inline-block',
+        textDecoration: 'none',
+        height: '100%',
+        width: '100%',
     }
 
 })
