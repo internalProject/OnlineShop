@@ -6,7 +6,7 @@ import {compose} from 'redux';
 import {withStyles, Button, Snackbar, SnackbarContent, Slide, IconButton} from '@material-ui/core';
 import CloseIcon from '@material-ui/icons/Close';
 import styles from './styles.js';
-import {createUser, isLoggedIn} from '../../../actions/userActions.js';
+import {createUser, userHasRegistred} from '../../../actions/userActions.js';
 import {Formik, Form, Field, ErrorMessage} from 'formik';
 import ls from 'local-storage';
 
@@ -25,9 +25,7 @@ class SignUp extends React.Component {
     }
 
     componentDidMount = () => {
-        if (this.props.isLoggedIn) {
-            window.addEventListener('storage', this.onStorage); // TODO check this
-        }
+        
     }
 
     componentDidUpdate = () => {
@@ -89,7 +87,7 @@ class SignUp extends React.Component {
                         this.showSuccessSnack(snackTransition)();
 
                         ls.set('ws-name', values.name); // TODO and this
-
+                        this.props.userHasRegistred();
                         for(let v in values) {
                             values[v] = '';
                         }
@@ -159,7 +157,7 @@ const mapStateToProps = state => ({
 
 const mapDispatchToProps = dispatch => ({
     'createUser': user => dispatch(createUser(user)),
-    'isLoggedIn': name => dispatch(isLoggedIn(name)),
+    'userHasRegistred': () => dispatch(userHasRegistred()),
 });
 
 export default compose(

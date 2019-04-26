@@ -3,7 +3,7 @@ import {connect} from 'react-redux';
 import {compose} from 'redux';
 import {withStyles} from '@material-ui/core';
 import Header from '../bricks/Header';
-import {getUserData} from '../../actions/userActions.js';
+// import {getUserData} from '../../actions/userActions.js';
 import styles from './styles.js';
 
 class Home extends React.Component {
@@ -35,7 +35,7 @@ const mapStateToProps = state => ({
 });
 
 const mapDispatchToProps = dispatch => ({
-    'getUserData': () => dispatch(getUserData()),
+    // 'getUserData': () => dispatch(getUserData()),
 })
 
 export default compose(

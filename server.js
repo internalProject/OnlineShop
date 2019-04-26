@@ -6,6 +6,7 @@ const model = require('./model.js');
 const path = require('path');
 const bodyParser = require('body-parser');
 const port = process.env.PORT || 3000;
+const safeStringify = require('json-stringify-safe');
 
 
 const sequelize = new Sequelize('postgres', 'postgres', 'take5five', {
@@ -63,6 +64,23 @@ app.post('/sign-up', jsonParser, (req, res) => {
     res.send(`user ${req.body.name} was created`);
 }).catch(e => console.log('server error => ',e));
 })
+
+app.post('/sign-in', jsonParser, (req, res) => {
+  console.log('users creds: ', req.body);
+  User.findOne({where: {email: req.body.email}})
+  .then(user => {
+    console.log('type of user sending to client');
+    console.dir(user);
+    res.json(safeStringify({user:{
+      name: user.name,
+      email: user.email,
+    }, isUserExists: true,}));
+  })
+  .catch(e => {
+    console.log('user hasn\'t found!', e);
+    res.send({isUserExists: false});
+  });
+});
 
 
 app.listen(port);

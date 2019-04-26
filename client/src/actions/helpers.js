@@ -16,3 +16,8 @@ export const createUser = async user => {
     return serverResponse;
 }
 
+export const checkUserInDB = async usersCreds => {
+    let serverResponse = await axios.post('/sign-in', usersCreds);
+    return serverResponse;
+}
+

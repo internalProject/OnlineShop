@@ -1,7 +1,16 @@
 import React from 'react';
+import ls from'local-storage';
+import {connect} from 'react-redux';
+import {compose} from 'redux';
 import cn from 'classnames';
 import './UserProfileFrame.scss';
+import {exit} from '../../../actions/userActions.js';
+import ExitToApp from '@material-ui/icons/ExitToApp';
+import {IconButton, withStyles} from '@material-ui/core';
 
+const styles = ({
+
+});
 
 class UserProfileFrame extends React.Component {
     constructor(props) {
@@ -22,13 +31,32 @@ class UserProfileFrame extends React.Component {
                     'inner-drop-menu',
                     this.props.showUPF ? 'go-down': ''
                 )}>
-                    inner drop
+                    <ul>
+                        <li>
+                            <IconButton onClick={this.props.exit}>
+                                <ExitToApp />
+                            </IconButton>
+                        </li>
+                        <li></li>
+                        <li></li>
+                    </ul>
                 </div>
             </> : null}
         </div>
     }
 }
 
-export default UserProfileFrame;
+const mapStateToProps = state => ({
+
+});
+
+const mapDispatchToProps = dispatch => ({
+    'exit': () => dispatch(exit()),
+});
+
+export default compose(
+    withStyles(styles),
+    connect(mapStateToProps, mapDispatchToProps),
+)(UserProfileFrame);
 
 

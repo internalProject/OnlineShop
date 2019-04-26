@@ -5,7 +5,7 @@ import {withStyles} from '@material-ui/core';
 import {Link} from 'react-router-dom';
 import UserBtn from '../UserBtn';
 import Unregistered from '../Unregistered';
-import {getUserData, isLoggedIn} from '../../../actions/userActions.js';
+import {isLoggedIn} from '../../../actions/userActions.js';
 import styles from './styles.js';
 
 class Nav extends React.Component {
@@ -14,13 +14,12 @@ class Nav extends React.Component {
     }
 
     componentDidMount = () => {
-        this.props.getUserData();
+        // this.props.getUserData();
+        this.props.checkUserLoginStatus();
     }
 
     componentDidUpdate = () => {
-        if (this.props.user.name) {
-            this.props.checkLogin();
-        }
+        
     }
 
     render = () => {
@@ -44,19 +43,18 @@ class Nav extends React.Component {
                 </Link>
             </li>
         </ul>
-        {this.props.isLoggedIn ? <UserBtn/> : <Unregistered/>}
+        {this.props.isUserLoggedIn ? <UserBtn/> : <Unregistered/>}
     </nav>
     }
 }
 
 const mapStateToProps = state => ({
-    isLoggedIn: state.userReducer.isLoggedIn,
+    isUserLoggedIn: state.userReducer.isLoggedIn,
     user: state.userReducer.user,
 });
 
 const mapDispatchToProps = dispatch => ({
-    'getUserData': () => dispatch(getUserData()),
-    'checkLogin': () => dispatch(isLoggedIn()), 
+    'checkUserLoginStatus': () => dispatch(isLoggedIn()),
 })
 
 export default compose(

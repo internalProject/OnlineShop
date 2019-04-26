@@ -8,12 +8,16 @@ const styles = {
         display: 'flex',
         justifyContent: 'space-between',
         flexWrap: 'wrap',
+        ['@media (max-width: 640px)']: {
+            display: 'block',
+        }
 
     },
     navLinks: {
         listStyleType: 'none',
         display: 'block',
         // height: '100%',
+        
     },
     navLi: {
         display: 'inline-block',
@@ -23,6 +27,10 @@ const styles = {
             background: 'radial-gradient(#827717, #111)'
         },
         height: '100%',
+        ['@media (max-width: 640px)']: {
+            display: 'block',
+            height: 'inherit'
+        },
     },
     link: {
         color: 'white',

@@ -13,6 +13,7 @@
     "chance": "^1.0.18",
     "cors": "^2.8.5",
     "express": "^4.16.4",
+    "json-stringify-safe": "^5.0.1",
     "path": "^0.12.7",
     "pg": "^7.9.0",
     "pg-hstore": "^2.3.2",
