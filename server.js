@@ -66,11 +66,8 @@ app.post('/sign-up', jsonParser, (req, res) => {
 })
 
 app.post('/sign-in', jsonParser, (req, res) => {
-  console.log('users creds: ', req.body);
   User.findOne({where: {email: req.body.email}})
   .then(user => {
-    console.log('type of user sending to client');
-    console.dir(user);
     res.json(safeStringify({user:{
       name: user.name,
       email: user.email,

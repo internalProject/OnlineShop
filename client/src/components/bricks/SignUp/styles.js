@@ -1,12 +1,13 @@
 
 import green from '@material-ui/core/colors/green';
+import imgUrl from '../../../../assets/recruit.jpg';
 
 const styles = theme => ({
     signUpPage: {
         height: '100%',
         width: '100%',
         color: 'white',
-        backgroundImage: 'linear-gradient(rgba(0, 0, 0, 0.6), rgba(0, 0, 0, 0.6)), url("./assets/recruit.jpg")',
+        backgroundImage: `linear-gradient(rgba(0, 0, 0, 0.6), rgba(0, 0, 0, 0.6)), url("${imgUrl}")`,
         backgroundPosition: 'center top',
         backgroundRepeat: 'no-repeat',
         backgroundSize: 'cover',
