@@ -7,6 +7,7 @@ const path = require('path');
 const bodyParser = require('body-parser');
 const port = process.env.PORT || 3000;
 const safeStringify = require('json-stringify-safe');
+const Op = Sequelize.Op;
 
 
 const sequelize = new Sequelize('postgres', 'postgres', 'take5five', {
@@ -59,10 +60,31 @@ app.get('*', (req,res) =>{
 });
 
 app.post('/sign-up', jsonParser, (req, res) => {
-  User.create(req.body).then(data=> {
-    console.log('success');
-    res.send(`user ${req.body.name} was created`);
-}).catch(e => console.log('server error => ',e));
+  User.findAll({
+    where: {
+      [Op.or]: [{name: req.body.name}, {email: req.body.email}]
+    }
+  })
+  .then( findedUsers => {
+    if (findedUsers.length === 0) {
+      User.create(req.body).then(data=> {
+        console.log('success');
+        res.send({
+          message: `user ${req.body.name} was created`,
+          status: 'success',
+        });
+      })
+      .catch(e => console.log('server error => ',e));
+    } else {
+      console.log('try to create user with same email or name');
+      res.send({
+        message: 'Such name or email are already in use.',
+        status: 'fail',
+      });
+    }
+
+  });
+  
 })
 
 app.post('/sign-in', jsonParser, (req, res) => {

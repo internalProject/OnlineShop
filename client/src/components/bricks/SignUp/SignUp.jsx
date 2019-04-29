@@ -11,7 +11,12 @@ import {Formik, Form, Field, ErrorMessage} from 'formik';
 import ls from 'local-storage';
 
 
-const snackTransition = props => <Slide {...props} direction="up" />
+const snackTransition =  props => <Slide {...props} direction="up" />
+let userCreatedSuccessfully = false;
+let registrationStatusMessages = {
+    success: 'You have been sign up successfully!',
+    fail: '',
+};
 
 class SignUp extends React.Component {
     constructor(props){
@@ -28,8 +33,21 @@ class SignUp extends React.Component {
         
     }
 
-    componentDidUpdate = () => {
-        if (this.props.serverData) console.log('resp from server',this.props.serverData);
+    componentDidUpdate = (prevProps) => {
+        if (this.props.serverData && this.props.serverData.data.status) {
+
+            if (prevProps.registerCounter === this.props.registerCounter) return;
+            
+            if (this.props.serverData.data.status === 'success') {
+                registrationStatusMessages.success = this.props.serverData.data.message;
+                this.showSuccessSnack(snackTransition)();
+                userCreatedSuccessfully = true;
+            } else {
+                registrationStatusMessages.fail = this.props.serverData.data.message;
+                this.showSuccessSnack(snackTransition)();
+                userCreatedSuccessfully = false;
+            }
+        }
     }
 
     showSuccessSnack = Transition => () => {
@@ -37,7 +55,7 @@ class SignUp extends React.Component {
     }
 
     closeSuccessSnack = () => {
-        this.setState({isSnackOpen: false});
+        this.setState({isSnackOpen: false,});
     }
 
     onStorage = () => {
@@ -83,9 +101,9 @@ class SignUp extends React.Component {
                     this.props.createUser(values)
                     .then(good => {
                         actions.setSubmitting(false);
+                        
 
-                        this.showSuccessSnack(snackTransition)();
-
+                        console.dir(good);
                         ls.set('ws-name', values.name); // TODO and this
                         this.props.userHasRegistred();
                         for(let v in values) {
@@ -100,12 +118,16 @@ class SignUp extends React.Component {
                 
                 render={({ errors, status, touched, isSubmitting }) => (<>
                     <div className={classes.navBar}>
-                        <span className={classes.linkWrapper}>
-                            <Link className={classes.navLink} to="/">Home</Link>
-                        </span>
-                        <span className={classes.linkWrapper}>
-                            <Link className={classes.navLink} to="/sign-in">Sign In</Link>
-                        </span>
+                        <div className={classes.linkWrapper}>
+                            <Link className={classes.navLink} to="/">
+                                <span className={classes.linkText}>Home</span>
+                            </Link>
+                        </div>
+                        <div className={classes.linkWrapper}>
+                            <Link className={classes.navLink} to="/sign-in">
+                                <span className={classes.linkText}>Sign In</span>
+                            </Link>
+                        </div>
                     </div>
                     <Form className={classes.registerForm}>
                         <fieldset>
@@ -138,10 +160,16 @@ class SignUp extends React.Component {
                 TransitionComponent={snackTransition}
                 anchorOrigin={{vertical: 'top', horizontal: 'center'}}
             >
-                <SnackbarContent className={classNames(classes['success'])}
+                <SnackbarContent className={
+                    userCreatedSuccessfully ? classes.success : classes.registrationFailed 
+                }
                     message={<div className={classes.snackMsg}>
-                        <span style={{display: 'inline-block'}} id="message-id">You have been sign up successfully!</span>
-                        <IconButton style={{display: 'inline-block'}} color="secondary" onClick={this.closeSuccessSnack}>
+                        <span style={{display: 'inline-block'}} id="message-id">
+                            {
+                                userCreatedSuccessfully ? registrationStatusMessages.success : registrationStatusMessages.fail
+                            }
+                        </span>
+                        <IconButton style={{display: 'inline-block'}} color="inherit" style={{color: "white"}} onClick={this.closeSuccessSnack}>
                             <CloseIcon/>
                         </IconButton>
                     </div>}
@@ -153,11 +181,12 @@ class SignUp extends React.Component {
 
 const mapStateToProps = state => ({
     serverData: state.userReducer.serverData,
+    registerCounter: state.userReducer.registerCounter,
 });
 
 const mapDispatchToProps = dispatch => ({
-    'createUser': user => dispatch(createUser(user)),
-    'userHasRegistred': () => dispatch(userHasRegistred()),
+    createUser: user => dispatch(createUser(user)),
+    userHasRegistred: () => dispatch(userHasRegistred()),
 });
 
 export default compose(

@@ -9,7 +9,8 @@ const initialUserState = {
     userSearchingResult: {
         hasUserFound: false,
         message: '',
-    }
+    },
+    registerCounter: 0,
     // long: 0
 }
 
@@ -21,7 +22,7 @@ const userReducer = (state = initialUserState, action) => {
         //         user: {...action.data},
         //     };
         case 'CREATE_NEW_USER':
-            return {...state, serverData: action.data};
+            return {...state, serverData: action.data, registerCounter: ++state.registerCounter};
         case 'USER_IS_LOGGED_IN':
             return {...state, isLoggedIn: action.data};
         case 'USER_HAS_REGISTRED':

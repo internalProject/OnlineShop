@@ -7,7 +7,7 @@ module.exports.user = function (DataTypes) {
         email:{
             type: DataTypes.TEXT,
             validate: {
-                isEmail: true
+                isEmail: true,
             },
         },
         password: {

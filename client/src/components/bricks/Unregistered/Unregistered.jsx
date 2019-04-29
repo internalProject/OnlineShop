@@ -13,7 +13,7 @@ class Unregistered extends React.Component {
                 {/* <Link className={classes.registerLinks} to="/sign-in"><span className={classes.linkTextHook}>Sign In</span></Link> */}
                 <SignIn />
             </div>
-            <div className={classes.regLinkWrapper}>
+            <div className={classes.regLinkWrapper} style={{height: "36px"}}>
                 <Link className={classes.registerLinks} to="/sign-up"><span className={classes.linkTextHook}>Sign Up</span></Link>
             </div>
         </div>;

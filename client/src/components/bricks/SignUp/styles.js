@@ -22,11 +22,11 @@ const styles = theme => ({
         backgroundColor: theme.primary.green,
         width: '100%',
         paddingLeft: '120px',
+        display: 'flex',
     },
     linkWrapper: {
-        display: 'inline-block',
-        height: '100%',
-        padding: '15px 30px',
+        height: '50px',
+        width: '110px',
         '&:hover': {
             cursor: 'pointer',
             background: 'radial-gradient(#827717, #111)',
@@ -34,7 +34,15 @@ const styles = theme => ({
     },
     navLink: {
         ...theme.link,
-        color: 'white'
+        color: 'white',
+        display: 'flex',
+        justifyContent: 'center',
+        alignItems: 'center',
+        width: '100%',
+        height: '100%',
+    },
+    linkText: {
+        display: 'block',
     },
     registerForm: {
         width: '100%',
@@ -89,6 +97,13 @@ const styles = theme => ({
     },
     success: {
         backgroundColor: green[600],
+        color: 'white',
+        width: '285px',
+        height: '100px',
+        borderRadius: '10px',
+    },
+    registrationFailed: {
+        backgroundColor: 'red',
         color: 'white',
         width: '285px',
         height: '100px',
