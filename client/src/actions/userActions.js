@@ -41,7 +41,7 @@ export const tryToLogin = userCredentials => async dispatch => {
     let user = JSON.parse(serverResponse.data);
     if (user.isUserExists === true) {
         dispatch({type: 'USER_IS_EXISTS', data: {user: user, isLoggedIn: true}});
-        ls.set('ws-name', user.name);
+        ls.set('ws-name', user.user.name);
     } else {
         dispatch({type: 'USER_IS_NOT_EXISTS'});
     }
