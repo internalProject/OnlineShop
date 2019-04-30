@@ -3,6 +3,7 @@ import {connect} from 'react-redux';
 import {compose} from 'redux';
 import {withStyles} from '@material-ui/core';
 import Header from '../bricks/Header';
+import BestSellers from '../bricks/BestSellers';
 // import {getUserData} from '../../actions/userActions.js';
 import styles from './styles.js';
 
@@ -18,11 +19,10 @@ class Home extends React.Component {
         <Header/>
         <main className={classes.main}>
             <div className={classes.columnHolder}>
+                {/* <div className={classes.columnRow}></div>
                 <div className={classes.columnRow}></div>
-                <div className={classes.columnRow}></div>
-                <div className={classes.columnRow}></div>
-                <div className={classes.columnRow}></div>
-                <div className={classes.columnRow}></div>
+                <div className={classes.columnRow}></div> */}
+                <BestSellers />
             </div>
         </main>
         <footer className={classes.footer}>footer</footer>

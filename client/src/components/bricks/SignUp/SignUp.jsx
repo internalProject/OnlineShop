@@ -123,11 +123,6 @@ class SignUp extends React.Component {
                                 <span className={classes.linkText}>Home</span>
                             </Link>
                         </div>
-                        <div className={classes.linkWrapper}>
-                            <Link className={classes.navLink} to="/sign-in">
-                                <span className={classes.linkText}>Sign In</span>
-                            </Link>
-                        </div>
                     </div>
                     <Form className={classes.registerForm}>
                         <fieldset>

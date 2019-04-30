@@ -8,12 +8,14 @@ import {routerReducer} from 'react-router-redux';
 import App from './components/App.jsx';
 import {ctrlReducer} from './reducers/controlsReducer.js';
 import userReducer from './reducers/userReducer.js';
+import cartReducer from './reducers/cartReducer.js';
 
 const store = createStore(
     combineReducers({
         // ... reducers,
         ctrlReducer,
         userReducer,
+        cartReducer,
         'router': routerReducer
     }),
     composeWithDevTools(applyMiddleware(

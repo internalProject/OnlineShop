@@ -5,7 +5,7 @@ const styles = theme => ({
         color: 'white',
     },
     main: {
-        minHeight: 'calc(100% - 200px)',
+        minHeight: 'calc(100% - 145px)',
         color: 'black'
     },
     footer: {
