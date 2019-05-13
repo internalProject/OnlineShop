@@ -8,7 +8,6 @@ import {createUser as saveNewUserToDb, checkUserInDB} from './helpers.js';
 // };
 
 export const isLoggedIn = () => {
-    // TODO check this 
     let name = ls.get('ws-name');
     if (name && name.length !== undefined && name.length > 1) {
         return ({type: 'USER_IS_LOGGED_IN', data: true});

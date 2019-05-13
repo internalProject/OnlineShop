@@ -7,6 +7,11 @@ const styles = {
         justifyContent: 'space-between',
         alignItems: 'center',
         cursor: 'pointer',
+    },
+    userName: {
+        marginLeft: '20px',
+        maxWidth: '80px',
+        textOverflow: 'ellipsis',
     }
 }
 

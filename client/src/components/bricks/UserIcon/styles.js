@@ -2,6 +2,7 @@ export const styles = {
     display: 'inline-block',
     height: '40px',
     width: '40px',
+    paddign: '10px',
 }
 
 export const imgWrapper = {

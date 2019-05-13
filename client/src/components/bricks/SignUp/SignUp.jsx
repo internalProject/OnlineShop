@@ -104,7 +104,7 @@ class SignUp extends React.Component {
                         
 
                         console.dir(good);
-                        ls.set('ws-name', values.name); // TODO and this
+                        ls.set('ws-name', values.name);
                         this.props.userHasRegistred();
                         for(let v in values) {
                             values[v] = '';
