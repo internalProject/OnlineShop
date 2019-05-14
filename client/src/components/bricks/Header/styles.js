@@ -11,8 +11,14 @@ const styles = theme => ({
         fontFamily: 'Abril Fatface',
         fontSize: '32pt',
         marginBottom: '30px',
-
-    }, 
+    },
+    mainLink: {
+        color: 'white',
+        textDecoration: 'none',
+        '&:visited': {
+            color: 'white',
+        }
+    }
 });
 
 export default styles;

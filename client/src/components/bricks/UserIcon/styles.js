@@ -2,7 +2,8 @@ export const styles = {
     display: 'inline-block',
     height: '40px',
     width: '40px',
-    paddign: '10px',
+    paddign: '20px',
+    marginRight: '20px',
 }
 
 export const imgWrapper = {
@@ -18,4 +19,9 @@ export const imgWrapper = {
 export const iconStyles = {
     width: '75%',
     display: 'block'
+}
+
+export const badge = {
+    width: '40px',
+    height: '40px',
 }

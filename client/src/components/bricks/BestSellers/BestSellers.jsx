@@ -18,18 +18,20 @@ class BestSellers extends React.Component {
         super(props);
     }
 
-    /// TODO: reduce call part;
     addItemToCart = chosenItem => e => {
         let subtitutionalItems = [...this.props.pickedItems];
-        let pickedType = this.props.pickedItems.filter(item => {
+        let searchResult = subtitutionalItems.filter(item => {
             if (item.id === chosenItem.id) return true;
             return false;
-        })[0];
-        if (pickedType === undefined) {
+        });
+        let pickedType = null;
+        if (searchResult.length === 0) {
             pickedType = {
                 ...chosenItem,
                 quantity: 0,
             };
+        } else {
+            pickedType = searchResult[0];
         }
         pickedType.quantity += 1;
 
@@ -37,11 +39,12 @@ class BestSellers extends React.Component {
         subtitutionalItems.forEach((item, index) => {
             if (item.id === pickedType.id) selectedIndex = index;
         })
+
         if (selectedIndex === null) {
             subtitutionalItems.push(pickedType);
+        } else {
+            subtitutionalItems.splice(selectedIndex, 1, pickedType);
         }
-        subtitutionalItems.splice(selectedIndex, 1, pickedType);
-        console.log(subtitutionalItems);
         this.props.pickOne(subtitutionalItems);
     }
 
@@ -82,8 +85,8 @@ const mapStateToProps = state => ({
     pickedItems: state.cartReducer.picked,
 });
 
-const mapDispatchToProps = disptch => ({
-    pickOne: item => disptch(pickOne(item)),
+const mapDispatchToProps = dispatch => ({
+    pickOne: item => dispatch(pickOne(item)),
 });
 
 export default compose(

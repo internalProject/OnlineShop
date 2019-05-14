@@ -1,7 +1,7 @@
 import React from 'react';
 import {BrowserRouter as Router, Switch, Route} from 'react-router-dom';
 import Home from './Home';
-import Cart from './Cart.jsx';
+import Cart from './Cart';
 import SignIn from './bricks/SignIn';
 import SignUp from './bricks/SignUp';
 
