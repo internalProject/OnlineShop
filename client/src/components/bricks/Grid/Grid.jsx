@@ -7,6 +7,7 @@ import DeleteIcon from '@material-ui/icons/Delete';
 import styles from './styles.js';
 import {pickOne, removeFromCart} from '../../../actions/cartActions.js';
 import cn from 'classnames';
+import ls from 'local-storage';
 
 const importAll = r => {
     return r.keys().map(r);
@@ -63,6 +64,7 @@ class Grid extends React.Component {
         } else {
             subtitutionalItems.splice(selectedIndex, 1, pickedType);
         }
+        ls.set('ws-cart', subtitutionalItems);
         this.props.pickOne(subtitutionalItems);
     }
 
@@ -81,7 +83,11 @@ class Grid extends React.Component {
         } else {
             pickedType = searchResult[0];
         }
-        pickedType.quantity -= 1;
+        if (pickedType.quantity > 1) {
+            pickedType.quantity -= 1;
+        } else {
+            pickedType.quantity = 1;
+        }
 
         let selectedIndex = null;
         subtitutionalItems.forEach((item, index) => {
@@ -93,6 +99,7 @@ class Grid extends React.Component {
         } else {
             subtitutionalItems.splice(selectedIndex, 1, pickedType);
         }
+        ls.set('ws-cart', subtitutionalItems);
         this.props.pickOne(subtitutionalItems);
     }
     
@@ -115,6 +122,7 @@ class Grid extends React.Component {
             {
                 this.props.items ? (this.props.items.map((item, i) => 
                     <div className={classes.item} key={item.id}>
+                        {/* TODO: fix hover on info */}
                         <div 
                             className={classes.infoField}
                             onMouseEnter={this.showDescription}

@@ -6,6 +6,7 @@ import {withStyles, IconButton} from '@material-ui/core';
 import AddShoppingCart from '@material-ui/icons/AddShoppingCart';
 import {pickOne} from '../../../actions/cartActions.js';
 import cn from 'classnames';
+import ls from 'local-storage';
 
 const importAll = r => {
     return r.keys().map(r);
@@ -45,6 +46,7 @@ class BestSellers extends React.Component {
         } else {
             subtitutionalItems.splice(selectedIndex, 1, pickedType);
         }
+        ls.set('ws-cart', subtitutionalItems);
         this.props.pickOne(subtitutionalItems);
     }
 

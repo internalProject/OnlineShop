@@ -1,7 +1,9 @@
 import React from 'react';
+import {connect} from 'react-redux';
 import { createMuiTheme, MuiThemeProvider } from '@material-ui/core/styles';
 import CssBaseline from '@material-ui/core/CssBaseline';
 import Main from './Main.jsx';
+import {grabCartItemsFromLS} from '../actions/cartActions.js';
 import '../../styles.scss';
 
 
@@ -25,9 +27,30 @@ const theme = createMuiTheme({
 
 })
 
-const App = props => <MuiThemeProvider theme={theme}>
-    <CssBaseline/>
-    <Main/>
-</MuiThemeProvider>
+// const App = props => 
+class App extends React.Component {
+    constructor(props) {
+        super(props);
+    }
 
-export default App;
+    componentDidMount = () => {
+        this.props.grabCartItemsFromLS();
+    }
+
+    render = () => {
+        return <MuiThemeProvider theme={theme}>
+            <CssBaseline/>
+            <Main/>
+        </MuiThemeProvider>
+    }
+}
+
+const mapStateToPprops = state => ({
+    
+});
+
+const mapDispatchToProps = dispatch => ({
+    grabCartItemsFromLS: () => dispatch(grabCartItemsFromLS()),
+});
+
+export default connect(mapStateToPprops, mapDispatchToProps,)(App);

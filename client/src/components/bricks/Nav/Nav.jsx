@@ -6,6 +6,7 @@ import {Link} from 'react-router-dom';
 import UserBtn from '../UserBtn';
 import Unregistered from '../Unregistered';
 import {isLoggedIn} from '../../../actions/userActions.js';
+// import {grabCartItemsFromLS} from '../../../actions/cartActions.js';
 import styles from './styles.js';
 
 class Nav extends React.Component {
@@ -14,8 +15,8 @@ class Nav extends React.Component {
     }
 
     componentDidMount = () => {
-        // this.props.getUserData();
         this.props.checkUserLoginStatus();
+        // this.props.grabCartItemsFromLS();
     }
 
     componentDidUpdate = () => {
@@ -55,6 +56,7 @@ const mapStateToProps = state => ({
 
 const mapDispatchToProps = dispatch => ({
     'checkUserLoginStatus': () => dispatch(isLoggedIn()),
+    // grabCartItemsFromLS: () => dispatch(grabCartItemsFromLS()),
 })
 
 export default compose(
