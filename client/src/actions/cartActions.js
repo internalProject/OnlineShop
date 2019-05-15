@@ -10,6 +10,9 @@ export const removeFromCart = itemId => dispatch => {
 
 export const grabCartItemsFromLS = () => dispatch => {
     let items = ls.get('ws-cart');
+    if (items === null || items === undefined) {
+        items = [];
+    }
 
     dispatch({type: 'GRAB_ON_CONNECT', data: items});
 }

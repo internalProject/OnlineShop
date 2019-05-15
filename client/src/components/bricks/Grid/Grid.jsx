@@ -14,6 +14,8 @@ const importAll = r => {
 }
   
 const images = importAll(require.context('../../../../assets', false, /\.(png|jpe?g|svg)$/));
+let descrBoard = null;
+
 
 class Grid extends React.Component {
     constructor(props) {
@@ -21,20 +23,18 @@ class Grid extends React.Component {
         this.state = {
             descriptionVisisbility: false,
         };
-        this.descriptionRef = React.createRef();
     }
 
     componentDidMount = () => {
-        // console.log(this.props);
-        // console.log(images);
     }
 
-    hideDescription = e => {
-        this.descriptionRef.current.style.display = 'none';
+    hideDescription = item => e => {
+        descrBoard.style.display = 'none';
     }
 
-    showDescription = e => {
-        this.descriptionRef.current.style.display = 'block';
+    showDescription = item => e => {
+        descrBoard = e.target.querySelector('span div');
+        descrBoard.style.display = 'block';
     }
 
     addOne = transitItem => e => {
@@ -109,7 +109,6 @@ class Grid extends React.Component {
 
     render = () => {
         const {classes} = this.props;
-        // console.log(this.descriptionRef);
 
         return <div className={classes.gridHolder}>
             <div className={classes.gridHeader}>
@@ -122,15 +121,14 @@ class Grid extends React.Component {
             {
                 this.props.items ? (this.props.items.map((item, i) => 
                     <div className={classes.item} key={item.id}>
-                        {/* TODO: fix hover on info */}
                         <div 
                             className={classes.infoField}
-                            onMouseEnter={this.showDescription}
-                            onMouseLeave={this.hideDescription}
+                            onMouseEnter={this.showDescription(item)}
+                            onMouseLeave={this.hideDescription(item)}
                         >
                             <span className={classes.itemInfo}>
                                 <Info/>
-                                <div ref={this.descriptionRef} className={classes.itemDescription}>
+                                <div className={classes.itemDescription}>
                                     <p>{item.description}</p>
                                 </div>
                             </span>

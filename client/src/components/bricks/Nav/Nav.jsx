@@ -5,7 +5,7 @@ import {withStyles} from '@material-ui/core';
 import {Link} from 'react-router-dom';
 import UserBtn from '../UserBtn';
 import Unregistered from '../Unregistered';
-import {isLoggedIn} from '../../../actions/userActions.js';
+// import {isLoggedIn} from '../../../actions/userActions.js';
 // import {grabCartItemsFromLS} from '../../../actions/cartActions.js';
 import styles from './styles.js';
 
@@ -15,7 +15,7 @@ class Nav extends React.Component {
     }
 
     componentDidMount = () => {
-        this.props.checkUserLoginStatus();
+        // this.props.checkUserLoginStatus();
         // this.props.grabCartItemsFromLS();
     }
 
@@ -55,7 +55,7 @@ const mapStateToProps = state => ({
 });
 
 const mapDispatchToProps = dispatch => ({
-    'checkUserLoginStatus': () => dispatch(isLoggedIn()),
+    // 'checkUserLoginStatus': () => dispatch(isLoggedIn()),
     // grabCartItemsFromLS: () => dispatch(grabCartItemsFromLS()),
 })
 

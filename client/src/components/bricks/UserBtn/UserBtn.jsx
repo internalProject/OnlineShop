@@ -43,7 +43,8 @@ class UserBtn extends React.Component {
             <div className={classes.userName}>{
                 this.props.user ? this.props.user.name : this.state.userName
             }</div>
-            <UserIcon cartItems={this.props.picked.reduce(wrapItems, 0)} imgUrl={iconUrl} />
+            {this.props.picked ? <UserIcon cartItems={this.props.picked.reduce(wrapItems, 0)} imgUrl={iconUrl} /> : null}
+            
             <UserProfileFrame showUPF={this.state.showUPF}/>
         </div>
     }
