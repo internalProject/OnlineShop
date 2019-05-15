@@ -1,7 +1,8 @@
 import React from 'react';
 import {compose} from 'redux';
 import {connect} from 'react-redux';
-import {withStyles, IconButton,} from '@material-ui/core';
+import {withRouter} from 'react-router';
+import {withStyles, IconButton, Button} from '@material-ui/core';
 import {Info, Add, Remove,} from '@material-ui/icons';
 import DeleteIcon from '@material-ui/icons/Delete';
 import styles from './styles.js';
@@ -107,50 +108,61 @@ class Grid extends React.Component {
         this.props.removeFromCart(itemId);
     }
 
+    goToOrderAddress = () => {
+        this.props.history.push('/order-address');
+    }
+
     render = () => {
         const {classes} = this.props;
 
         return <div className={classes.gridHolder}>
-            <div className={classes.gridHeader}>
-                <div className={classes.infoField}>info</div>
-                <div className={classes.itemId}>id</div>
-                <div className={classes.itemName}>name</div>
-                <div className={classes.itemQuantity}>quantity</div>
+            <div className={classes.innerShell}>
+                <div className={classes.gridHeader}>
+                    <div className={classes.infoField}>info</div>
+                    <div className={classes.itemId}>id</div>
+                    <div className={classes.itemName}>name</div>
+                    <div className={classes.itemQuantity}>quantity</div>
+                </div>
+
+                {
+                    this.props.items ? (this.props.items.map((item, i) => 
+                        <div className={classes.item} key={item.id}>
+                            <div 
+                                className={classes.infoField}
+                                onMouseEnter={this.showDescription(item)}
+                                onMouseLeave={this.hideDescription(item)}
+                            >
+                                <span className={classes.itemInfo}>
+                                    <Info/>
+                                    <div className={classes.itemDescription}>
+                                        <p>{item.description}</p>
+                                    </div>
+                                </span>
+                            </div>
+                            <div className={classes.itemId}>{item.id}</div>
+                            <div className={classes.itemName}>{item.name}</div>
+                            <div className={classes.itemQuantity}>
+                                <IconButton className={classes.qunatElem} size="small" variant="contained" onClick={this.removeOne(item)}>
+                                    <Remove/>
+                                </IconButton>
+                                <span className={cn(classes.numberPlace, classes.qunatElem)}>{item.quantity}</span>
+                                <IconButton className={classes.qunatElem} size="small" variant="contained" onClick={this.addOne(item)}>
+                                    <Add/>
+                                </IconButton>
+                                <IconButton onClick={this.removeFromCart(item.id)} variant="contained" size="small">
+                                    <DeleteIcon />
+                                </IconButton>
+                            </div>
+
+                        </div>
+                    )) : null
+                }
+                <hr className={classes.hr}/>
+                <div className={classes.continueBtnWrapper}>
+                    <Button onClick={this.goToOrderAddress} size="large" variant="contained" classes={{root: classes.continueBtn}}>Continue</Button>
+                </div>
             </div>
-
-            {
-                this.props.items ? (this.props.items.map((item, i) => 
-                    <div className={classes.item} key={item.id}>
-                        <div 
-                            className={classes.infoField}
-                            onMouseEnter={this.showDescription(item)}
-                            onMouseLeave={this.hideDescription(item)}
-                        >
-                            <span className={classes.itemInfo}>
-                                <Info/>
-                                <div className={classes.itemDescription}>
-                                    <p>{item.description}</p>
-                                </div>
-                            </span>
-                        </div>
-                        <div className={classes.itemId}>{item.id}</div>
-                        <div className={classes.itemName}>{item.name}</div>
-                        <div className={classes.itemQuantity}>
-                            <IconButton className={classes.qunatElem} size="small" variant="contained" onClick={this.removeOne(item)}>
-                                <Remove/>
-                            </IconButton>
-                            <span className={cn(classes.numberPlace, classes.qunatElem)}>{item.quantity}</span>
-                            <IconButton className={classes.qunatElem} size="small" variant="contained" onClick={this.addOne(item)}>
-                                <Add/>
-                            </IconButton>
-                            <IconButton onClick={this.removeFromCart(item.id)} variant="contained" size="small">
-                                <DeleteIcon />
-                            </IconButton>
-                        </div>
-
-                    </div>
-                )) : null
-            }
+            
         </div>;
     }
 }
@@ -166,5 +178,5 @@ const mapDispatchToProps = dispatch => ({
 export default compose(
     connect(mapStateToProps, mapDispatchToProps),
     withStyles(styles),
-)(Grid);
+)(withRouter(Grid));
 

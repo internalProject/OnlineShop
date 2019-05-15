@@ -1,7 +1,15 @@
 import { GridListTileBar } from "@material-ui/core";
+import { PlayCircleFilledWhite } from "@material-ui/icons";
 
-const styles = {
+const styles = theme => ({
     gridHolder: {
+        display: 'flex',
+        flexDirection: 'column',
+        justifyContent: 'space-around',
+        alignItems: 'center',
+    },
+    innerShell: {
+        maxWidth: '500px',
         display: 'flex',
         flexDirection: 'column',
         justifyContent: 'space-around',
@@ -61,7 +69,25 @@ const styles = {
         width: '300px',
         padding: '10px',
         zIndex: '99999',
+    },
+    hr: {
+        height: '2px',
+        backgroundColor: 'white',
+        borderRadius: '5px',
+        width: '500px',
+        margin: '20px 0px',
+    },
+    continueBtnWrapper: {
+        display: 'flex',
+        justifyContent: 'flex-end',
+        width: '100%',
+        padding: '0px 20px', 
+    },
+    continueBtn: {
+        backgroundColor: theme.primary.green,
+        color: 'white',
+        display: 'block',
     }
-}
+})
 
 export default styles;

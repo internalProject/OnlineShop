@@ -4,6 +4,8 @@ import Home from './Home';
 import Cart from './Cart';
 import SignIn from './bricks/SignIn';
 import SignUp from './bricks/SignUp';
+import OrderAddress from './bricks/OrderAddress';
+
 
 class Main extends React.Component {
     constructor(props) {
@@ -18,6 +20,7 @@ class Main extends React.Component {
             <Route path="/cart" component={Cart} />
             <Route path="/sign-in" component={SignIn} />
             <Route path="/sign-up" component={SignUp} />
+            <Route path="/order-address" component={OrderAddress} />
         </Switch>
     </Router>
     }
