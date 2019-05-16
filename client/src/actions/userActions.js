@@ -1,5 +1,5 @@
 import ls from 'local-storage';
-import {createUser as saveNewUserToDb, checkUserInDB} from './helpers.js';
+import {createUser as saveNewUserToDb, checkUserInDB, getUserDataFromDb} from './helpers.js';
 
 // export const getUserData = () => async dispatch => {
 //     let user = await ls.get('me');
@@ -38,6 +38,10 @@ export const exit = () => dispatch => {
 export const tryToLogin = userCredentials => async dispatch => {
     let serverResponse = await checkUserInDB(userCredentials);
     let user = JSON.parse(serverResponse.data);
+    
+    if (user.wrongPassword) {
+        dispatch({type: 'WRONG_PASSWORD'});
+    }
     if (user.isUserExists === true) {
         dispatch({type: 'USER_IS_EXISTS', data: {user: user, isLoggedIn: true}});
         ls.set('ws-name', user.user.name);
@@ -45,4 +49,11 @@ export const tryToLogin = userCredentials => async dispatch => {
         dispatch({type: 'USER_IS_NOT_EXISTS'});
     }
     
+}
+
+export const getUserData = userName => async dispatch => {
+    let serverResponse = await getUserDataFromDb(userName);
+    let user = JSON.parse(serverResponse.data);
+    user = user.user.dataValues;
+    dispatch({type: 'GET_USER_DATA_FROM_SERVER', data: user});
 }

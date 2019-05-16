@@ -16,3 +16,7 @@ export const grabCartItemsFromLS = () => dispatch => {
 
     dispatch({type: 'GRAB_ON_CONNECT', data: items});
 }
+
+export const sendRequest = data => async dispatch => {
+    
+}

@@ -90,16 +90,37 @@ app.post('/sign-up', jsonParser, (req, res) => {
 app.post('/sign-in', jsonParser, (req, res) => {
   User.findOne({where: {email: req.body.email}})
   .then(user => {
-    res.json(safeStringify({user:{
-      name: user.name,
-      email: user.email,
-    }, isUserExists: true,}));
+    if (user.password === req.body.password && user.email === req.body.email) {
+      res.json(safeStringify({user:{
+        name: user.name,
+        email: user.email,
+        password: user.password,
+      }, isUserExists: true,}));
+    }
+    if (user.password !== req.body.password && user.email === req.body.email) {
+      console.log('wrong password!');
+      res.json(safeStringify({
+        wrongPassword: true,
+      }));
+    }
   })
   .catch(e => {
     console.log('user hasn\'t found!', e);
     res.send({isUserExists: false});
   });
 });
+
+app.post('/order', jsonParser, (req, res) => {
+  
+})
+
+app.post('/user-data', jsonParser, (req, res) => {
+  User.findOne({where: {name: req.body.name}})
+  .then(findedUser => {
+    res.json(safeStringify({user: {...findedUser}}))
+  })
+  .catch(searchResult => console.dir(searchResult));
+})
 
 
 app.listen(port);

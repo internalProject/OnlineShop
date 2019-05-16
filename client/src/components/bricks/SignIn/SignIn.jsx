@@ -1,5 +1,7 @@
 import React from 'react';
 import {Button, Dialog, DialogActions, DialogContent, DialogContentText, DialogTitle, withMobileDialog} from '@material-ui/core';
+import {Snackbar, SnackbarContent, IconButton} from '@material-ui/core';
+import Close from '@material-ui/icons/Close';
 import {connect} from 'react-redux';
 import {compose} from 'redux';
 import {withStyles} from '@material-ui/core';
@@ -7,18 +9,28 @@ import styles from './styles.js';
 import {tryToLogin} from '../../../actions/userActions.js';
 import {Formik, Form, Field} from 'formik';
 
+let userInformed = false;
+
 class SignIn extends React.Component {
     constructor(props){
         super(props);
         this.state = {
             isDialogOpen: false,
             isDisabled: false,
+            isSnackOpen: false,
         }
     }
 
-    componentDidUpdate = () => {
+    componentDidUpdate = (prevProps) => {
         if (this.props.isLoggedIn) {
             this.props.history.push('/');
+        }
+        if (this.props.tryToLoginCounter !== prevProps.tryToLoginCounter) {
+            userInformed = !userInformed;
+            this.setState({isSnackOpen: true,});
+        }
+        if (this.props.wrongPassword && !userInformed && (this.props.tryToLoginCounter !== prevProps.tryToLoginCounter)) {
+            this.setState({isSnackOpen: this.props.wrongPassword});
         }
     }
 
@@ -28,6 +40,12 @@ class SignIn extends React.Component {
 
     openDLoginDialog = () => {
         this.setState({isDialogOpen: true});
+    }
+
+    closeSnack = () => {
+        this.setState({isSnackOpen: false});
+        userInformed = true;
+
     }
 
     render = () => {
@@ -56,6 +74,7 @@ class SignIn extends React.Component {
                     this.props.tryToLogin({email: values.email, password: values.password});
                 }}
                 render={({errors, status, touched, isSubmitting}) => 
+                    <>
                     <div>
                         <Form>
                             <h2>Type in your email and password to sign in.</h2>
@@ -66,6 +85,27 @@ class SignIn extends React.Component {
                             <Button disabled={this.state.isDisabled} className={classes.signInFormBtn} variant="contained" type="submit">Sign In</Button>
                         </Form>
                     </div>
+                    <Snackbar
+                    open={this.state.isSnackOpen}
+                    onClose={this.state.closeSnack}
+                    autoHideDuration={6000}
+                    anchorOrigin={{vertical: 'top', horizontal: 'center'}}
+                    >
+                        <SnackbarContent
+                            message={<div>
+                                <span>
+                                    {
+                                        // userCreatedSuccessfully ? registrationStatusMessages.success : registrationStatusMessages.fail
+                                        'auk'
+                                    }
+                                </span>
+                                <IconButton style={{display: 'inline-block'}} color="inherit" style={{color: "white"}} onClick={this.closeSnack}>
+                                    <Close/>
+                                </IconButton>
+                            </div>}
+                        />
+                    </Snackbar>
+                    </>
                 }
                 />
             </Dialog>
@@ -76,6 +116,8 @@ class SignIn extends React.Component {
 const mapStateToProps = state => ({
     user: state.userReducer.user.user,
     isLoggedIn: state.userReducer.isLoggedIn,
+    wrongPassword: state.userReducer.wrongPassword,
+    tryToLoginCounter: state.userReducer.tryToLoginCounter,
 });
 
 const mapDispatchToProps = dispatch => ({

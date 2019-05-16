@@ -159,7 +159,12 @@ class Grid extends React.Component {
                 }
                 <hr className={classes.hr}/>
                 <div className={classes.continueBtnWrapper}>
-                    <Button onClick={this.goToOrderAddress} size="large" variant="contained" classes={{root: classes.continueBtn}}>Continue</Button>
+                    <Button
+                        disabled={this.props.items && (this.props.items.length <= 0) ? true: false}
+                        onClick={this.goToOrderAddress}
+                        size="large" variant="contained"
+                        classes={{root: classes.continueBtn}}
+                    >Continue</Button>
                 </div>
             </div>
             

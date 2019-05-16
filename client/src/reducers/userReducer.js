@@ -6,11 +6,13 @@ const initialUserState = {
     },
     isLoggedIn: false,
     serverData: null,
+    wrongPassword: false,
     userSearchingResult: {
         hasUserFound: false,
         message: '',
     },
     registerCounter: 0,
+    tryToLoginCounter: 0,
     stuff: [
         {id: 1, name: 'guardian', description: '"Steregushchy" - a corvette with guided missile weapons of the Navy of the Russian Federation, the head corvette of the project 20380.'},
         {id: 2, name: 'pakfa', description: 'Su-57 (factory index T-50) is a promising fifth-generation Russian multi-purpose fighter developed by the P.O. Sukhoi Design Bureau in the framework of the PAK FA project (I-21 program); until August 2017, the aircraft was known under the factory index T-50).'},
@@ -40,9 +42,19 @@ const userReducer = (state = initialUserState, action) => {
         case 'EXIT':
             return {...state, isLoggedIn: action.data};
         case 'USER_IS_EXISTS':
-            return {...state, user: {...action.data.user}, isLoggedIn: action.data.isLoggedIn, userSearchingResult: {message: 'Welcome!', hasUserFound: true,},};
+            return {
+                ...state,
+                user: {...action.data.user},
+                isLoggedIn: action.data.isLoggedIn,
+                userSearchingResult: {message: 'Welcome!', hasUserFound: true,},
+                wrongPassword: false,
+            };
+        case 'WRONG_PASSWORD':
+            return {...state, wrongPassword: true, tryToLoginCounter: ++state.tryToLoginCounter,};
         case 'USER_IS_NOT_EXISTS':
             return {...state, userSearchingResult:{message: 'User hasn\'t found!\nOr entered email/password are wrong.', hasUserFound: false,}};
+        case 'GET_USER_DATA_FROM_SERVER':
+            return {...state, user: {...action.data},};
     }
 
     return state;

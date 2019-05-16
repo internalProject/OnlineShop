@@ -21,3 +21,7 @@ export const checkUserInDB = async usersCreds => {
     return serverResponse;
 }
 
+export const getUserDataFromDb = async userName => {
+    let serverResponse = await axios.post('/user-data', {name: userName});
+    return serverResponse;
+}

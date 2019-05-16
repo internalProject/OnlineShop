@@ -4,9 +4,12 @@ import { createMuiTheme, MuiThemeProvider } from '@material-ui/core/styles';
 import CssBaseline from '@material-ui/core/CssBaseline';
 import Main from './Main.jsx';
 import {grabCartItemsFromLS,} from '../actions/cartActions.js';
-import {isLoggedIn} from '../actions/userActions.js';
+import {isLoggedIn, getUserData} from '../actions/userActions.js';
+import ls from 'local-storage';
 import '../../styles.scss';
 
+let isUserDataCaught = false;
+let userName = null;
 
 const theme = createMuiTheme({
     typography: {
@@ -37,6 +40,22 @@ class App extends React.Component {
     componentDidMount = () => {
         this.props.grabCartItemsFromLS();
         this.props.checkUserLoginStatus();
+        
+    }
+    
+    componentDidUpdate = () => {
+        if (!this.props.user.id && this.props.loginStatus && !isUserDataCaught) {
+            userName = ls.get('ws-name');
+            this.props.getUserData(userName)
+        }
+        if (this.props.user && this.props.user.id) {
+            isUserDataCaught = !isUserDataCaught;
+        }
+    }
+
+    shouldComponentUpdate = () => {
+        if (isUserDataCaught) return false;
+        return true;
     }
 
     render = () => {
@@ -48,12 +67,15 @@ class App extends React.Component {
 }
 
 const mapStateToPprops = state => ({
-    
+    loginStatus: state.userReducer.isLoggedIn,
+    user: state.userReducer.user,
 });
 
 const mapDispatchToProps = dispatch => ({
     grabCartItemsFromLS: () => dispatch(grabCartItemsFromLS()),
     checkUserLoginStatus: () => dispatch(isLoggedIn()),
+    // TODO rewright
+    getUserData: userName => dispatch(getUserData(userName)),
 });
 
 export default connect(mapStateToPprops, mapDispatchToProps,)(App);
