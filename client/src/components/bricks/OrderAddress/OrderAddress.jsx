@@ -9,6 +9,7 @@ import styles from './styles.js';
 import {sendRequest,} from '../../../actions/cartActions.js';
 import cn from 'classnames';
 
+
 class OrderAddress extends React.Component {
     constructor(props) {
         super(props);
@@ -17,6 +18,27 @@ class OrderAddress extends React.Component {
         }
     }
     
+    validate = values => {
+        let errors = {};
+        if (values.address.length < 15) {
+            errors.invalidAddress = "Address is too short";
+            this.setState({isDisabled: true});
+        } else {
+            this.setState({isDisabled: false});
+        }
+        return errors;
+    }
+
+    submit = (values, actions) => {
+        this.test({
+            user: {
+                id: this.props.user.id,
+                address: values.address,
+            },
+            order: this.props.cartItems,
+        });
+    }
+
     test = data => {
         console.log(data);
     }
@@ -24,32 +46,14 @@ class OrderAddress extends React.Component {
     render = () => {
         const {classes} = this.props;
 
-        return <div className={classes.pageWrapper}>
+        return (<div className={classes.pageWrapper}>
             <Header />
             <div className={classes.pageContent}>
                 <div className={classes.innerShell}>
                     <Formik
-                    // validate={values => {
-                    //     let errors = {};
-                    //     if (values.address.length < 15) {
-                    //         errors.invalidAddress = "Address is too short";
-                    //         this.setState({isDisabled: true});
-                    //     } else {
-                    //         errors.invalidAddress = null;
-                    //         this.setState({isDisabled: false});
-                    //     }
-                    //     return errors;
-                    // }}
+                    validate={this.validate}
                     initialValues={{address: ''}}
-                    onSubmit={(values, actions)=>{
-                        this.test({
-                            user: {
-                                id: this.props.user.id,
-                                address: values.address,
-                            },
-                            order: this.props.cartItems,
-                        });
-                    }}
+                    onSubmit={this.submit}
                     render={({errors, status, touched, isSubmitting}) => 
                     <Form className={classes.form}>
                             <Field name="address" placeholder="address" component="textarea" className={cn(classes.formElement,classes.addressField)} />
@@ -63,7 +67,7 @@ class OrderAddress extends React.Component {
                 </div>
                 
             </div>
-        </div>;
+        </div>);
     }
 }
 

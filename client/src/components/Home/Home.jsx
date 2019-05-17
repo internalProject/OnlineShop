@@ -4,18 +4,13 @@ import {compose} from 'redux';
 import {withStyles} from '@material-ui/core';
 import Header from '../bricks/Header';
 import BestSellers from '../bricks/BestSellers';
-// import {getUserData} from '../../actions/userActions.js';
 import styles from './styles.js';
 
-class Home extends React.Component {
-    constructor(props){
-        super(props);
-    }
+const Home = props =>{
 
-    render = () => {
-        const {classes} = this.props;
+    const {classes} = props;
 
-        return <div className={classes.page}>
+    return (<div className={classes.page}>
         <Header/>
         <main className={classes.main}>
             <div className={classes.columnHolder}>
@@ -26,8 +21,7 @@ class Home extends React.Component {
             </div>
         </main>
         <footer className={classes.footer}>footer</footer>
-    </div>
-    }
+    </div>)
 }
 
 const mapStateToProps = state => ({
@@ -35,7 +29,6 @@ const mapStateToProps = state => ({
 });
 
 const mapDispatchToProps = dispatch => ({
-    // 'getUserData': () => dispatch(getUserData()),
 })
 
 export default compose(

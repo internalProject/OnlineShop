@@ -1,4 +1,4 @@
-module.exports.user = function (DataTypes) {
+module.exports.user = DataTypes => {
     return {
         name: {
             type: DataTypes.TEXT,
@@ -17,7 +17,7 @@ module.exports.user = function (DataTypes) {
 };
 
 
-module.exports.order = function(DataTypes){
+module.exports.order = DataTypes => {
     return {
         orderId: {
             primaryKey: true,
@@ -34,7 +34,7 @@ module.exports.order = function(DataTypes){
      }
  };
 
-module.exports.product = function(DataTypes) {
+module.exports.product = DataTypes => {
     return {
         description: {
             type: DataTypes.TEXT,

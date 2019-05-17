@@ -62,59 +62,64 @@ class SignUp extends React.Component {
         this.props.isLoggedIn();
     }
 
+    validate = values => {
+        let errors = {};
+        if (values.password !== values.confirmPassword) {
+            errors.passNotMatch = '"Passwrod and Confirm Passwrod aren\'t match"';
+            this.setState({isDisabled: true});
+        } else {
+            this.setState({isDisabled: false});
+        }
+        if (values.password.length <3) {
+            errors.passLength = 'Password is too short';
+            this.setState({isDisabled: true});
+        } else {
+            this.setState({isDisabled: false});
+        }
+        if (values.name.length <3) {
+            errors.nameLength = 'Name is too short';
+            this.setState({isDisabled: true});
+        } else {
+            this.setState({isDisabled: false});
+        }
+        return errors;
+    }
+
+    submit = (values, actions) => {
+        if (values.password !== values.confirmPassword) {
+            actions.setStatus({msg: 'Password is not match to confirmPassword field!'});
+            actions.setSubmitting(false);
+
+            return;
+        }
+        this.props.createUser(values)
+        .then(good => {
+            actions.setSubmitting(false);
+            
+
+            console.dir(good);
+            ls.set('ws-name', values.name);
+            // localStorage.setItem('ws-name', values.name);
+            this.props.userHasRegistred();
+            for(let v in values) {
+                values[v] = '';
+            }
+        }).catch(bad => {
+            actions.setSubmitting(false);
+            actions.setErrors(bad);
+            actions.setStatus({ msg: bad.message });
+        })
+    }
+
     render = () => {
         const {classes} = this.props;
-        return <div className={classes.signUpPage}>
+        return (<div className={classes.signUpPage}>
             
             <Formik
-                validate={values => {
-                    let errors = {};
-                    if (values.password !== values.confirmPassword) {
-                        errors.passNotMatch = '"Passwrod and Confirm Passwrod aren\'t match"';
-                        this.setState({isDisabled: true});
-                    } else {
-                        this.setState({isDisabled: false});
-                    }
-                    if (values.password.length <3) {
-                        errors.passLength = 'Password is too short';
-                        this.setState({isDisabled: true});
-                    } else {
-                        this.setState({isDisabled: false});
-                    }
-                    if (values.name.length <3) {
-                        errors.nameLength = 'Name is too short';
-                        this.setState({isDisabled: true});
-                    } else {
-                        this.setState({isDisabled: false});
-                    }
-                    return errors;
-                }}
+                validate={this.validate}
                 initialValues={{name: '', email: '', password: '', confirmPassword: ''}}
 
-                onSubmit={(values, actions) => {
-                    if (values.password !== values.confirmPassword) {
-                        actions.setStatus({msg: 'Password is not match to confirmPassword field!'});
-                        actions.setSubmitting(false);
-
-                        return;
-                    }
-                    this.props.createUser(values)
-                    .then(good => {
-                        actions.setSubmitting(false);
-                        
-
-                        console.dir(good);
-                        ls.set('ws-name', values.name);
-                        this.props.userHasRegistred();
-                        for(let v in values) {
-                            values[v] = '';
-                        }
-                    }).catch(bad => {
-                        actions.setSubmitting(false);
-                        actions.setErrors(bad);
-                        actions.setStatus({ msg: bad.message });
-                    })
-                }}
+                onSubmit={this.submit}
                 
                 render={({ errors, status, touched, isSubmitting }) => (<>
                     <div className={classes.navBar}>
@@ -170,7 +175,7 @@ class SignUp extends React.Component {
                     </div>}
                 />
             </Snackbar>
-        </div>;
+        </div>);
     }
 }
 

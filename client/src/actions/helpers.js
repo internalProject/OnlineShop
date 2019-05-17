@@ -1,7 +1,8 @@
 import axios from 'axios';
+import urls from '../urlConstants.js';
 
 const pulsar = axios.create({
-    baseURL: 'https://localhost:3000/',
+    baseURL: urls.BASE_URL,
     timeout: 3000,
     headers: {'Content-Type': 'application/json'}
 });
@@ -12,16 +13,16 @@ export const createUser = async user => {
     // .catch(e => console.log('bad response from server to client',e));
     // return result;
     
-    let serverResponse = await axios.post('/sign-up', user);
+    let serverResponse = await axios.post(urls.SIGN_UP, user);
     return serverResponse;
 }
 
 export const checkUserInDB = async usersCreds => {
-    let serverResponse = await axios.post('/sign-in', usersCreds);
+    let serverResponse = await axios.post(urls.SIGN_IN, usersCreds);
     return serverResponse;
 }
 
 export const getUserDataFromDb = async userName => {
-    let serverResponse = await axios.post('/user-data', {name: userName});
+    let serverResponse = await axios.post(urls.GET_USER_DATA, {name: userName});
     return serverResponse;
 }

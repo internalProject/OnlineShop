@@ -1,6 +1,6 @@
 
 import green from '@material-ui/core/colors/green';
-import imgUrl from '../../../../assets/recruit.jpg';
+import imgUrl from '../../../../assets/images/recruit.jpg';
 
 const styles = theme => ({
     signUpPage: {

@@ -40,6 +40,9 @@ const styles = {
         textDecoration: 'none',
         display: 'flex',
         justifyContent: 'center',
+        '&:visited': {
+            color: 'white',
+        }
     },
     menuLi: {
         // width: '100%',

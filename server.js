@@ -2,7 +2,11 @@ var cors = require('cors');
 var express = require('express');
 var app = express();
 const Sequelize = require('sequelize');
-const model = require('./model.js');
+// const model = require('./model.js');
+const userModel = require('./models/user.js').userModel,
+orderModel = require('./models/order.js').orderModel,
+productModel = require('./models/product.js').productModel;
+ 
 const path = require('path');
 const bodyParser = require('body-parser');
 const port = process.env.PORT || 3000;
@@ -28,20 +32,23 @@ sequelize
 
 const Model = Sequelize.Model;
 class User extends Model {}
-User.init(model.user(Sequelize), {
+// User.init(model.user(Sequelize), {
+User.init(userModel(Sequelize), {
   sequelize,
   modelName: 'user', timestamps: false,
 });
 
 
 class Order extends Model {}
-Order.init(model.order(Sequelize), {
+// Order.init(model.order(Sequelize), {
+Order.init(orderModel(Sequelize), {
   sequelize,
   modelName: 'order', timestamps: false,
 })
 
 class Product extends Model {}
-Product.init(model.product(Sequelize), {
+// Product.init(model.product(Sequelize), {
+Product.init(productModel(Sequelize), {
   sequelize, modelName: 'product', timestamps: false,
 })
 
@@ -90,18 +97,27 @@ app.post('/sign-up', jsonParser, (req, res) => {
 app.post('/sign-in', jsonParser, (req, res) => {
   User.findOne({where: {email: req.body.email}})
   .then(user => {
-    if (user.password === req.body.password && user.email === req.body.email) {
-      res.json(safeStringify({user:{
-        name: user.name,
-        email: user.email,
-        password: user.password,
-      }, isUserExists: true,}));
+    console.log('incoming request to log in: ');
+    console.dir(user);
+    if (user === null) {
+      // big issue! check this.
+      res.send('Wrong email.');
     }
-    if (user.password !== req.body.password && user.email === req.body.email) {
-      console.log('wrong password!');
-      res.json(safeStringify({
-        wrongPassword: true,
-      }));
+    else {
+      if (user.password === req.body.password && user.email === req.body.email) {
+        res.json(safeStringify({user:{
+          name: user.name,
+          email: user.email,
+          password: user.password,
+          id: user.id,
+        }, isUserExists: true,}));
+      }
+      if (user.password !== req.body.password && user.email === req.body.email) {
+        console.log('wrong password!');
+        res.json(safeStringify({
+          wrongPassword: true,
+        }));
+      }
     }
   })
   .catch(e => {
@@ -109,10 +125,6 @@ app.post('/sign-in', jsonParser, (req, res) => {
     res.send({isUserExists: false});
   });
 });
-
-app.post('/order', jsonParser, (req, res) => {
-  
-})
 
 app.post('/user-data', jsonParser, (req, res) => {
   User.findOne({where: {name: req.body.name}})
@@ -122,5 +134,8 @@ app.post('/user-data', jsonParser, (req, res) => {
   .catch(searchResult => console.dir(searchResult));
 })
 
+app.post('/order', jsonParser, (req, res) => {
+  
+})
 
 app.listen(port);

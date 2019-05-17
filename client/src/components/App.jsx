@@ -44,10 +44,11 @@ class App extends React.Component {
     }
     
     componentDidUpdate = () => {
-        if (!this.props.user.id && this.props.loginStatus && !isUserDataCaught) {
-            userName = ls.get('ws-name');
-            this.props.getUserData(userName)
-        }
+        // if (!this.props.user.id && this.props.loginStatus && !isUserDataCaught) {
+        //     userName = ls.get('ws-name');
+        //     // userName = localStorage.getItem('ws-name');
+        //     this.props.getUserData(userName)
+        // }
         if (this.props.user && this.props.user.id) {
             isUserDataCaught = !isUserDataCaught;
         }
@@ -59,10 +60,10 @@ class App extends React.Component {
     }
 
     render = () => {
-        return <MuiThemeProvider theme={theme}>
+        return (<MuiThemeProvider theme={theme}>
             <CssBaseline/>
             <Main/>
-        </MuiThemeProvider>
+        </MuiThemeProvider>)
     }
 }
 

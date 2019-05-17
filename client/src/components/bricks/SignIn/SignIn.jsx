@@ -48,31 +48,35 @@ class SignIn extends React.Component {
 
     }
 
+    validate = values => {
+        let errors = {};
+        if (values.password.length < 3 || values.email.length < 3) {
+            errors.invalidFields = 'Email or password is too short.';
+            this.setState({isDisabled: true});
+        } else {
+            this.setState({isDisabled: false});
+        }
+
+        return errors;
+    }
+
+    submit = (values, actions) => {
+        this.props.tryToLogin({email: values.email, password: values.password});
+    }
+
     render = () => {
         const {classes} = this.props;
 
-        return <div className={classes.loginModalWrapper}>
+        return (<div className={classes.loginModalWrapper}>
             <Button onClick={this.openDLoginDialog} className={classes.signInBtn}>Sign In</Button>
             <Dialog
                 open={this.state.isDialogOpen}
                 onClose={this.closeLoginDialog}
             >
                 <Formik
-                validate={values => {
-                    let errors = {};
-                    if (values.password.length < 3 || values.email.length < 3) {
-                        errors.invalidFields = 'Email or password is too short.';
-                        this.setState({isDisabled: true});
-                    } else {
-                        this.setState({isDisabled: false});
-                    }
-
-                    return errors;
-                }}
+                validate={this.validate}
                 initialValues={{email: '', password: ''}}
-                onSubmit={(values, actions)=>{
-                    this.props.tryToLogin({email: values.email, password: values.password});
-                }}
+                onSubmit={this.submit}
                 render={({errors, status, touched, isSubmitting}) => 
                     <>
                     <div>
@@ -81,6 +85,9 @@ class SignIn extends React.Component {
                             <Field type="email" required name="email" placeholder="email" className={classes.field}/>
                             <Field required type="password" name="password" placeholder="password" className={classes.field}/>
                             {errors && errors.invalidFields && (touched.email || touched.password) && <div className={classes.error}>{errors.invalidFields}</div>}
+                            {this.props.userSearchingResult && !this.props.userSearchingResult.hasUserFounded && <div className={classes.error}>
+                                {this.props.userSearchingResult.message}
+                            </div>}
                             <Button onClick={this.closeLoginDialog}>Close</Button>
                             <Button disabled={this.state.isDisabled} className={classes.signInFormBtn} variant="contained" type="submit">Sign In</Button>
                         </Form>
@@ -92,11 +99,12 @@ class SignIn extends React.Component {
                     anchorOrigin={{vertical: 'top', horizontal: 'center'}}
                     >
                         <SnackbarContent
+                            classes={{root: classes.error}}
                             message={<div>
                                 <span>
                                     {
                                         // userCreatedSuccessfully ? registrationStatusMessages.success : registrationStatusMessages.fail
-                                        'auk'
+                                        'Wrong Password!'
                                     }
                                 </span>
                                 <IconButton style={{display: 'inline-block'}} color="inherit" style={{color: "white"}} onClick={this.closeSnack}>
@@ -109,7 +117,7 @@ class SignIn extends React.Component {
                 }
                 />
             </Dialog>
-        </div>;
+        </div>);
     }
 }
 
@@ -118,6 +126,7 @@ const mapStateToProps = state => ({
     isLoggedIn: state.userReducer.isLoggedIn,
     wrongPassword: state.userReducer.wrongPassword,
     tryToLoginCounter: state.userReducer.tryToLoginCounter,
+    userSearchingResult: state.userReducer.userSearchingResult,
 });
 
 const mapDispatchToProps = dispatch => ({

@@ -32,7 +32,10 @@ const styles = theme => ({
     },
     error: {
         fontSize: '16px',
-        color: 'red',
+        color: 'white',
+        backgroundColor: '#b71c1c',
+        maxWidth: '80%',
+        margin: '5px 0px 5px 5%',
     },
 });
 

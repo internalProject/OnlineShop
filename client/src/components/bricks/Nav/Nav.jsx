@@ -26,7 +26,7 @@ class Nav extends React.Component {
     render = () => {
         const {classes} = this.props;
 
-        return <nav className={classes.navBar}>
+        return (<nav className={classes.navBar}>
         <ul className={classes.navLinks}>
             <li className={classes.navLi}>
                 <Link className={classes.link} to="/cart">CART</Link>
@@ -45,7 +45,7 @@ class Nav extends React.Component {
             </li>
         </ul>
         {this.props.isUserLoggedIn ? <UserBtn/> : <Unregistered/>}
-    </nav>
+    </nav>)
     }
 }
 

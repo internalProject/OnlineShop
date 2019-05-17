@@ -10,6 +10,7 @@ export const removeFromCart = itemId => dispatch => {
 
 export const grabCartItemsFromLS = () => dispatch => {
     let items = ls.get('ws-cart');
+    // let items = localStorage.getItem('ws-cart');
     if (items === null || items === undefined) {
         items = [];
     }

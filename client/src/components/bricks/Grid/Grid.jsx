@@ -18,28 +18,19 @@ const images = importAll(require.context('../../../../assets', false, /\.(png|jp
 let descrBoard = null;
 
 
-class Grid extends React.Component {
-    constructor(props) {
-        super(props);
-        this.state = {
-            descriptionVisisbility: false,
-        };
-    }
+const Grid = props => {
 
-    componentDidMount = () => {
-    }
-
-    hideDescription = item => e => {
+    const hideDescription = item => e => {
         descrBoard.style.display = 'none';
     }
 
-    showDescription = item => e => {
+    const showDescription = item => e => {
         descrBoard = e.target.querySelector('span div');
         descrBoard.style.display = 'block';
     }
 
-    addOne = transitItem => e => {
-        let subtitutionalItems = [...this.props.items];
+    const addOne = transitItem => e => {
+        let subtitutionalItems = [...props.items];
         let searchResult = subtitutionalItems.filter(item => {
             if (item.id === transitItem.id) return true;
             return false;
@@ -66,11 +57,12 @@ class Grid extends React.Component {
             subtitutionalItems.splice(selectedIndex, 1, pickedType);
         }
         ls.set('ws-cart', subtitutionalItems);
-        this.props.pickOne(subtitutionalItems);
+        // localStorage.setItem('ws-cart', subtitutionalItems);
+        props.pickOne(subtitutionalItems);
     }
 
-    removeOne = transitItem => e => {
-        let subtitutionalItems = [...this.props.items];
+    const removeOne = transitItem => e => {
+        let subtitutionalItems = [...props.items];
         let searchResult = subtitutionalItems.filter(item => {
             if (item.id === transitItem.id) return true;
             return false;
@@ -101,75 +93,74 @@ class Grid extends React.Component {
             subtitutionalItems.splice(selectedIndex, 1, pickedType);
         }
         ls.set('ws-cart', subtitutionalItems);
-        this.props.pickOne(subtitutionalItems);
+        // localStorage.setItem('ws-cart', subtitutionalItems);
+        props.pickOne(subtitutionalItems);
     }
     
-    removeFromCart = itemId => e => {
-        this.props.removeFromCart(itemId);
+    const removeFromCart = itemId => e => {
+        props.removeFromCart(itemId);
     }
 
-    goToOrderAddress = () => {
-        this.props.history.push('/order-address');
+    const goToOrderAddress = () => {
+        props.history.push('/order-address');
     }
 
-    render = () => {
-        const {classes} = this.props;
+    const {classes} = props;
 
-        return <div className={classes.gridHolder}>
-            <div className={classes.innerShell}>
-                <div className={classes.gridHeader}>
-                    <div className={classes.infoField}>info</div>
-                    <div className={classes.itemId}>id</div>
-                    <div className={classes.itemName}>name</div>
-                    <div className={classes.itemQuantity}>quantity</div>
-                </div>
-
-                {
-                    this.props.items ? (this.props.items.map((item, i) => 
-                        <div className={classes.item} key={item.id}>
-                            <div 
-                                className={classes.infoField}
-                                onMouseEnter={this.showDescription(item)}
-                                onMouseLeave={this.hideDescription(item)}
-                            >
-                                <span className={classes.itemInfo}>
-                                    <Info/>
-                                    <div className={classes.itemDescription}>
-                                        <p>{item.description}</p>
-                                    </div>
-                                </span>
-                            </div>
-                            <div className={classes.itemId}>{item.id}</div>
-                            <div className={classes.itemName}>{item.name}</div>
-                            <div className={classes.itemQuantity}>
-                                <IconButton className={classes.qunatElem} size="small" variant="contained" onClick={this.removeOne(item)}>
-                                    <Remove/>
-                                </IconButton>
-                                <span className={cn(classes.numberPlace, classes.qunatElem)}>{item.quantity}</span>
-                                <IconButton className={classes.qunatElem} size="small" variant="contained" onClick={this.addOne(item)}>
-                                    <Add/>
-                                </IconButton>
-                                <IconButton onClick={this.removeFromCart(item.id)} variant="contained" size="small">
-                                    <DeleteIcon />
-                                </IconButton>
-                            </div>
-
-                        </div>
-                    )) : null
-                }
-                <hr className={classes.hr}/>
-                <div className={classes.continueBtnWrapper}>
-                    <Button
-                        disabled={this.props.items && (this.props.items.length <= 0) ? true: false}
-                        onClick={this.goToOrderAddress}
-                        size="large" variant="contained"
-                        classes={{root: classes.continueBtn}}
-                    >Continue</Button>
-                </div>
+    return (<div className={classes.gridHolder}>
+        <div className={classes.innerShell}>
+            <div className={classes.gridHeader}>
+                <div className={classes.infoField}>info</div>
+                <div className={classes.itemId}>id</div>
+                <div className={classes.itemName}>name</div>
+                <div className={classes.itemQuantity}>quantity</div>
             </div>
-            
-        </div>;
-    }
+
+            {
+                props.items ? (props.items.map((item, i) => 
+                    <div className={classes.item} key={item.id}>
+                        <div 
+                            className={classes.infoField}
+                            onMouseEnter={showDescription(item)}
+                            onMouseLeave={hideDescription(item)}
+                        >
+                            <span className={classes.itemInfo}>
+                                <Info/>
+                                <div className={classes.itemDescription}>
+                                    <p>{item.description}</p>
+                                </div>
+                            </span>
+                        </div>
+                        <div className={classes.itemId}>{item.id}</div>
+                        <div className={classes.itemName}>{item.name}</div>
+                        <div className={classes.itemQuantity}>
+                            <IconButton className={classes.qunatElem} size="small" variant="contained" onClick={removeOne(item)}>
+                                <Remove/>
+                            </IconButton>
+                            <span className={cn(classes.numberPlace, classes.qunatElem)}>{item.quantity}</span>
+                            <IconButton className={classes.qunatElem} size="small" variant="contained" onClick={addOne(item)}>
+                                <Add/>
+                            </IconButton>
+                            <IconButton onClick={removeFromCart(item.id)} variant="contained" size="small">
+                                <DeleteIcon />
+                            </IconButton>
+                        </div>
+
+                    </div>
+                )) : null
+            }
+            <hr className={classes.hr}/>
+            <div className={classes.continueBtnWrapper}>
+                <Button
+                    disabled={props.items && (props.items.length <= 0) ? true: false}
+                    onClick={goToOrderAddress}
+                    size="large" variant="contained"
+                    classes={{root: classes.continueBtn}}
+                >Continue</Button>
+            </div>
+        </div>
+        
+    </div>);
 }
 
 const mapStateToProps = state => ({

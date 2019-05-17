@@ -8,23 +8,18 @@ import SignUp from './bricks/SignUp';
 import OrderAddress from './bricks/OrderAddress';
 
 
-class Main extends React.Component {
-    constructor(props) {
-        super(props)
-    }
+const Main = props => {
 
-    render = () => {
-    return <Router>
+    return (<Router>
         <Switch>
             {/* Login, Register, Cart, Profile */}
             <Route exact path="/" component={Home} />
             <Route path="/cart" component={Cart} />
             <Route path="/sign-in" component={SignIn} />
             <Route path="/sign-up" component={SignUp} />
-            <Route path="/order-address" render={() => (this.props.pickedItems && (this.props.pickedItems.length <= 0) ? <Redirect to="/"/> : <OrderAddress/>)} />
+            <Route path="/order-address" render={() => (props.pickedItems && (props.pickedItems.length <= 0) ? <Redirect to="/"/> : <OrderAddress/>)} />
         </Switch>
-    </Router>
-    }
+    </Router>)
 }
 
 const mapStateToProps = state => ({

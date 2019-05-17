@@ -18,6 +18,7 @@ const cartReducer = (state = cart, action) => {
                 return true;
             });
             ls.set('ws-cart', afterRemove);
+            // localStorage.setItem('ws-cart', afterRemove);
             return {...state, picked: afterRemove};
         }
         case 'GRAB_ON_CONNECT':

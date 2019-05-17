@@ -8,7 +8,7 @@ class Unregistered extends React.Component {
     render = () => {
         const {classes} = this.props;
 
-        return <div className={classes.togglesSignInMenu}>
+        return (<div className={classes.togglesSignInMenu}>
             <div className={classes.regLinkWrapper}>
                 {/* <Link className={classes.registerLinks} to="/sign-in"><span className={classes.linkTextHook}>Sign In</span></Link> */}
                 <SignIn />
@@ -16,7 +16,7 @@ class Unregistered extends React.Component {
             <div className={classes.regLinkWrapper} style={{height: "36px"}}>
                 <Link className={classes.registerLinks} to="/sign-up"><span className={classes.linkTextHook}>Sign Up</span></Link>
             </div>
-        </div>;
+        </div>);
     }
 }
 

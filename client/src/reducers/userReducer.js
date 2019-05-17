@@ -36,7 +36,7 @@ const userReducer = (state = initialUserState, action) => {
         case 'CREATE_NEW_USER':
             return {...state, serverData: action.data, registerCounter: ++state.registerCounter};
         case 'USER_IS_LOGGED_IN':
-            return {...state, isLoggedIn: action.data};
+            return {...state, isLoggedIn: action.data.isLoggedIn, user: action.data.user};
         case 'USER_HAS_REGISTRED':
             return {...state, isLoggedIn: action.data};
         case 'EXIT':
@@ -52,7 +52,7 @@ const userReducer = (state = initialUserState, action) => {
         case 'WRONG_PASSWORD':
             return {...state, wrongPassword: true, tryToLoginCounter: ++state.tryToLoginCounter,};
         case 'USER_IS_NOT_EXISTS':
-            return {...state, userSearchingResult:{message: 'User hasn\'t found!\nOr entered email/password are wrong.', hasUserFound: false,}};
+            return {...state, userSearchingResult:{message: 'User hasn\'t found!\n Entered email or password are wrong.', hasUserFound: false,}};
         case 'GET_USER_DATA_FROM_SERVER':
             return {...state, user: {...action.data},};
     }

@@ -7,10 +7,14 @@ import {createUser as saveNewUserToDb, checkUserInDB, getUserDataFromDb} from '.
 //     dispatch({type: 'GET_USER_DATA', data: user});
 // };
 
-export const isLoggedIn = () => {
+export const isLoggedIn = () => async dispatch => {
     let name = ls.get('ws-name');
+    // let name = localStorage.getItem('ws-name');
     if (name && name.length !== undefined && name.length > 1) {
-        return ({type: 'USER_IS_LOGGED_IN', data: true});
+        let serverResponse = await getUserDataFromDb(name);
+        let user = JSON.parse(serverResponse.data);
+        user = user.user.dataValues;
+        return ({type: 'USER_IS_LOGGED_IN', data: {isLoggedIn: true, user}});
     }
     return ({type: 'USER_IS_LOGGED_IN', data: false});
 }
@@ -29,6 +33,7 @@ export const userHasRegistred = () => dispatch => {
 
 export const exit = () => dispatch => {
     ls.remove('ws-name');
+    // localStorage.removeItem('ws-name');
     dispatch({
         type: 'EXIT',
         data: false,
@@ -37,6 +42,9 @@ export const exit = () => dispatch => {
 
 export const tryToLogin = userCredentials => async dispatch => {
     let serverResponse = await checkUserInDB(userCredentials);
+    if (serverResponse.data === 'Wrong email.') {
+        dispatch({type: 'USER_IS_NOT_EXISTS'});
+    }
     let user = JSON.parse(serverResponse.data);
     
     if (user.wrongPassword) {
