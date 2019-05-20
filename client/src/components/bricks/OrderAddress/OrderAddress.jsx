@@ -1,12 +1,14 @@
 import React from 'react';
 import {compose} from 'redux';
 import {connect} from 'react-redux';
+import {withRouter} from 'react-router';
 import {withStyles} from '@material-ui/core';
 import Header from '../../bricks/Header';
 import {Formik, Form, Field} from 'formik';
-import {Button,} from '@material-ui/core';
+import {Button, Snackbar, SnackbarContent, IconButton} from '@material-ui/core';
+import Close from '@material-ui/icons/Close';
 import styles from './styles.js';
-import {sendRequest,} from '../../../actions/cartActions.js';
+import {clearCart, makeOrder} from '../../../actions/cartActions.js';
 import cn from 'classnames';
 
 
@@ -15,6 +17,8 @@ class OrderAddress extends React.Component {
         super(props);
         this.state = {
             isDisabled: false,
+            isSnackOpen: false,
+            userInformed: false,
         }
     }
     
@@ -29,8 +33,20 @@ class OrderAddress extends React.Component {
         return errors;
     }
 
+    componentDidUpdate = prevProps => {
+        if (!this.props.isLoggedIn) {
+            this.props.history.push('/');
+        }
+        if ((this.props.orderNumber !== prevProps.orderNumber) && this.props.orderStatus.status !== '') { // if (this.props.orderNumber !== prevProps.orderNumber) {
+            this.setState({isSnackOpen: true,});
+        }
+        if (this.props.orderStatus && this.props.orderStatus.status === 'success' && this.state.userInformed) {
+            this.props.clearCart();
+        }
+    }
+ 
     submit = (values, actions) => {
-        this.test({
+        this.sendRequestForOrder({
             user: {
                 id: this.props.user.id,
                 address: values.address,
@@ -39,8 +55,13 @@ class OrderAddress extends React.Component {
         });
     }
 
-    test = data => {
-        console.log(data);
+    sendRequestForOrder = orderData => {
+        this.props.makeOrder(orderData);
+        // console.log('on order');
+    }
+
+    closeSnack = () => {
+        this.setState({isSnackOpen: false, userInformed: !this.state.userInformed});
     }
 
     render = () => {
@@ -56,32 +77,74 @@ class OrderAddress extends React.Component {
                     onSubmit={this.submit}
                     render={({errors, status, touched, isSubmitting}) => 
                     <Form className={classes.form}>
-                            <Field name="address" placeholder="address" component="textarea" className={cn(classes.formElement,classes.addressField)} />
-                            {errors && errors.invalidAddress && touched.address && <div className={classes.error}>
+                            <Field name="address"
+                            placeholder="address"
+                            component="textarea"
+                            className={cn(classes.formElement,classes.addressField)} />
+
+                            {errors && errors.invalidAddress && touched.address &&
+                            <div className={classes.error}>
                                 {errors.invalidAddress}
                             </div>}
-                            <Button disabled={this.state.isDisabled} size="medium" className={cn(classes.formElement, classes.sendBtn)} type="submit" variant="contained">Send Request</Button>
+
+                            <Button
+                            disabled={this.state.isDisabled}
+                            size="medium"
+                            className={cn(classes.formElement, classes.sendBtn)}
+                            type="submit"
+                            variant="contained"
+                                >Send Request
+                            </Button>
                         </Form>
                     }
                     />
                 </div>
-                
             </div>
+            {
+                this.props.orderStatus.message !== '' && !this.props.orderStatus.error ? 
+                <Snackbar
+                open={this.state.isSnackOpen}
+                onClose={this.state.closeSnack}
+                autoHideDuration={2000}
+                anchorOrigin={{vertical: 'top', horizontal: 'center'}}
+                >
+                    <SnackbarContent
+                        classes={{root: this.props.orderStatus.error ? classes.snackError: classes.snackSuccess}}
+                        message={<div>
+                            <span>
+                                {
+                                    this.props.orderStatus.status === 'success' ? this.props.orderStatus.message : 
+                                    `${this.props.orderStatus.message}\n${this.props.orderStatus.error}`
+                                }
+                            </span>
+                            <IconButton style={{display: 'inline-block'}} color="inherit" style={{color: "white"}} onClick={this.closeSnack}>
+                                <Close/>
+                            </IconButton>
+                        </div>}
+                    />
+                </Snackbar>
+                : 
+                null // <div className={classes.error}>`${this.props.orderStatus.error}`</div>
+            }
         </div>);
     }
 }
 
 const mapStateToProps = state => ({
-    user: state.userReducer.user,
+    user: state.userReducer.user.user,
+    isLoggedIn: state.userReducer.isLoggedIn,
     cartItems: state.cartReducer.picked,
+    orderStatus: state.cartReducer.orderStatus,
+    orderNumber: state.cartReducer.orderNumber,
 });
 
 const mapDispatchToProps = dispatch => ({
-    sendRequest: data => dispatch(sendRequest(data)),
+    makeOrder: order => dispatch(makeOrder(order)),
+    clearCart: () => dispatch(clearCart()),
 });
 
 export default compose(
     connect(mapStateToProps, mapDispatchToProps),
     withStyles(styles),
-)(OrderAddress);
+)(withRouter(OrderAddress));
 

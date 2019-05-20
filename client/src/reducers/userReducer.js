@@ -13,6 +13,7 @@ const initialUserState = {
     },
     registerCounter: 0,
     tryToLoginCounter: 0,
+    orderStatus: {message: '', error: null,},
     stuff: [
         {id: 1, name: 'guardian', description: '"Steregushchy" - a corvette with guided missile weapons of the Navy of the Russian Federation, the head corvette of the project 20380.'},
         {id: 2, name: 'pakfa', description: 'Su-57 (factory index T-50) is a promising fifth-generation Russian multi-purpose fighter developed by the P.O. Sukhoi Design Bureau in the framework of the PAK FA project (I-21 program); until August 2017, the aircraft was known under the factory index T-50).'},
@@ -55,6 +56,7 @@ const userReducer = (state = initialUserState, action) => {
             return {...state, userSearchingResult:{message: 'User hasn\'t found!\n Entered email or password are wrong.', hasUserFound: false,}};
         case 'GET_USER_DATA_FROM_SERVER':
             return {...state, user: {...action.data},};
+        
     }
 
     return state;

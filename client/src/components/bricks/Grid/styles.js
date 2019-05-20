@@ -87,6 +87,18 @@ const styles = theme => ({
         backgroundColor: theme.primary.green,
         color: 'white',
         display: 'block',
+    },
+    loginWrapper: {
+        display: 'flex',
+        justifyContent: 'flex-end',
+        alignItems: 'center',
+        width: '100%',
+        padding: '0px 20px', 
+        color: 'white',
+    },
+    haveToLogin: {
+        ...styles.continueBtn,
+        backgroundColor: 'transparent',
     }
 })
 

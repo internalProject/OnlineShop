@@ -44,6 +44,14 @@ const style = theme => ({
         width: '150px',
         alignSelf: 'flex-end',
     },
+    snackError: {
+        backgroundColor: 'red',
+        color: 'white',
+    },
+    snackSuccess: {
+        backgroundColor: '#00c853',
+        color: 'white',
+    },
     error: {
         color: 'red',
     },

@@ -97,8 +97,6 @@ app.post('/sign-up', jsonParser, (req, res) => {
 app.post('/sign-in', jsonParser, (req, res) => {
   User.findOne({where: {email: req.body.email}})
   .then(user => {
-    console.log('incoming request to log in: ');
-    console.dir(user);
     if (user === null) {
       // big issue! check this.
       res.send('Wrong email.');
@@ -134,8 +132,23 @@ app.post('/user-data', jsonParser, (req, res) => {
   .catch(searchResult => console.dir(searchResult));
 })
 
-app.post('/order', jsonParser, (req, res) => {
-  
+app.post('/make-order', jsonParser, (req, res) => {
+  let orders = req.body.order.map(o => {
+    return Order.create({
+      userId: req.body.user.id,
+      productId: o.id,
+      quantity: o.quantity,
+      address: req.body.user.address,
+    });
+  });
+
+  Promise.all(orders)
+  .then(result => {
+    console.log('User\'s order successfully accepted!');
+    console.dir(new Date().getMilliseconds());
+    res.json(safeStringify(result));
+  })
+  .catch(error => res.json(safeStringify(error)));
 })
 
 app.listen(port);

@@ -17,13 +17,14 @@ const Main = props => {
             <Route path="/cart" component={Cart} />
             <Route path="/sign-in" component={SignIn} />
             <Route path="/sign-up" component={SignUp} />
-            <Route path="/order-address" render={() => (props.pickedItems && (props.pickedItems.length <= 0) ? <Redirect to="/"/> : <OrderAddress/>)} />
+            <Route path="/order-address" render={() => ((props.pickedItems && (props.pickedItems.length <= 0))  || (props.user && !props.user.id) ? <Redirect to="/"/> : <OrderAddress/>)} />
         </Switch>
     </Router>)
 }
 
 const mapStateToProps = state => ({
     pickedItems: state.cartReducer.picked,
+    user: state.userReducer.user.user,
 });
 
 const mapDispatchToProps = dispatch => ({});

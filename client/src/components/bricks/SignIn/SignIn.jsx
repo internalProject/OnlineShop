@@ -4,6 +4,7 @@ import {Snackbar, SnackbarContent, IconButton} from '@material-ui/core';
 import Close from '@material-ui/icons/Close';
 import {connect} from 'react-redux';
 import {compose} from 'redux';
+import {withRouter} from 'react-router';
 import {withStyles} from '@material-ui/core';
 import styles from './styles.js';
 import {tryToLogin} from '../../../actions/userActions.js';
@@ -23,7 +24,11 @@ class SignIn extends React.Component {
 
     componentDidUpdate = (prevProps) => {
         if (this.props.isLoggedIn) {
-            this.props.history.push('/');
+            // console.log(this.props.history);
+            if (this.props.location.pathname === '/cart' && this.props.user.id) {
+                this.props.history.push('/order-address');
+            }
+            // this.props.history.push('/');
         }
         if (this.props.tryToLoginCounter !== prevProps.tryToLoginCounter) {
             userInformed = !userInformed;
@@ -130,11 +135,11 @@ const mapStateToProps = state => ({
 });
 
 const mapDispatchToProps = dispatch => ({
-    'tryToLogin': usersCredentials => dispatch(tryToLogin(usersCredentials)),
+    tryToLogin: usersCredentials => dispatch(tryToLogin(usersCredentials)),
 });
 
 
 export default compose(
     withStyles(styles),
     connect(mapStateToProps, mapDispatchToProps),
-)(SignIn);
+)(withRouter(SignIn));

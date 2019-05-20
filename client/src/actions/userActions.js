@@ -1,5 +1,9 @@
 import ls from 'local-storage';
-import {createUser as saveNewUserToDb, checkUserInDB, getUserDataFromDb} from './helpers.js';
+import {
+    createUser as saveNewUserToDb,
+    checkUserInDB,
+    getUserDataFromDb,
+} from './helpers.js';
 
 // export const getUserData = () => async dispatch => {
 //     let user = await ls.get('me');
@@ -65,3 +69,4 @@ export const getUserData = userName => async dispatch => {
     user = user.user.dataValues;
     dispatch({type: 'GET_USER_DATA_FROM_SERVER', data: user});
 }
+

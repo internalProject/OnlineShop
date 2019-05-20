@@ -26,3 +26,8 @@ export const getUserDataFromDb = async userName => {
     let serverResponse = await axios.post(urls.GET_USER_DATA, {name: userName});
     return serverResponse;
 }
+
+export const makeOrder = async order => {
+    let serverResponse = await axios.post(urls.MAKE_ORDER, order);
+    return serverResponse;
+}
