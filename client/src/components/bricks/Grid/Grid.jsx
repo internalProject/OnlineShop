@@ -7,7 +7,7 @@ import {Info, Add, Remove,} from '@material-ui/icons';
 import DeleteIcon from '@material-ui/icons/Delete';
 import styles from './styles.js';
 import SignIn from '../SignIn';
-import {pickOne, removeFromCart} from '../../../actions/cartActions.js';
+import {pickOne, removeFromCart, clearCart} from '../../../actions/cartActions.js';
 import cn from 'classnames';
 import ls from 'local-storage';
 
@@ -23,9 +23,9 @@ class Grid extends React.Component{
     constructor(props) {
         super(props);
 
-        this.state = {
-            continueClicked: false,
-        }
+        // this.state = {
+        //     continueClicked: false,
+        // }
     }
 
     hideDescription = item => e => {
@@ -109,9 +109,13 @@ class Grid extends React.Component{
         this.props.removeFromCart(itemId);
     }
 
+    clearCart = () => {
+        this.props.clearCart();
+    }
+
     goToOrderAddress = () => {
         if (!this.props.isLoggedIn) {
-            this.state.continueClicked = this.setState({continueClicked: !this.state.continueClicked});
+            // this.state.continueClicked = this.setState({continueClicked: !this.state.continueClicked});
             return;
         }
         this.props.history.push('/order-address');
@@ -165,15 +169,22 @@ class Grid extends React.Component{
                 <hr className={classes.hr}/>
                 <div className={classes.continueBtnWrapper}>
                     <Button
+                        variant="contained"
+                        className={classes.clearCart}
+                        size="small"
+                        onClick={this.clearCart}
+                        disabled={this.props.items.length <= 0}
+                        >Clear Cart</Button>
+                    <Button
                         disabled={this.props.items && (this.props.items.length <= 0) ? true: false}
                         onClick={this.goToOrderAddress}
                         size="large" variant="contained"
                         classes={{root: classes.continueBtn}}
                     >Continue</Button>
                 </div>
-                {!this.props.isLoggedIn && this.state.continueClicked ?
+                {!this.props.isLoggedIn ?
                     <div className={classes.loginWrapper}>
-                        <div>To make order first you have to</div><SignIn className={classes.haveToLogin}/>
+                        <div>To make order first you have to</div><div className={classes.signInShell}><SignIn/></div>
                     </div>: 
                     null
                 }
@@ -190,6 +201,7 @@ const mapStateToProps = state => ({
 const mapDispatchToProps = dispatch => ({
     pickOne: item => dispatch(pickOne(item)),
     removeFromCart: itemId => dispatch(removeFromCart(itemId)),
+    clearCart: () => dispatch(clearCart()),
 });
 
 export default compose(

@@ -6,6 +6,7 @@ import Cart from './Cart';
 import SignIn from './bricks/SignIn';
 import SignUp from './bricks/SignUp';
 import OrderAddress from './bricks/OrderAddress';
+import Profile from './bricks/Profile';
 
 
 const Main = props => {
@@ -18,12 +19,14 @@ const Main = props => {
             <Route path="/sign-in" component={SignIn} />
             <Route path="/sign-up" component={SignUp} />
             <Route path="/order-address" render={() => ((props.pickedItems && (props.pickedItems.length <= 0))  || (props.user && !props.user.id) ? <Redirect to="/"/> : <OrderAddress/>)} />
+            <Route path="/profile" render={() => (props.isLoggedIn ? <Profile /> : <Redirect to="/" />)} />
         </Switch>
     </Router>)
 }
 
 const mapStateToProps = state => ({
     pickedItems: state.cartReducer.picked,
+    isLoggedIn: state.userReducer.isLoggedIn,
     user: state.userReducer.user.user,
 });
 

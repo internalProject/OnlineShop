@@ -16,7 +16,7 @@ const styles = {
         }
     },
     higher: {
-        height: '80px',
+        height: '130px',
     },
     innerDropMenu: {
         position: 'absolute',
@@ -42,15 +42,15 @@ const styles = {
         justifyContent: 'center',
         '&:visited': {
             color: 'white',
-        }
+        },
+        '&:hover': {
+            color: '#f44336',
+        },
     },
     menuLi: {
-        // width: '100%',
-        // color: 'white',
-        // textDecoration: 'none',
-        // display: 'block',
         display: 'block',
-    }
+        margin: '10px 0px',
+    },
 }
 
 export default styles;

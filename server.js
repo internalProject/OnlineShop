@@ -79,6 +79,7 @@ app.post('/sign-up', jsonParser, (req, res) => {
         res.send({
           message: `user ${req.body.name} was created`,
           status: 'success',
+          name: req.body.name,
         });
       })
       .catch(e => console.log('server error => ',e));

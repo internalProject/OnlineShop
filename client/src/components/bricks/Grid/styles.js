@@ -79,13 +79,20 @@ const styles = theme => ({
     },
     continueBtnWrapper: {
         display: 'flex',
-        justifyContent: 'flex-end',
+        justifyContent: 'space-between',
         width: '100%',
         padding: '0px 20px', 
     },
     continueBtn: {
         backgroundColor: theme.primary.green,
         color: 'white',
+        display: 'block',
+    },
+    signInShell: {
+        borderBottom: '1px solid #f44336',
+    },
+    clearCart: {
+        alignSelf: 'flex-start',
         display: 'block',
     },
     loginWrapper: {
@@ -96,10 +103,6 @@ const styles = theme => ({
         padding: '0px 20px', 
         color: 'white',
     },
-    haveToLogin: {
-        ...styles.continueBtn,
-        backgroundColor: 'transparent',
-    }
 })
 
 export default styles;

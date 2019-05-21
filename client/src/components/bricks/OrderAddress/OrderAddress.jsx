@@ -33,6 +33,10 @@ class OrderAddress extends React.Component {
         return errors;
     }
 
+    componentDidMount = () => {
+        console.log(this.props);
+    }
+
     componentDidUpdate = prevProps => {
         if (!this.props.isLoggedIn) {
             this.props.history.push('/');
