@@ -13,5 +13,8 @@ module.exports.userModel = DataTypes => {
         password: {
             type: DataTypes.TEXT,
         },
+        address: {
+            type: DataTypes.TEXT,
+        }
     }
 };

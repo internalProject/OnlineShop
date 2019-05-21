@@ -82,6 +82,12 @@ class SignUp extends React.Component {
         } else {
             this.setState({isDisabled: false});
         }
+        if (values.address.length < 15) {
+            errors.address = 'Address is too short'
+            this.setState({isDisabled: true});
+        } else {
+            this.setState({isDisabled: false});
+        }
         return errors;
     }
 
@@ -117,7 +123,7 @@ class SignUp extends React.Component {
             
             <Formik
                 validate={this.validate}
-                initialValues={{name: '', email: '', password: '', confirmPassword: ''}}
+                initialValues={{name: '', email: '', password: '', confirmPassword: '', address: ''}}
 
                 onSubmit={this.submit}
                 
@@ -135,6 +141,10 @@ class SignUp extends React.Component {
                             <label className={classes.label}>Name
                                 <Field required className={classes.field} name="name" />
                                 {errors && touched.name && errors.nameLength && <div className={classes.error}>{errors.nameLength}</div>}
+                            </label>
+                            <label className={classes.label}>Address
+                                <Field required className={classes.field} name="address" />
+                                {errors && touched.address && errors.address && <div className={classes.error}>{errors.address}</div>}
                             </label>
                             <label className={classes.label}>Em@il
                                 <Field required className={classes.field} name="email" type="email" />

@@ -67,6 +67,8 @@ app.get('*', (req,res) =>{
 });
 
 app.post('/sign-up', jsonParser, (req, res) => {
+  console.log('check address'),
+  console.dir(req.body.address);
   User.findAll({
     where: {
       [Op.or]: [{name: req.body.name}, {email: req.body.email}]

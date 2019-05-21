@@ -53,7 +53,8 @@ class OrderAddress extends React.Component {
         this.sendRequestForOrder({
             user: {
                 id: this.props.user.id,
-                address: values.address,
+                address: this.props.user.address,
+                // address: values.address,
             },
             order: this.props.cartItems,
         });
@@ -77,15 +78,15 @@ class OrderAddress extends React.Component {
                 <div className={classes.innerShell}>
                     <Formik
                     validate={this.validate}
-                    initialValues={{address: ''}}
+                    initialValues={{address: this.props.user && this.props.user.address ? this.props.user.address: ''}}
                     onSubmit={this.submit}
-                    render={({errors, status, touched, isSubmitting}) => 
+                    render={({errors, status, touched, handleChange, values}) => 
                     <Form className={classes.form}>
                             <Field name="address"
                             placeholder="address"
                             component="textarea"
+                            value={values.address}
                             className={cn(classes.formElement,classes.addressField)} />
-
                             {errors && errors.invalidAddress && touched.address &&
                             <div className={classes.error}>
                                 {errors.invalidAddress}

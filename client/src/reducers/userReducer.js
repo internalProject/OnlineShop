@@ -3,6 +3,7 @@ const initialUserState = {
         id: null,
         name: '',
         email: '',
+        address: '',
         password: '',
     },
     isLoggedIn: false,
