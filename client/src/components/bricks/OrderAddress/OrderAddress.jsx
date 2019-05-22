@@ -9,6 +9,7 @@ import {Button, Snackbar, SnackbarContent, IconButton} from '@material-ui/core';
 import Close from '@material-ui/icons/Close';
 import styles from './styles.js';
 import {clearCart, makeOrder} from '../../../actions/cartActions.js';
+import {getUserData} from '../../../actions/userActions.js';
 import cn from 'classnames';
 
 
@@ -35,6 +36,10 @@ class OrderAddress extends React.Component {
 
     componentDidMount = () => {
         console.log(this.props);
+        if (this.props.serverData.id) {
+            this.props.getUserData(this.props.serverData.user.name);
+        }
+
     }
 
     componentDidUpdate = prevProps => {
@@ -50,13 +55,19 @@ class OrderAddress extends React.Component {
     }
  
     submit = (values, actions) => {
+        let orderTime = new Date().toISOString().replace('T', ' ');
+        orderTime = orderTime.slice(0, orderTime.indexOf('.'));
+
         this.sendRequestForOrder({
             user: {
-                id: this.props.user.id,
-                address: this.props.user.address,
+                id: this.props.serverData.user.id,
+                address: this.props.serverData.user.address,
                 // address: values.address,
             },
-            order: this.props.cartItems,
+            order: {
+                items: this.props.cartItems,
+                date: orderTime,
+            },
         });
     }
 
@@ -78,7 +89,10 @@ class OrderAddress extends React.Component {
                 <div className={classes.innerShell}>
                     <Formik
                     validate={this.validate}
-                    initialValues={{address: this.props.user && this.props.user.address ? this.props.user.address: ''}}
+                    initialValues={{address: this.props.user && this.props.user.address ? 
+                        this.props.user.address: 
+                        this.props.serverData.address
+                    }}
                     onSubmit={this.submit}
                     render={({errors, status, touched, handleChange, values}) => 
                     <Form className={classes.form}>
@@ -137,6 +151,7 @@ class OrderAddress extends React.Component {
 
 const mapStateToProps = state => ({
     user: state.userReducer.user.user,
+    serverData: state.userReducer.user,
     isLoggedIn: state.userReducer.isLoggedIn,
     cartItems: state.cartReducer.picked,
     orderStatus: state.cartReducer.orderStatus,
@@ -146,6 +161,7 @@ const mapStateToProps = state => ({
 const mapDispatchToProps = dispatch => ({
     makeOrder: order => dispatch(makeOrder(order)),
     clearCart: () => dispatch(clearCart()),
+    getUserData: name => dispatch(getUserData(name)),
 });
 
 export default compose(

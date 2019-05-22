@@ -27,7 +27,7 @@ class UserBtn extends React.Component {
     }
 
     componentDidMount = () => {
-        if (this.props.serverData) {
+        if (!this.props.user && this.props.serverData) {
             this.props.getUserData(this.props.serverData.data.name);
         }
     }

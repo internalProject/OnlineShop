@@ -1,9 +1,9 @@
 module.exports.orderModel = DataTypes => {
     return {
         orderId: {
-            primaryKey: true,
-            allowNull: false,
-            autoIncrement: true,
+            // primaryKey: true,
+            // allowNull: false,
+            // autoIncrement: true,
             type: DataTypes.INTEGER,
         },
         userId: {
@@ -15,8 +15,8 @@ module.exports.orderModel = DataTypes => {
         quantity: {
             type: DataTypes.INTEGER,
         },
-        address: {
-            type: DataTypes.TEXT,
-        },
+        // address: {
+        //     type: DataTypes.TEXT,
+        // },
      }
  };

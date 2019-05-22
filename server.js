@@ -2,10 +2,11 @@ var cors = require('cors');
 var express = require('express');
 var app = express();
 const Sequelize = require('sequelize');
-// const model = require('./model.js');
-const userModel = require('./models/user.js').userModel,
-orderModel = require('./models/order.js').orderModel,
-productModel = require('./models/product.js').productModel;
+const userModel = require('./alter models/user.js').userModel,
+orderModel = require('./alter models/order.js').orderModel,
+orderDetailModel = require('./alter models/orderDetail.js').orderDetailModel,
+productModel = require('./alter models/product.js').productModel;
+
  
 const path = require('path');
 const bodyParser = require('body-parser');
@@ -20,7 +21,6 @@ st: 'localhost',
   dialect: 'postgres'
 });
 
-// #region sequelize
 sequelize
 .authenticate()
 .then(() => {
@@ -32,7 +32,6 @@ sequelize
 
 const Model = Sequelize.Model;
 class User extends Model {}
-// User.init(model.user(Sequelize), {
 User.init(userModel(Sequelize), {
   sequelize,
   modelName: 'user', timestamps: false,
@@ -40,21 +39,26 @@ User.init(userModel(Sequelize), {
 
 
 class Order extends Model {}
-// Order.init(model.order(Sequelize), {
 Order.init(orderModel(Sequelize), {
   sequelize,
   modelName: 'order', timestamps: false,
 })
 
+class OrderDetail extends Model {}
+OrderDetail.init(orderDetailModel(Sequelize), {
+  sequelize,
+  modelName: 'orderDetail', timestamps: false,
+})
+
 class Product extends Model {}
-// Product.init(model.product(Sequelize), {
 Product.init(productModel(Sequelize), {
   sequelize, modelName: 'product', timestamps: false,
 })
 
-Product.belongsToMany(User, {through: Order, as: 'orders', foreignKey: 'productId', otherKey: 'userId'});
-User.belongsToMany(Product, {through: Order, as: 'orders', foreignKey: 'userId', otherKey: 'productId'});
-// #endregion
+User.hasMany(Order, {foreignKey: 'userId'});
+Order.belongsToMany(Product, {through: OrderDetail, as: 'orderDetails', foreignKey: 'orderId', otherKey: 'productId'});
+Product.belongsToMany(Order, {through: OrderDetail, as: 'orderDetails', foreignKey: 'productId', otherKey: 'orderId'});
+
 sequelize.sync();
 const jsonParser = bodyParser.json();
 const  urlencodedParser = bodyParser.urlencoded({ extended: false });
@@ -111,6 +115,7 @@ app.post('/sign-in', jsonParser, (req, res) => {
           email: user.email,
           password: user.password,
           id: user.id,
+          address: user.address,
         }, isUserExists: true,}));
       }
       if (user.password !== req.body.password && user.email === req.body.email) {
@@ -136,22 +141,31 @@ app.post('/user-data', jsonParser, (req, res) => {
 })
 
 app.post('/make-order', jsonParser, (req, res) => {
-  let orders = req.body.order.map(o => {
-    return Order.create({
-      userId: req.body.user.id,
-      productId: o.id,
-      quantity: o.quantity,
-      address: req.body.user.address,
-    });
-  });
-
-  Promise.all(orders)
-  .then(result => {
-    console.log('User\'s order successfully accepted!');
-    console.dir(new Date().getMilliseconds());
-    res.json(safeStringify(result));
+  
+  Order.create({
+    userId: req.body.user.id,
+    date: req.body.order.date,
   })
-  .catch(error => res.json(safeStringify(error)));
+  .then(result => {
+    let orderDetails = req.body.order.items.map( item => {
+      return OrderDetail.create({
+        orderId: result.id,
+        productId: item.id,
+        quantity: item.quantity,
+      })
+    });
+    Promise.all(orderDetails)
+    .then(processedOrder => {
+      console.log('order processed SUCCESSFULLY!');
+      res.json(safeStringify({
+        processedOrder: req.body,
+        hasOrderSavedToDb: true,
+      }));
+    })
+    .catch(fail => res.json(safeStringify({fail, hasOrderSavedToDb: false,})));
+  })
+  .catch(fail => res.json(safeStringify({fail, hasOrderSavedToDb: false,})));
 })
 
 app.listen(port);
+
