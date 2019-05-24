@@ -2,6 +2,7 @@ import React from 'react';
 import {compose} from 'redux';
 import {connect} from 'react-redux';
 import {withStyles} from '@material-ui/core';
+import OrderDetail from '../OrderDetail';
 import styles from './styles.js';
 import {getAllUserOrders} from '../../../actions/userActions';
 
@@ -26,16 +27,17 @@ class OrdersGrid extends React.Component {
                 {
                     this.props.user && Array.isArray(this.props.user.orders) ? 
                     this.props.user.orders.map(o => (
-                        <div key={o.id}>
-                            <div>{o.date} -  Id: {o.id}</div>
-                            <div>
-                                <ul>
-                                    {o.products.map( p =>
-                                        <li key={p.product.id}><span>{p.product.id}</span>  <span>{p.product.name}</span>  <span>{p.quantity}</span></li>
-                                    )}
-                                </ul>
-                            </div>
-                        </div>
+                        // <div key={o.id}>
+                        //     <div>{o.date} -  Id: {o.id}</div>
+                        //     <div>
+                        //         <ul>
+                        //             {o.products.map( p =>
+                        //                 <li key={p.product.id}><span>{p.product.id}</span>  <span>{p.product.name}</span>  <span>{p.quantity}</span></li>
+                        //             )}
+                        //         </ul>
+                        //     </div>
+                        // </div>
+                        <OrderDetail order={o} key={o.id} />
                     )) :
                     null  
                 }
