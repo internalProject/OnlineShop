@@ -7,6 +7,7 @@ import SignIn from './bricks/SignIn';
 import SignUp from './bricks/SignUp';
 import OrderAddress from './bricks/OrderAddress';
 import Profile from './bricks/Profile';
+import UserOrders from './bricks/UserOrders';
 
 
 const Main = props => {
@@ -20,6 +21,10 @@ const Main = props => {
             <Route path="/sign-up" component={SignUp} />
             <Route path="/order-address" render={() => ((props.pickedItems && (props.pickedItems.length <= 0))  || (props.user && !props.user.id) ? <Redirect to="/"/> : <OrderAddress/>)} />
             <Route path="/profile" render={() => (props.isLoggedIn ? <Profile /> : <Redirect to="/" />)} />
+            <Route path="/my-orders" render={() => {
+                console.log('whow warning with invitation to login.');
+                return props.isLoggedIn ? <UserOrders /> : <Redirect to="/" />;
+            }} />
         </Switch>
     </Router>)
 }

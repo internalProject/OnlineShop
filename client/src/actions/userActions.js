@@ -3,6 +3,7 @@ import {
     createUser as saveNewUserToDb,
     checkUserInDB,
     getUserDataFromDb,
+    fetchAllUserOrders,
 } from './helpers.js';
 
 // export const getUserData = () => async dispatch => {
@@ -68,5 +69,10 @@ export const getUserData = userName => async dispatch => {
     let user = JSON.parse(serverResponse.data);
     user = user.user.dataValues;
     dispatch({type: 'GET_USER_DATA_FROM_SERVER', data: user});
+}
+
+export const getAllUserOrders = id => async dispatch => {
+    let orders = await fetchAllUserOrders(id);
+    dispatch({type: 'GET_ALL_USER_ORDERS', data: orders});
 }
 

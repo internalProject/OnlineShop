@@ -99,7 +99,7 @@ app.post('/sign-up', jsonParser, (req, res) => {
 
   });
   
-})
+});
 
 app.post('/sign-in', jsonParser, (req, res) => {
   User.findOne({where: {email: req.body.email}})
@@ -138,7 +138,7 @@ app.post('/user-data', jsonParser, (req, res) => {
     res.json(safeStringify({user: {...findedUser}}))
   })
   .catch(searchResult => console.dir(searchResult));
-})
+});
 
 app.post('/make-order', jsonParser, (req, res) => {
   
@@ -165,7 +165,45 @@ app.post('/make-order', jsonParser, (req, res) => {
     .catch(fail => res.json(safeStringify({fail, hasOrderSavedToDb: false,})));
   })
   .catch(fail => res.json(safeStringify({fail, hasOrderSavedToDb: false,})));
-})
+});
+
+app.post('/my-orders', jsonParser, (req, res) => {
+  console.log(`req body id: ${req.body.id}, body: ${req.body}`);
+
+  Order.findAll({where: {userId: req.body.id,}})
+  .then(orders => {
+
+    let restoredOrders = orders.map(
+      order => {
+      // ---------------- order restoring ----------------
+      let productsForAdding = OrderDetail.findAll( {where: { orderId: order.id }} )
+        .then(product_idNq_pair => {
+          let products = Promise.all( product_idNq_pair.map( p => Product.findOne( {where: {id: p.productId}} ).then(prod => Promise.resolve({quantity: p.quantity, product: prod})) ) ) //p это объект id+q который нужно превратить в q+prod
+          .then(extra => extra);
+          return products;
+        })
+          .then(final => final)
+    let assembledOrder = productsForAdding.then( restoredProducts => Promise.resolve({id: order.id, date: order.date, products: restoredProducts}) );
+    return assembledOrder;
+      // ---------------- ---------------- ----------------
+    }
+    )
+    Promise.all(restoredOrders).then( responseForUser => res.json(responseForUser) );
+  })
+  .catch(fail => console.log('______ FAIL ON USER ORDERS', fail));
+});
+
 
 app.listen(port);
 
+async function restoreOrder(order) {
+  let productsForAdding = await OrderDetail.findAll( {where: { orderId: order.id }} )
+    .then(product_idNq_pair => {
+      let products = Promise.all( product_idNq_pair.map( p => Product.findOne( {where: {id: p.productId}} ).then(prod => Promise.resolve({quantity: p.quantity, product: prod})) ) ) //p это объект id+q который нужно превратить в q+prod
+      .then(extra => extra);
+      return products;
+    })
+      .then(final => final );
+
+  return productsForAdding;
+}

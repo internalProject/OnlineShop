@@ -31,3 +31,8 @@ export const makeOrder = async order => {
     let serverResponse = await axios.post(urls.MAKE_ORDER, order);
     return serverResponse;
 }
+
+export const fetchAllUserOrders = async id => {
+    let orders = await axios.post(urls.FETCH_ALL_USER_ORDERS, {id});
+    return orders;
+}

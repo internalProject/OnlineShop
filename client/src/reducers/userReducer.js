@@ -5,6 +5,7 @@ const initialUserState = {
         email: '',
         address: '',
         password: '',
+        orders: [],
     },
     isLoggedIn: false,
     serverData: null,
@@ -39,7 +40,7 @@ const userReducer = (state = initialUserState, action) => {
         case 'CREATE_NEW_USER':
             return {...state, serverData: action.data, registerCounter: ++state.registerCounter};
         case 'USER_IS_LOGGED_IN':
-            return {...state, isLoggedIn: action.data.isLoggedIn, user: action.data.user};
+            return {...state, isLoggedIn: action.data.isLoggedIn, user: {...action.data.user}};
         case 'USER_HAS_REGISTRED':
             return {...state, isLoggedIn: action.data};
         case 'EXIT':
@@ -47,7 +48,7 @@ const userReducer = (state = initialUserState, action) => {
         case 'USER_IS_EXISTS':
             return {
                 ...state,
-                user: {...action.data.user},
+                user: {...state.user, ...action.data.user.user},
                 isLoggedIn: action.data.isLoggedIn,
                 userSearchingResult: {message: 'Welcome!', hasUserFound: true,},
                 wrongPassword: false,
@@ -57,8 +58,12 @@ const userReducer = (state = initialUserState, action) => {
         case 'USER_IS_NOT_EXISTS':
             return {...state, userSearchingResult:{message: 'User hasn\'t found!\n Entered email or password are wrong.', hasUserFound: false,}};
         case 'GET_USER_DATA_FROM_SERVER':
-            return {...state, user: {...action.data},};
-        
+            return {...state, user: {...state.user, ...action.data},};
+        case 'GET_ALL_USER_ORDERS':
+            return {...state, user: {
+                ...state.user,
+                orders: [...action.data.data],
+            }}
     }
 
     return state;

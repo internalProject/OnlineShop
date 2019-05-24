@@ -32,7 +32,7 @@ class Nav extends React.Component {
                 <Link className={classes.link} to="/cart">CART</Link>
             </li>
             <li className={classes.navLi}>
-                <Link className={classes.link} to="/">1
+                <Link className={classes.link} to="/my-orders">MY ORDERS
                 </Link>
             </li>
             <li className={classes.navLi}>
