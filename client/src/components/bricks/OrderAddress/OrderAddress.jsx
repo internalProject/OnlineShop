@@ -36,8 +36,8 @@ class OrderAddress extends React.Component {
 
     componentDidMount = () => {
         console.log(this.props);
-        if (this.props.serverData.id) {
-            this.props.getUserData(this.props.serverData.user.name);
+        if (!this.props.user.id) {
+            this.props.getUserData(this.props.user.name);
         }
 
     }
@@ -60,8 +60,8 @@ class OrderAddress extends React.Component {
 
         this.sendRequestForOrder({
             user: {
-                id: this.props.serverData.user.id,
-                address: this.props.serverData.user.address,
+                id: this.props.user.id,
+                address: this.props.user.address,
                 // address: values.address,
             },
             order: {
@@ -89,6 +89,7 @@ class OrderAddress extends React.Component {
                 <div className={classes.innerShell}>
                     <Formik
                     validate={this.validate}
+                    enableReinitialize={true}
                     initialValues={{address: this.props.user && this.props.user.address ? 
                         this.props.user.address: 
                         this.props.serverData.address
@@ -150,7 +151,7 @@ class OrderAddress extends React.Component {
 }
 
 const mapStateToProps = state => ({
-    user: state.userReducer.user.user,
+    user: state.userReducer.user,
     serverData: state.userReducer.user,
     isLoggedIn: state.userReducer.isLoggedIn,
     cartItems: state.cartReducer.picked,

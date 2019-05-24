@@ -195,15 +195,3 @@ app.post('/my-orders', jsonParser, (req, res) => {
 
 
 app.listen(port);
-
-async function restoreOrder(order) {
-  let productsForAdding = await OrderDetail.findAll( {where: { orderId: order.id }} )
-    .then(product_idNq_pair => {
-      let products = Promise.all( product_idNq_pair.map( p => Product.findOne( {where: {id: p.productId}} ).then(prod => Promise.resolve({quantity: p.quantity, product: prod})) ) ) //p это объект id+q который нужно превратить в q+prod
-      .then(extra => extra);
-      return products;
-    })
-      .then(final => final );
-
-  return productsForAdding;
-}

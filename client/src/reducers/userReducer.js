@@ -38,7 +38,12 @@ const userReducer = (state = initialUserState, action) => {
         //         user: {...action.data},
         //     };
         case 'CREATE_NEW_USER':
-            return {...state, serverData: action.data, registerCounter: ++state.registerCounter};
+            return {
+                ...state,
+                serverData: action.data,
+                registerCounter: ++state.registerCounter,
+                user: {...state.user, name: action.data.data.name,
+            }};
         case 'USER_IS_LOGGED_IN':
             return {...state, isLoggedIn: action.data.isLoggedIn, user: {...action.data.user}};
         case 'USER_HAS_REGISTRED':
