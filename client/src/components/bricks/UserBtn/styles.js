@@ -7,6 +7,7 @@ const styles = {
         justifyContent: 'space-between',
         alignItems: 'center',
         cursor: 'pointer',
+        height: '52px',
     },
     userName: {
         marginLeft: '20px',

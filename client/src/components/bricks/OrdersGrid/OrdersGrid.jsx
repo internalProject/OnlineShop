@@ -15,10 +15,6 @@ class OrdersGrid extends React.Component {
         this.props.getAllUserOrders(this.props.user.id);
     }
 
-    componentDidUpdate = prevProps => {
-        console.dir(this.props.user);
-    }
-
     render = () => {
         const {classes} = this.props;
 
@@ -27,16 +23,6 @@ class OrdersGrid extends React.Component {
                 {
                     this.props.user && Array.isArray(this.props.user.orders) ? 
                     this.props.user.orders.map(o => (
-                        // <div key={o.id}>
-                        //     <div>{o.date} -  Id: {o.id}</div>
-                        //     <div>
-                        //         <ul>
-                        //             {o.products.map( p =>
-                        //                 <li key={p.product.id}><span>{p.product.id}</span>  <span>{p.product.name}</span>  <span>{p.quantity}</span></li>
-                        //             )}
-                        //         </ul>
-                        //     </div>
-                        // </div>
                         <OrderDetail order={o} key={o.id} />
                     )) :
                     null  

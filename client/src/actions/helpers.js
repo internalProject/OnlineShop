@@ -7,12 +7,7 @@ const pulsar = axios.create({
     headers: {'Content-Type': 'application/json'}
 });
 
-export const createUser = async user => {
-    // let result = await axios.post('/sign-up', user)
-    // .then(s => s.data)
-    // .catch(e => console.log('bad response from server to client',e));
-    // return result;
-    
+export const createUser = async user => {    
     let serverResponse = await axios.post(urls.SIGN_UP, user);
     return serverResponse;
 }

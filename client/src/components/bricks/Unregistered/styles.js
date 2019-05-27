@@ -8,6 +8,7 @@ const styles = {
         display: 'flex',
         justifyContent: 'space-around',
         alignItems: 'center',
+        height: '100%',
     },
     regLinkWrapper: {
         height: '100%',

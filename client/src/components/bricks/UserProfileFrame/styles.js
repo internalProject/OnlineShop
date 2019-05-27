@@ -12,11 +12,11 @@ const styles = {
         overflow: 'hidden',
 
         ['@media (max-width: 816px)']: {
-            top: '40px',
+            top: '46px',
         }
     },
     higher: {
-        height: '130px',
+        height: '170px',
     },
     innerDropMenu: {
         position: 'absolute',

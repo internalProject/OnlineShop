@@ -21,6 +21,10 @@ const theme = createMuiTheme({
     secondary: {
         white: '#ffffff',
         fontWeight: '600',
+        gray: 'rgba(200, 200, 200, 0.6)',
+    },
+    item: {
+        headerColor: '#ff9800',
     },
     link: {
         display: 'inline-block',

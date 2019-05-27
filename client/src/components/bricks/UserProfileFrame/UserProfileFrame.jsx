@@ -39,6 +39,9 @@ const UserProfileFrame = props => {
                         <Link className={classes.liContent} to="/cart"><div>Cart</div></Link> 
                         {/* apply classes.menuLi for this Link */}
                     </li>
+                    <li className={classes.menuLi}>
+                        <Link className={classes.liContent} to="/my-orders">My Orders</Link>
+                    </li>
                     <hr/>
                     <li className={classes.menuLi}>
                         <IconButton className={classes.liContent} style={{color: 'white'}} onClick={props.exit}><span className={classes.logoutText}>Log out                    </span>  

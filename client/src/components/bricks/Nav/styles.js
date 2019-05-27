@@ -13,9 +13,13 @@ const styles = {
         }
 
     },
+    loggedUserShell: {
+        backgroundColor: '#333',
+    },
     navLinks: {
         listStyleType: 'none',
         display: 'block',
+        backgroundColor: '#333',
         // height: '100%',
         
     },

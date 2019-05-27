@@ -13,6 +13,29 @@ const styles = {
         height: '500px',
         width: '300px',
     },
+    formShell: {
+        color: 'white',
+    },
+    fieldWrapper: {
+        display: 'flex',
+        // justifyContent: 'center',
+    },
+    fieldNlabel: {
+        width: '85%',
+        display: 'flex',
+        justifyContent: 'space-between',
+        alignItems: 'center',
+    },
+    toWhite: {
+        color: 'white',
+        width: '15%',
+    },
+    toBlock: {
+        display: 'block',
+    },
+    red: {
+        color: 'red',
+    },
 }
 
 export default styles;
