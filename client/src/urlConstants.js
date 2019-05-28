@@ -5,6 +5,7 @@ const urls = {
     GET_USER_DATA: '/user-data',
     MAKE_ORDER: 'make-order',
     FETCH_ALL_USER_ORDERS: '/my-orders',
+    UPDATE_USER: '/update-user',
 };
 
 export default urls;

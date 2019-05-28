@@ -1,3 +1,5 @@
+import {dateToPropperFormat} from '../actions/helpers.js';
+
 const initialUserState = {
     user: {
         id: null,
@@ -69,6 +71,24 @@ const userReducer = (state = initialUserState, action) => {
                 ...state.user,
                 orders: [...action.data.data],
             }}
+        case 'AFTER_USER_UPDATE':
+            return {...state,
+                user: {
+                    ...state.user, ...action.data,
+                },
+                serverData: {
+                    message: `User ${action.data.name} has updated successfully at ${dateToPropperFormat(new Date().toISOString())}.`,
+                    status: 'success',
+                }
+            }
+        case 'FAIL_ON_USER_UPDATE':
+            return {
+                ...state,
+                serverData: {
+                    message: `User ${action.data.name} has updated successfully at ${dateToPropperFormat(new Date().toISOString())}.`,
+                    status: 'fail',
+                }
+            }
     }
 
     return state;

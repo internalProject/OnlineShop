@@ -193,5 +193,16 @@ app.post('/my-orders', jsonParser, (req, res) => {
   .catch(fail => console.log('______ FAIL ON USER ORDERS', fail));
 });
 
+app.post('/update-user', jsonParser, (req, res) => {
+  User.update({
+    name: req.body.name,
+    email: req.body.email,
+    address: req.body.address,
+  }, {returning: true, where: {id: req.body.id}},)
+  .then( user => {
+    res.json(safeStringify(user));
+  } );
+});
+
 
 app.listen(port);

@@ -4,6 +4,7 @@ import {
     checkUserInDB,
     getUserDataFromDb,
     fetchAllUserOrders,
+    updateUserOnServer
 } from './helpers.js';
 
 // export const getUserData = () => async dispatch => {
@@ -74,5 +75,15 @@ export const getUserData = userName => async dispatch => {
 export const getAllUserOrders = id => async dispatch => {
     let orders = await fetchAllUserOrders(id);
     dispatch({type: 'GET_ALL_USER_ORDERS', data: orders});
+}
+
+export const updateUser = userNewData => async dispatch => {
+    let serverResponse = await updateUserOnServer(userNewData);
+    if (serverResponse.status === 200) {
+        let updatedUser = JSON.parse(serverResponse.data);
+        dispatch({type: 'AFTER_USER_UPDATE', data: updatedUser[updateUser.length][0]});
+    } else {
+        dispatch({type: 'FAIL_ON_USER_UPDATE'});
+    }
 }
 

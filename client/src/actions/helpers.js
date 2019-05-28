@@ -1,6 +1,10 @@
 import axios from 'axios';
 import urls from '../urlConstants.js';
 
+export const dateToPropperFormat = date => {
+    return  date.replace('T', '   ').slice(0, date.indexOf('.'));
+}
+
 const pulsar = axios.create({
     baseURL: urls.BASE_URL,
     timeout: 3000,
@@ -30,4 +34,9 @@ export const makeOrder = async order => {
 export const fetchAllUserOrders = async id => {
     let orders = await axios.post(urls.FETCH_ALL_USER_ORDERS, {id});
     return orders;
+}
+
+export const updateUserOnServer = async userData => {
+    let updatedUser = await axios.post(urls.UPDATE_USER, userData);
+    return updatedUser;
 }

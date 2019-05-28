@@ -5,16 +5,30 @@ const styles = {
         width: '100%',
         display: 'flex',
         flexDirection: 'column',
-        justifyContent: 'center',
         alignItems: 'center',
     },
     profileWrapper: {
-        border: '2px solid white',
-        height: '500px',
+        height: '250px',
         width: '300px',
+        marginTop: '100px',
     },
     formShell: {
         color: 'white',
+    },
+    fieldSet: {
+        border: '2px solid white',
+    },
+    formLegend: {
+        fontFamily: 'Abril Fatface',
+        fontSize: '2.5em',
+    },
+    field: {
+        padding: '3px 6px',
+        fontSize: '16px',
+        color: '#ff5722',
+        fontWeight: '600',
+        borderRadius: '16px',
+        maxWidth: '170px',
     },
     fieldWrapper: {
         display: 'flex',
@@ -35,6 +49,26 @@ const styles = {
     },
     red: {
         color: 'red',
+    },
+    snackError: {
+        backgroundColor: 'red',
+        color: 'white',
+    },
+    snackSuccess: {
+        backgroundColor: '#00c853',
+        color: 'white',
+    },
+    error: {
+        color: 'white',
+        backgroundColor: 'red',
+        margin: '2px 6px 6px 6px',
+        padding: '3px',
+        borderRadius: '3px',
+    },
+    submitBtnContainer: {
+        margin: '20px',
+        display: 'flex',
+        justifyContent: 'center',
     },
 }
 
