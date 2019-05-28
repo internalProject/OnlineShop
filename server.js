@@ -5,7 +5,8 @@ const Sequelize = require('sequelize');
 const userModel = require('./alter models/user.js').userModel,
 orderModel = require('./alter models/order.js').orderModel,
 orderDetailModel = require('./alter models/orderDetail.js').orderDetailModel,
-productModel = require('./alter models/product.js').productModel;
+productModel = require('./alter models/product.js').productModel,
+adminModel = require('./alter models/admin.js').adminModel;
 
  
 const path = require('path');
@@ -30,7 +31,15 @@ sequelize
   console.error('Unable to connect to the database:', err);
 });
 
+
+
 const Model = Sequelize.Model;
+
+class Admin extends Model {}
+Admin.init(adminModel(Sequelize), {
+  sequelize, modelName: 'admin', timestamps: false,
+});
+
 class User extends Model {}
 User.init(userModel(Sequelize), {
   sequelize,
@@ -194,6 +203,7 @@ app.post('/my-orders', jsonParser, (req, res) => {
 });
 
 app.post('/update-user', jsonParser, (req, res) => {
+  console.
   User.update({
     name: req.body.name,
     email: req.body.email,
@@ -201,7 +211,19 @@ app.post('/update-user', jsonParser, (req, res) => {
   }, {returning: true, where: {id: req.body.id}},)
   .then( user => {
     res.json(safeStringify(user));
-  } );
+  } )
+  .catch(fail => res.json(fail));
+});
+
+app.post('/get-admin', jsonParser, (req, res) => {
+  console.log('CHECK ADMIN HOOK', req.body);
+  Admin.findOne({where: {
+    email: req.body.email, password: req.body.password,
+  }})
+  .then( admin => { 
+    console.log('CHECK search admin result', admin);
+    return res.json(admin); } )
+  .catch( fail => res.json(fail) );
 });
 
 

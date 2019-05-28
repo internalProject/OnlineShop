@@ -6,6 +6,7 @@ const urls = {
     MAKE_ORDER: 'make-order',
     FETCH_ALL_USER_ORDERS: '/my-orders',
     UPDATE_USER: '/update-user',
+    GET_ADMIN: '/get-admin',
 };
 
 export default urls;

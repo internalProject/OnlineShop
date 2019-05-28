@@ -8,6 +8,7 @@ import SignUp from './bricks/SignUp';
 import OrderAddress from './bricks/OrderAddress';
 import Profile from './bricks/Profile';
 import UserOrders from './bricks/UserOrders';
+import AdminUI from './bricks/AdminUI';
 
 
 const Main = props => {
@@ -25,6 +26,7 @@ const Main = props => {
                 console.log('whow warning with invitation to login.');
                 return props.isLoggedIn ? <UserOrders /> : <Redirect to="/" />;
             }} />
+            <Route path="/admin" component={AdminUI} />
         </Switch>
     </Router>)
 }

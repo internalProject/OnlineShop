@@ -40,3 +40,8 @@ export const updateUserOnServer = async userData => {
     let updatedUser = await axios.post(urls.UPDATE_USER, userData);
     return updatedUser;
 }
+
+export const getAdminData = async adminData => {
+    let admin = await axios.post(urls.GET_ADMIN, adminData);
+    return admin;
+}

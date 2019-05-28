@@ -9,6 +9,7 @@ import App from './components/App.jsx';
 import {ctrlReducer} from './reducers/controlsReducer.js';
 import userReducer from './reducers/userReducer.js';
 import cartReducer from './reducers/cartReducer.js';
+import adminReducer from './reducers/adminReducer.js';
 
 const store = createStore(
     combineReducers({
@@ -16,6 +17,7 @@ const store = createStore(
         ctrlReducer,
         userReducer,
         cartReducer,
+        adminReducer,
         'router': routerReducer
     }),
     composeWithDevTools(applyMiddleware(
