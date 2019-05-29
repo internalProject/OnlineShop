@@ -6,7 +6,7 @@ import thunkMiddleware from 'redux-thunk';
 import {Provider} from 'react-redux';
 import {routerReducer} from 'react-router-redux';
 import App from './components/App.jsx';
-import {ctrlReducer} from './reducers/controlsReducer.js';
+import {ctrlReducer} from './reducers/ctrlReducer.js';
 import userReducer from './reducers/userReducer.js';
 import cartReducer from './reducers/cartReducer.js';
 import adminReducer from './reducers/adminReducer.js';

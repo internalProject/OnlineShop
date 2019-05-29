@@ -4,7 +4,7 @@ import {connect} from 'react-redux';
 import {withStyles, Button, IconButton, Snackbar, SnackbarContent,} from '@material-ui/core';
 import CloseIcon from '@material-ui/icons/Close';
 import Edit from '@material-ui/icons/Edit';
-import {withRouter} from 'react-router';
+import {withRouter, Redirect} from 'react-router';
 import Header from '../Header';
 import {Formik, Form, Field} from 'formik';
 import {getUserData, updateUser} from '../../../actions/userActions.js';
@@ -118,7 +118,7 @@ class Profile extends React.Component {
     render = () => {
         const {classes} = this.props;        
 
-        return <> 
+        return this.props.isLoggedIn ? <> 
         <Header />
         <div className={classes.page}>
             <div className={classes.profileWrapper}>
@@ -212,12 +212,14 @@ class Profile extends React.Component {
             />
             </div>
         </div>
-        </>;
+        </> 
+        : <Redirect to="/" />
     }
 }
 
 const mapStateToProps = state => ({
     user: state.userReducer.user,
+    isLoggedIn: state.userReducer.isLoggedIn,
     serverData: state.userReducer.serverData,
 });
 const mapDispatchToProps = dispatch => ({
