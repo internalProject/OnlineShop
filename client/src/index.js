@@ -13,7 +13,6 @@ import adminReducer from './reducers/adminReducer.js';
 
 const store = createStore(
     combineReducers({
-        // ... reducers,
         ctrlReducer,
         userReducer,
         cartReducer,

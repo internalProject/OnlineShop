@@ -6,7 +6,7 @@ const userModel = require('./alter models/user.js').userModel,
 orderModel = require('./alter models/order.js').orderModel,
 orderDetailModel = require('./alter models/orderDetail.js').orderDetailModel,
 productModel = require('./alter models/product.js').productModel,
-adminModel = require('./alter models/admin.js').adminModel;
+roleModel = require('./alter models/role.js').roleModel;
 
  
 const path = require('path');
@@ -35,9 +35,9 @@ sequelize
 
 const Model = Sequelize.Model;
 
-class Admin extends Model {}
-Admin.init(adminModel(Sequelize), {
-  sequelize, modelName: 'admin', timestamps: false,
+class Role extends Model {}
+Role.init(roleModel(Sequelize), {
+  sequelize, modelName: 'role', timestamps: false,
 });
 
 class User extends Model {}
@@ -64,6 +64,7 @@ Product.init(productModel(Sequelize), {
   sequelize, modelName: 'product', timestamps: false,
 })
 
+Role.hasMany(User, {foreignKey: 'roleId'});
 User.hasMany(Order, {foreignKey: 'userId'});
 Order.belongsToMany(Product, {through: OrderDetail, as: 'orderDetails', foreignKey: 'orderId', otherKey: 'productId'});
 Product.belongsToMany(Order, {through: OrderDetail, as: 'orderDetails', foreignKey: 'productId', otherKey: 'orderId'});
@@ -203,7 +204,6 @@ app.post('/my-orders', jsonParser, (req, res) => {
 });
 
 app.post('/update-user', jsonParser, (req, res) => {
-  console.
   User.update({
     name: req.body.name,
     email: req.body.email,
@@ -216,14 +216,14 @@ app.post('/update-user', jsonParser, (req, res) => {
 });
 
 app.post('/get-admin', jsonParser, (req, res) => {
-  console.log('CHECK ADMIN HOOK', req.body);
-  Admin.findOne({where: {
-    email: req.body.email, password: req.body.password,
-  }})
-  .then( admin => { 
-    console.log('CHECK search admin result', admin);
-    return res.json(admin); } )
-  .catch( fail => res.json(fail) );
+  // console.log('CHECK ADMIN HOOK', req.body);
+  // Admin.findOne({where: {
+  //   email: req.body.email, password: req.body.password,
+  // }})
+  // .then( admin => { 
+  //   console.log('CHECK search admin result', admin);
+  //   return res.json(admin); } )
+  // .catch( fail => res.json(fail) );
 });
 
 

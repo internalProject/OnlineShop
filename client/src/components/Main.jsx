@@ -24,11 +24,6 @@ class Main extends React.Component {
         }
     }
 
-    shouldComponentUpdate = nextProps => {
-        if (this.props.infoObj.isInfoMsgOpen === nextProps.infoObj.isInfoMsgOpen) return false;
-        return true;
-    }
-
     closeSnack = () => {
         this.setState({isSnackOpen: false,});
     }

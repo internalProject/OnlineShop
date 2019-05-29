@@ -15,6 +15,9 @@ module.exports.userModel = DataTypes => {
         },
         address: {
             type: DataTypes.TEXT,
-        }
+        },
+        roleId: {
+            type: DataTypes.INTEGER,
+        },
     }
 };

@@ -8,8 +8,7 @@ import {isLoggedIn, getUserData} from '../actions/userActions.js';
 import ls from 'local-storage';
 import '../../styles.scss';
 
-let isUserDataCaught = false;
-let userName = null;
+// let isUserDataCaught = false;
 
 const theme = createMuiTheme({
     typography: {
@@ -44,23 +43,6 @@ class App extends React.Component {
     componentDidMount = () => {
         this.props.grabCartItemsFromLS();
         this.props.checkUserLoginStatus();
-        
-    }
-    
-    componentDidUpdate = () => {
-        // if (!this.props.user.id && this.props.loginStatus && !isUserDataCaught) {
-        //     userName = ls.get('ws-name');
-        //     // userName = localStorage.getItem('ws-name');
-        //     this.props.getUserData(userName)
-        // }
-        if (this.props.user && this.props.user.id) {
-            isUserDataCaught = !isUserDataCaught;
-        }
-    }
-
-    shouldComponentUpdate = () => {
-        if (isUserDataCaught) return false;
-        return true;
     }
 
     render = () => {
@@ -79,7 +61,6 @@ const mapStateToPprops = state => ({
 const mapDispatchToProps = dispatch => ({
     grabCartItemsFromLS: () => dispatch(grabCartItemsFromLS()),
     checkUserLoginStatus: () => dispatch(isLoggedIn()),
-    // TODO rewright
     getUserData: userName => dispatch(getUserData(userName)),
 });
 
