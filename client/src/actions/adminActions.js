@@ -1,7 +1,7 @@
-import {getAdminData} from './helpers.js';
+import {toAdmin} from './helpers.js';
 
-export const getAdminDataFromServer = adminCreds => async dispatch => {
-    let serverResponse = await getAdminData(adminCreds);
+export const getIntoAdmin = adminCreds => async dispatch => {
+    let serverResponse = await toAdmin(adminCreds);
     if (serverResponse.status === 200 && serverResponse.data !== null) {
         dispatch({type: 'ADMIN_HAS_LOGGED_IN', data: serverResponse.data,});
     } else {

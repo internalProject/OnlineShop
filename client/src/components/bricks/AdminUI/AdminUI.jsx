@@ -11,8 +11,8 @@ class AdminUI extends React.Component {
 
         return (
             // this.props.admin && this.props.admin.id ?
-            // <div>{'hello admin'}</div> :
-            <AdminSignIn />
+            <div style={{color: 'white', }}>{'Welcome you, master!'}</div>
+            //: <AdminSignIn />
         );
     }
 }

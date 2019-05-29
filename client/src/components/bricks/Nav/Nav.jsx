@@ -40,7 +40,7 @@ class Nav extends React.Component {
                 </Link>
             </li>
             <li className={classes.navLi}>
-                <Link className={classes.link} to="/">3
+                <Link className={classes.link} to="/admin">ADMIN
                 </Link>
             </li>
         </ul>

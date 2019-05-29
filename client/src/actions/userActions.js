@@ -4,7 +4,8 @@ import {
     checkUserInDB,
     getUserDataFromDb,
     fetchAllUserOrders,
-    updateUserOnServer
+    updateUserOnServer,
+    isAdmin
 } from './helpers.js';
 
 // export const getUserData = () => async dispatch => {
@@ -85,5 +86,11 @@ export const updateUser = userNewData => async dispatch => {
     } else {
         dispatch({type: 'FAIL_ON_USER_UPDATE'});
     }
+}
+
+export const checkAccess = userId => async dispatch => {
+    let hasAccess = await isAdmin({userId: userId});
+    dispatch({type: 'ADMIN_ACCESS', data: hasAccess,});
+
 }
 

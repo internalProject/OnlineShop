@@ -12,6 +12,7 @@ import Profile from './bricks/Profile';
 import UserOrders from './bricks/UserOrders';
 import AdminUI from './bricks/AdminUI';
 import {openInfo, closeInfo, } from '../actions/ctrlActions.js';
+import {isAdmin} from '../actions/helpers.js';
 
 
 class Main extends React.Component {
@@ -62,7 +63,11 @@ class Main extends React.Component {
             <Route path="/my-orders" render={() => {
                 return this.props.isLoggedIn ? <UserOrders /> : (() => { this.props.openInfo('To check user orders first login.'); return <Redirect to="/" />; })() 
             }} />
-            <Route path="/admin" component={AdminUI} />
+            <Route path="/admin" render={ () => {
+                return this.props.isLoggedIn ?
+                ( this.props.serverData.hasAdminAccess ? <AdminUI /> : (() => { this.props.openInfo('Declined.'); return <Redirect to="/" />; })() )
+                : (() => { this.props.openInfo('To check user orders first login.'); return <Redirect to="/" />; })()
+            } } />
         </Switch>
     </Router>
     </>)
@@ -74,6 +79,7 @@ const mapStateToProps = state => ({
     isLoggedIn: state.userReducer.isLoggedIn,
     user: state.userReducer.user.user,
     infoObj: state.ctrlReducer.infoObj,
+    serverData: state.userReducer.serverData,
 });
 
 const mapDispatchToProps = dispatch => ({

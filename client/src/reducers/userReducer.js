@@ -89,6 +89,13 @@ const userReducer = (state = initialUserState, action) => {
                     status: 'fail',
                 }
             }
+        case 'ADMIN_ACCESS':
+            return {...state,
+                serverData: {
+                    ...state.serverData,
+                    hasAdminAccess: action.data,
+                },
+            }
     }
 
     return state;

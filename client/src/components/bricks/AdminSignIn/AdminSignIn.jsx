@@ -6,7 +6,7 @@ import {Snackbar, SnackbarContent, IconButton} from '@material-ui/core';
 import Close from '@material-ui/icons/Close';
 import styles from './styles.js';
 import {Formik, Form, Field} from 'formik';
-import {getAdminDataFromServer} from '../../../actions/adminActions.js';
+// import {getAdminDataFromServer} from '../../../actions/adminActions.js';
 
 
 class AdminSignIn extends React.Component {
@@ -49,7 +49,7 @@ class AdminSignIn extends React.Component {
     }
 
     submit = (values, actions) => {
-        this.props.getAdminData({email: values.email, password: values.password});
+        // this.props.getAdminData({email: values.email, password: values.password});
     }
 
     render = () => {
@@ -109,7 +109,7 @@ const mapStateToProps = state => ({
     serverData: state.adminReducer.serverData,
 });
 const mapDispatchToProps = dispatch => ({
-    getAdminData: creds => dispatch(getAdminDataFromServer(creds)),
+    // getAdminData: creds => dispatch(getAdminDataFromServer(creds)),
 });
 
 export default compose(

@@ -41,7 +41,12 @@ export const updateUserOnServer = async userData => {
     return updatedUser;
 }
 
-export const getAdminData = async adminData => {
-    let admin = await axios.post(urls.GET_ADMIN, adminData);
+export const toAdmin = async adminData => {
+    let admin = await axios.post(urls.TO_ADMIN, adminData);
     return admin;
+}
+
+export const isAdmin = async userId => {
+    let serverResponse = await axios.post(urls.TO_ADMIN, userId);
+    return serverResponse.data.isAccessAllowed;
 }

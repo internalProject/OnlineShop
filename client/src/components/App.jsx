@@ -4,7 +4,7 @@ import { createMuiTheme, MuiThemeProvider } from '@material-ui/core/styles';
 import CssBaseline from '@material-ui/core/CssBaseline';
 import Main from './Main.jsx';
 import {grabCartItemsFromLS,} from '../actions/cartActions.js';
-import {isLoggedIn, getUserData} from '../actions/userActions.js';
+import {isLoggedIn, getUserData, checkAccess} from '../actions/userActions.js';
 import ls from 'local-storage';
 import '../../styles.scss';
 
@@ -45,6 +45,12 @@ class App extends React.Component {
         this.props.checkUserLoginStatus();
     }
 
+    componentDidUpdate = prevProps => {
+        if ( this.props.user && this.props.user.id && (this.props.user.id !== prevProps.user.id) ) {
+            this.props.checkAccess(this.props.user.id);
+        }
+    }
+
     render = () => {
         return (<MuiThemeProvider theme={theme}>
             <CssBaseline/>
@@ -62,6 +68,7 @@ const mapDispatchToProps = dispatch => ({
     grabCartItemsFromLS: () => dispatch(grabCartItemsFromLS()),
     checkUserLoginStatus: () => dispatch(isLoggedIn()),
     getUserData: userName => dispatch(getUserData(userName)),
+    checkAccess: userId => dispatch(checkAccess(userId)),
 });
 
 export default connect(mapStateToPprops, mapDispatchToProps,)(App);

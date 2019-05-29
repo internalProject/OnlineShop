@@ -7,7 +7,7 @@ import {compose} from 'redux';
 import {withRouter} from 'react-router';
 import {withStyles} from '@material-ui/core';
 import styles from './styles.js';
-import {tryToLogin} from '../../../actions/userActions.js';
+import {tryToLogin, } from '../../../actions/userActions.js';
 import {Formik, Form, Field} from 'formik';
 
 let userInformed = false;

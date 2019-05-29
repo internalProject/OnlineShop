@@ -90,7 +90,7 @@ app.post('/sign-up', jsonParser, (req, res) => {
   })
   .then( findedUsers => {
     if (findedUsers.length === 0) {
-      User.create(req.body).then(data=> {
+      User.create({...req.body, roleId: 2}).then(data=> {
         console.log('success');
         res.send({
           message: `user ${req.body.name} was created`,
@@ -215,15 +215,11 @@ app.post('/update-user', jsonParser, (req, res) => {
   .catch(fail => res.json(fail));
 });
 
-app.post('/get-admin', jsonParser, (req, res) => {
-  // console.log('CHECK ADMIN HOOK', req.body);
-  // Admin.findOne({where: {
-  //   email: req.body.email, password: req.body.password,
-  // }})
-  // .then( admin => { 
-  //   console.log('CHECK search admin result', admin);
-  //   return res.json(admin); } )
-  // .catch( fail => res.json(fail) );
+app.post('/admin', jsonParser, (req, res) => {
+  User.findOne({where: {id: req.body.userId}})
+  .then(user => Role.findOne( { where: { id: user.roleId }} ) )
+  .then(role => role.role === 'admin' ? res.json( {isAccessAllowed: true, } ) : res.json( {isAccessAllowed: false, } ) )
+  .catch( fail => res.json({fail}) );
 });
 
 
