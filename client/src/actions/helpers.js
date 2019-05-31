@@ -50,3 +50,8 @@ export const isAdmin = async userId => {
     let serverResponse = await axios.post(urls.TO_ADMIN, userId);
     return serverResponse.data.isAccessAllowed;
 }
+
+export const findItemsByQuery = async query => {
+    let items = await axios.post(urls.SEARCH_STOCK_ITEMS, {query});
+    return items;
+}

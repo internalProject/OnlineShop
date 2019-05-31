@@ -222,5 +222,38 @@ app.post('/admin', jsonParser, (req, res) => {
   .catch( fail => res.json({fail}) );
 });
 
+app.post('/search-stock-items', jsonParser, (req, res) => {
+  let allSearchhKeys = req.body.query.split(' ');
+  let idKeys = allSearchhKeys.filter(key => {
+    // check for not chars+integers
+    if (
+      ( /^[0-9]*$/.test(key) ) &&
+      ( !isNaN(parseFloat(key)) && isFinite(key) )
+    ) return true;
+    return false;
+  })
+
+  for (let index = 0; index < idKeys.length; index++) {
+    let removablePlace = allSearchhKeys.indexOf(idKeys[index]);
+    if (removablePlace !== -1) {
+
+      allSearchhKeys.splice(removablePlace, 1);
+    }
+    // at the end of cycle allSearchKeys has name-keys, without id-keys
+  }
+
+  idKeys = idKeys.map(k => parseFloat(k, 10) );
+
+  Product.findAll({where: {
+    [Op.or]: {
+      id: { [Op.in]: idKeys}, // search based on array of values - idKeys
+      name: {[Op.in]: allSearchhKeys} // search based on array of values - allSearchKeys
+    } 
+  },
+  raw: true, // this remove duplicates
+})
+  .then( items => res.json(items) )
+  .catch( fail => res.json(fail) )
+});
 
 app.listen(port);

@@ -13,6 +13,8 @@ import UserOrders from './bricks/UserOrders';
 import AdminUI from './bricks/AdminUI';
 import {openInfo, closeInfo, } from '../actions/ctrlActions.js';
 import {isAdmin} from '../actions/helpers.js';
+import ProductConfig from './bricks/ProductConfig';
+import NotFound from './bricks/NotFound';
 
 
 class Main extends React.Component {
@@ -66,8 +68,14 @@ class Main extends React.Component {
             <Route path="/admin" render={ () => {
                 return this.props.isLoggedIn ?
                 ( this.props.serverData.hasAdminAccess ? <AdminUI /> : (() => { this.props.openInfo('Declined.'); return <Redirect to="/" />; })() )
-                : (() => { this.props.openInfo('To check user orders first login.'); return <Redirect to="/" />; })()
+                : (() => { this.props.openInfo('Declined.'); return <Redirect to="/" />; })()
             } } />
+            <Route path="/product-config" render={ () => {
+                return this.props.isLoggedIn ?
+                ( this.props.serverData.hasAdminAccess ? <ProductConfig /> : (() => { this.props.openInfo('Declined.'); return <Redirect to="/" />; })() )
+                : (() => { this.props.openInfo('Declined'); return <Redirect to="/" />; })()
+            } } />
+            <Route path="*" component={NotFound} />
         </Switch>
     </Router>
     </>)

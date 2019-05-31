@@ -7,6 +7,7 @@ const initialAdmin = {
         password: '',
     },
     serverData: null,
+    searchResult: { items: [], },
 };
 
 export default function adminReducer(state = initialAdmin, action) {
@@ -26,6 +27,10 @@ export default function adminReducer(state = initialAdmin, action) {
                     message: `Fail on login. (attempted by ${dateToPropperFormat(new Date().toISOString())})`,
                     status: 'fail',
                 },
+            }
+        case 'SEARCHED_ITEMS':
+            return {...state,
+                searchResult: {...state.searchResult, ...action.data},
             }
     }
     return state;

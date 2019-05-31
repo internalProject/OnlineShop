@@ -2,7 +2,7 @@ import React from 'react';
 import {compose} from 'redux';
 import {connect} from 'react-redux';
 import {withStyles} from '@material-ui/core';
-import AdminSignIn from '../AdminSignIn';
+import AdminPanel from '../AdminPanel';
 import styles from './stlyes.js';
 
 class AdminUI extends React.Component {
@@ -10,9 +10,10 @@ class AdminUI extends React.Component {
         const {classes} = this.props;
 
         return (
-            // this.props.admin && this.props.admin.id ?
-            <div style={{color: 'white', }}>{'Welcome you, master!'}</div>
-            //: <AdminSignIn />
+            <div style={{color: 'white', }} className={classes.page}>
+                <AdminPanel />
+                <div>{'Welcome you, master!'}</div>
+            </div>
         );
     }
 }
