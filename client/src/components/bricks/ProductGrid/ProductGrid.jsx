@@ -4,6 +4,7 @@ import {connect} from 'react-redux';
 import {withStyles, IconButton,} from '@material-ui/core';
 import Search from '@material-ui/icons/Search';
 import {findItems} from '../../../actions/adminActions.js';
+import ProductRow from '../ProductRow';
 import styles from './styles.js';
 
 class ProductGrid extends React.Component {
@@ -29,22 +30,18 @@ class ProductGrid extends React.Component {
         return <div className={classes.page}>
             <div className={classes.searchBar}>
                 <div className={classes.searchContainer}>
-                    <input onChange={this.setQuery} className={classes.searchField} type="text"/>
+                    <label htmlFor="searchField">Search product by ID or Name: </label>
+                    <input id="searchField" onChange={this.setQuery} className={classes.searchField} type="text"/>
                     <IconButton onClick={this.findItemsByQuery}>
                         <Search className={classes.searchIcon}/>
                     </IconButton>
                 </div>
             </div>
             <div className={classes.searchResult}>
-                {this.props.searchResult && this.props.searchResult.items ? 
-                this.props.searchResult.items.map( item => 
-                    <div key={item.id}>
-                        <span>{item.id}</span>
-                        <span>___</span>
-                        <span>{item.name}</span>
-                    </div>
-                )
-                : null
+                {
+                    this.props.searchResult && this.props.searchResult.items ? 
+                    this.props.searchResult.items.map( item => <ProductRow key={item.id} item={item} /> )
+                    : null
                 }
             </div>
         </div>;

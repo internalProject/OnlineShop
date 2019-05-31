@@ -245,7 +245,7 @@ app.post('/search-stock-items', jsonParser, (req, res) => {
   idKeys = idKeys.map(k => parseFloat(k, 10) );
 
   Product.findAll({where: {
-    [Op.or]: {
+    [Op.or]: { // NOTE IT! necessary for multiple search
       id: { [Op.in]: idKeys}, // search based on array of values - idKeys
       name: {[Op.in]: allSearchhKeys} // search based on array of values - allSearchKeys
     } 
@@ -255,5 +255,25 @@ app.post('/search-stock-items', jsonParser, (req, res) => {
   .then( items => res.json(items) )
   .catch( fail => res.json(fail) )
 });
+
+app.post('/delete-product-by-id', jsonParser, (req, res) => {
+  Product.destroy({where: {
+    id: req.body.itemId,
+  }})
+  .then(numberDeletedRows => {
+    console.log('numberDeletedRows ', numberDeletedRows);
+    numberDeletedRows === 1 ?
+      res.json({
+        status: 'ok',
+        message: `Product has deleted successfully! ${dateToPropperFormat(new Date())}`,
+      }) : null
+    }
+  )
+  .catch( fail => res.json({fail}) );
+});
+
+function dateToPropperFormat(date) {
+  return  date.replace('T', '   ').slice(0, date.indexOf('.'));
+}
 
 app.listen(port);

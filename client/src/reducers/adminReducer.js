@@ -30,7 +30,26 @@ export default function adminReducer(state = initialAdmin, action) {
             }
         case 'SEARCHED_ITEMS':
             return {...state,
-                searchResult: {...state.searchResult, ...action.data},
+                searchResult: {...state.searchResult, items: [...action.data]},
+            }
+        case 'ITEM_REMOVED_OK':
+            return {
+                ...state,
+                serverData: {
+                    ...state.serverData,
+                    ...action.data,
+                    hasItemRemoved: true,
+                },
+            }
+        case 'ITEM_NOT_REMOVED':
+            return {
+                ...state,
+                serverData: {
+                    ...state.serverData,
+                    ...action.data,
+                    hasItemRemoved: false,
+                    message: 'Item has not deleted.',
+                },
             }
     }
     return state;

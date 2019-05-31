@@ -1,5 +1,4 @@
-import {toAdmin, findItemsByQuery} from './helpers.js';
-import { BottomNavigationAction } from '@material-ui/core';
+import {toAdmin, findItemsByQuery, removeItemFromStore, } from './helpers.js';
 
 export const getIntoAdmin = adminCreds => async dispatch => {
     let serverResponse = await toAdmin(adminCreds);
@@ -18,3 +17,17 @@ export const findItems = query => async dispatch => {
         dispatch( {type: "ITEMS_NOT_FOUND"} );
     }
 };
+
+export const removeItem = itemId => async dispatch => {
+    let serverResponse = await removeItemFromStore(itemId);
+    if (serverResponse.data.status === 'ok') {
+        dispatch( {type: 'ITEM_REMOVED_OK', data: {message: serverResponse.data.message} });
+    } else {
+        dispatch({ type: 'ITEM_NOT_REMOVED', data: serverResponse.data});
+    }
+
+}
+
+export const saveChanges = newData => async dispatch => {
+
+}

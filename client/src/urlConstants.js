@@ -7,7 +7,8 @@ const urls = {
     FETCH_ALL_USER_ORDERS: '/my-orders',
     UPDATE_USER: '/update-user',
     TO_ADMIN: '/admin',
-    SEARCH_STOCK_ITEMS: '/search-stock-items'
+    SEARCH_STOCK_ITEMS: '/search-stock-items',
+    DELETE_PRODUCT_BY_ID: '/delete-product-by-id'
 };
 
 export default urls;

@@ -20,6 +20,7 @@ const theme = createMuiTheme({
     secondary: {
         white: '#ffffff',
         fontWeight: '600',
+        red: 'red',
         gray: 'rgba(200, 200, 200, 0.6)',
     },
     item: {
