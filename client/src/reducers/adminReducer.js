@@ -7,7 +7,10 @@ const initialAdmin = {
         password: '',
     },
     serverData: null,
-    searchResult: { items: [], },
+    searchCounter: 0,
+    itemRemoveCounter: 0,
+    productEdited: 0,
+    searchResult: { items: [], message: '',},
 };
 
 export default function adminReducer(state = initialAdmin, action) {
@@ -32,14 +35,30 @@ export default function adminReducer(state = initialAdmin, action) {
             return {...state,
                 searchResult: {...state.searchResult, items: [...action.data]},
             }
+        case 'ITEMS_NOT_FOUND': 
+            return {
+                ...state, searchResult: {
+                    ...state.searchResult,
+                    message: 'There are no items with these names.',
+                },
+                searchCounter: ++state.searchCounter,
+            }
         case 'ITEM_REMOVED_OK':
             return {
                 ...state,
                 serverData: {
                     ...state.serverData,
                     ...action.data,
+                    message: "Item removed successfully!",
                     hasItemRemoved: true,
                 },
+                searchResult: {
+                    items: [...state.searchResult.items.filter(item => {
+                        if (item.id === action.data.deletedItemId) return false;
+                        return true;
+                    } )],
+                },
+                itemRemoveCounter: ++state.itemRemoveCounter,
             }
         case 'ITEM_NOT_REMOVED':
             return {
@@ -50,6 +69,24 @@ export default function adminReducer(state = initialAdmin, action) {
                     hasItemRemoved: false,
                     message: 'Item has not deleted.',
                 },
+            }
+        case 'PRODUCT_UPDATED_SUCCESSFULLY': {
+            let updatedItems = state.searchResult.items.filter(
+                item => {
+                    if (item.id === action.data.id) return false;
+                    return true;
+                });
+            updatedItems.push(action.data);
+            return {...state,
+                    serverData: {...state.serverData,
+                        item: action.data,
+                        message: `${action.data.name} product has updated successfully!`,
+                    },
+                    productEdited: ++state.productEdited,
+                    searchResult: {
+                        items: [...updatedItems],
+                    },
+                }   
             }
     }
     return state;

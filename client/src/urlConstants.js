@@ -8,7 +8,9 @@ const urls = {
     UPDATE_USER: '/update-user',
     TO_ADMIN: '/admin',
     SEARCH_STOCK_ITEMS: '/search-stock-items',
-    DELETE_PRODUCT_BY_ID: '/delete-product-by-id'
+    DELETE_PRODUCT_BY_ID: '/delete-product-by-id',
+    UPDATE_PRODUCT: '/update-product',
+
 };
 
 export default urls;

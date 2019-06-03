@@ -260,17 +260,26 @@ app.post('/delete-product-by-id', jsonParser, (req, res) => {
   Product.destroy({where: {
     id: req.body.itemId,
   }})
-  .then(numberDeletedRows => {
-    console.log('numberDeletedRows ', numberDeletedRows);
-    numberDeletedRows === 1 ?
-      res.json({
-        status: 'ok',
-        message: `Product has deleted successfully! ${dateToPropperFormat(new Date())}`,
-      }) : null
-    }
-  )
-  .catch( fail => res.json({fail}) );
+  .then(numberOfDeletedRows => {
+    console.log('numberOfDeletedRows : ', numberOfDeletedRows);
+    res.json( {
+      status: 'ok',
+      message: `Product has deleted successfully! ${dateToPropperFormat(new Date().toISOString())}`,
+    } );
+  })
+  .catch( fail => res.json(fail) );
 });
+
+
+app.post('/update-product', jsonParser, (req, res) => {
+  Product.update(
+    {name: req.body.name, description: req.body.description},
+    {returning: true, where: { id: req.body.id } 
+  })
+  .then( product => res.json(product))
+  .catch( fail => res.json(fail));
+})
+
 
 function dateToPropperFormat(date) {
   return  date.replace('T', '   ').slice(0, date.indexOf('.'));

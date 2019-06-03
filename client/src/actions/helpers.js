@@ -59,4 +59,9 @@ export const findItemsByQuery = async query => {
 export const removeItemFromStore = async itemId => {
     let serverResponse = await axios.post(urls.DELETE_PRODUCT_BY_ID, {itemId})
     return serverResponse;
-} 
+}
+
+export const updateProduct = async newData => {
+    let serverResponse = await axios.post(urls.UPDATE_PRODUCT, newData);
+    return serverResponse;
+}

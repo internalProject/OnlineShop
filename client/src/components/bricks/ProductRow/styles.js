@@ -18,12 +18,13 @@ const styles = theme => ({
         borderLeft: `2px solid ${theme.secondary.gray}`,
         paddingLeft: '6px',
         paddingTop: '50px',
-        color: 'ff5722',
+        color: '#ff9800',
     },
     description: {
         width: '55%',
         overflowX: 'hidden',
         overflowY: 'auto',
+        padding: '10px',
         borderLeft: `2px solid ${theme.secondary.gray}`,
     },
     editBtn: {
@@ -97,7 +98,15 @@ const styles = theme => ({
         color: 'red',
         padding: '30px'
     },
-    
+    error: {
+        width: '90%',
+        margin: '8px 13px',
+        color: 'white',
+        backgroundColor: 'red',
+        padding: '6px',
+        borderRadius: '13px',
+        fontWeight: '600',
+    }
 });
 
 export default styles;

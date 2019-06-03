@@ -5,6 +5,7 @@ import {withStyles, IconButton, Button, Snackbar, SnackbarContent, } from '@mate
 import {Dialog, DialogActions, DialogContent, DialogTitle, DialogContentText} from '@material-ui/core';
 import Edit from '@material-ui/icons/Edit';
 import Close from '@material-ui/icons/Close';
+import {Formik, Form, Field} from 'formik';
 import styles from './styles.js';
 import {removeItem,saveChanges, } from '../../../actions/adminActions.js';
 import cn from 'classnames';
@@ -19,11 +20,11 @@ class ProductRow extends React.Component {
             isRemoveModalOpen: false,
             isEditModalOpen: false,
             isSnackOpen: false,
+            disabledForm: false,
         }
     }
 
     // TODO: 
-    // 1. handle hooks, handle snack on remove-callback,
     // 2. add new item to store
     // 3. control users
 
@@ -37,25 +38,12 @@ class ProductRow extends React.Component {
     }
 
     componentDidUpdate = prevProps => {
-        if (this.props.serverData && this.props.serverData.message ) {
+        if (this.props.serverData && prevProps.serverData === null) {
             this.setState({isSnackOpen: true});
         }
-    }
-
-    shouldComponentUpdate = nextProps => {
-        if (this.props.serverData !== null && ( this.props.serverData.message === nextProps.serverData.message)) 
-        { 
-            return false;
+        if (this.props.serverData && prevProps.serverData && (this.props.productEdited !== prevProps.productEdited) ) {
+            this.setState({isSnackOpen: true});
         }
-        return true;
-    }
-
-    changeDescriptionText = e => {
-        this.setState({description: e.target.value, });
-    }
-
-    changeNameText = e => {
-        this.setState({name: e.target.value});
     }
 
     saveItemChanges = e => {
@@ -70,6 +58,29 @@ class ProductRow extends React.Component {
 
     openEditModal = e => {
         this.setState({isEditModalOpen: true});
+    }
+
+    validate = values => {
+        let errors = {};
+        if (values.name.length < 3) {
+            this.setState({disabledForm: true,})
+            errors.name = "Product name have to contains more than or equal 3 characters!"
+        } else {
+            this.setState({disabledForm: false,})
+        }
+        if (values.description.length < 6) {
+            this.setState({disabledForm: true,});
+            errors.description = "Product description have to contains more than or equal 6 characters!"
+        } else {
+            this.setState({disabledForm: false,})
+        }
+        return errors;
+    }
+
+    submit = (values, actions) => {
+        // closeEditModal
+        this.props.saveChanges({id: values.id, name: values.name, description: values.description,})
+        this.setState({isEditModalOpen: false,});
     }
 
     closeEditModal = e => {
@@ -113,16 +124,34 @@ class ProductRow extends React.Component {
                 aria-describedby="edit-item-dialog-description"
                 classes={{paper: cn(classes.dialog), }}
             >
-                <DialogTitle className={classes.editDialogTitle} id="edit-item-dialog-title">Edit <span className={classes.emphasizedName}>{`${this.props.item.name}`}</span></DialogTitle>
-                <DialogContent className={classes.editDialogContent}>
-                        <input className={classes.editId} disabled={true} value={this.props.item.id} />
-                        <input className={classes.editName} onChange={this.changeNameText} value={this.state.name} />
-                        <textarea onChange={this.changeDescriptionText} className={classes.descrArea} value={this.state.description}></textarea>
-                </DialogContent>
-                <DialogActions className={classes.modalControls}>
-                    <Button className={classes.toBlock} onClick={this.tryToRemove} variant="contained" color="secondary">Remove</Button>
-                    <Button className={classes.toBlock} onClick={this.closeEditModal} variant="contained" color="primary">Save</Button>
-                </DialogActions>
+                <Formik 
+                    validate={this.validate}
+                    enableReinitialize={true}
+                    initialValues={{
+                        id: this.props.item.id,
+                        name: this.props.item.name,
+                        description: this.props.item.description,
+                    }}
+                    onSubmit={this.submit}
+                    render={({errors, status, touched, values}) => <div>
+                        <Form>
+                        <DialogTitle className={classes.editDialogTitle} id="edit-item-dialog-title">Edit <span className={classes.emphasizedName}>{`${this.props.item.name}`}</span></DialogTitle>
+                        <DialogContent className={classes.editDialogContent}>
+                            <Field type="text" name="id" className={classes.editId} disabled={true} value={values.id} />
+                            <Field type="text" name="name" className={classes.editName}  value={values.name} />
+                            {errors && errors.name && <div className={classes.error}>{errors.name}</div>}
+                            <Field render={ ( {field, form:{values, errors}} ) => (<>
+                                <textarea {...field} name="description" className={classes.descrArea} value={values.description}></textarea>
+                                {errors && errors.description && <div className={classes.error}>{errors.description}</div>}
+                            </>) }  />
+                        </DialogContent>
+                        <DialogActions className={classes.modalControls}>
+                            <Button className={classes.toBlock} onClick={this.tryToRemove} variant="contained" color="secondary">Remove</Button>
+                            <Button type="submit" disabled={this.state.disabledForm} className={classes.toBlock} variant="contained" color="primary">Save</Button>
+                        </DialogActions>
+                        </Form>
+                    </div>}
+                />
             </Dialog>
 
             <Dialog
@@ -169,6 +198,7 @@ class ProductRow extends React.Component {
 
 const mapStateToprops = state => ({
     serverData: state.adminReducer.serverData,
+    productEdited: state.adminReducer.productEdited,
 });
 const mapDispatchToprops = dispatch => ({
     removeItem: id => dispatch(removeItem(id)),
