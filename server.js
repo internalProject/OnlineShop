@@ -280,6 +280,15 @@ app.post('/update-product', jsonParser, (req, res) => {
   .catch( fail => res.json(fail));
 })
 
+app.post('/create-new-product', jsonParser, (req, res) => {
+  Product.create({
+    name: req.body.name,
+    description: req.body.description,
+    image: '',
+  })
+  .then( addedProduct => res.json({product: addedProduct, status: 'created'}) )
+  .catch( fail => res.json(fail) );
+})
 
 function dateToPropperFormat(date) {
   return  date.replace('T', '   ').slice(0, date.indexOf('.'));

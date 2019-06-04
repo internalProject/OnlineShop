@@ -65,3 +65,8 @@ export const updateProduct = async newData => {
     let serverResponse = await axios.post(urls.UPDATE_PRODUCT, newData);
     return serverResponse;
 }
+
+export const createNewProduct = async productData => {
+    let serverResponse = await axios.post(urls.CREATE_NEW_PRODUCT, productData);
+    return serverResponse;
+}

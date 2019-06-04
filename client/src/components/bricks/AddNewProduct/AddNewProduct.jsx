@@ -6,6 +6,7 @@ import {Dialog, DialogActions, DialogContent, DialogTitle, DialogContentText} fr
 import {Formik, Form, Field} from 'formik';
 import Close from '@material-ui/icons/Close';
 import styles from './styles.js';
+import {createrProductInDB, } from '../../../actions/adminActions.js';
 import cn from 'classnames';
 
 class AddNewProduct extends React.Component {
@@ -36,11 +37,10 @@ class AddNewProduct extends React.Component {
     }
 
     submit = (values, actions) => {
-        // closeEditModal
-        this.props.saveChanges({id: values.id, name: values.name, description: values.description,})
+        this.props.createrProductInDB({ name: values.name, description: values.description,})
         this.props.newProductFormHandler();
     }
-    
+
     render = () => {
         const {classes} = this.props;
 
@@ -61,7 +61,7 @@ class AddNewProduct extends React.Component {
                 onSubmit={this.submit}
                 render={({errors, status, touched, values}) => <div>
                     <Form>
-                    <DialogTitle className={classes.editDialogTitle} id="edit-item-dialog-title">Edit <span className={classes.emphasizedName}>{`${this.props.item.name}`}</span></DialogTitle>
+                    <DialogTitle className={classes.editDialogTitle} id="edit-item-dialog-title">New Product</DialogTitle>
                     <DialogContent className={classes.editDialogContent}>
                         <Field type="text" name="name" className={classes.editName}  value={values.name} />
                         {errors && errors.name && <div className={classes.error}>{errors.name}</div>}
@@ -82,7 +82,10 @@ class AddNewProduct extends React.Component {
 }
 
 const mapStateToProps = state => ({});
-const mapDispatchToProps = dispatch => ({});
+
+const mapDispatchToProps = dispatch => ({
+    createrProductInDB: productData => dispatch(createrProductInDB(productData)),
+});
 
 export default compose(
     connect(mapStateToProps, mapDispatchToProps),

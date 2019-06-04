@@ -4,8 +4,9 @@ import {connect} from 'react-redux';
 import {withStyles, IconButton, Button, Snackbar, SnackbarContent,} from '@material-ui/core';
 import Search from '@material-ui/icons/Search';
 import Close from '@material-ui/icons/Close';
-import {findItems} from '../../../actions/adminActions.js';
+import {findItems, clearSearchResult, } from '../../../actions/adminActions.js';
 import ProductRow from '../ProductRow';
+import AddNewProduct from '../AddNewProduct';
 import styles from './styles.js';
 
 class ProductGrid extends React.Component {
@@ -17,16 +18,21 @@ class ProductGrid extends React.Component {
             isSnackOpen: false,
             removeMsg: false,
             searchMsg: false,
+            createdMsg: false,
             newProductFormState: false,
-        }
+        };
+        this.searchBarRef =  React.createRef();
     }
     
     componentDidUpdate = prevProps => {
         if ( (this.props.searchCounter !== prevProps.searchCounter) && this.props.searchResult.message !== '' ) {
-            this.setState({isSnackOpen: true, searchMsg: true, removeMsg: false})
+            this.setState({isSnackOpen: true, searchMsg: true, removeMsg: false, createdMsg: false, })
         }
         if ( (this.props.itemRemoveCounter !== prevProps.itemRemoveCounter) && this.props.serverData.message !== '') {
-            this.setState({isSnackOpen: true, removeMsg: true, searchMsg: false,})
+            this.setState({isSnackOpen: true, removeMsg: true, searchMsg: false, createdMsg: false, })
+        }
+        if ( (this.props.productCreatedCounter !== prevProps.productCreatedCounter) && this.props.createdProduct !== null ) {
+            this.setState({isSnackOpen: true, removeMsg: false, searchMsg: false, createdMsg: true, })
         }
     }
 
@@ -50,6 +56,11 @@ class ProductGrid extends React.Component {
         this.setState({newProductFormState: true,});
     }
 
+    clearSearchResultAndBar = () => {
+        this.props.clearSearchResult();
+        this.searchBarRef.current.value = '';
+    }
+
     render = () => {
         const {classes} = this.props;
 
@@ -57,13 +68,17 @@ class ProductGrid extends React.Component {
             <div className={classes.searchBar}>
                 <div className={classes.searchContainer}>
                     <label htmlFor="searchField">Search product by ID or Name: </label>
-                    <input id="searchField" onChange={this.setQuery} className={classes.searchField} type="text"/>
-                    <IconButton onClick={this.findItemsByQuery}>
+                    <input ref={this.searchBarRef} id="searchField" onChange={this.setQuery} className={classes.searchField} type="text"/>
+                    <IconButton style={{color: 'white'}} onClick={this.findItemsByQuery}>
                         <Search className={classes.searchIcon}/>
                     </IconButton>
+                    <Button variant="contained" size="small" onClick={this.clearSearchResultAndBar}>Clear Searh Result</Button>
+
+                    <Button className={classes.createNewProduct} variant="contained" size="medium" color="primary" onClick={this.openNewPropductForm}>Create New Product</Button>
                 </div>
             </div>
             <div className={classes.addNewProduct}>
+
                 <AddNewProduct newProductFormState={this.state.newProductFormState} newProductFormHandler={this.newProductFormHandler} openNewPropductForm={this.openNewPropductForm} />
             </div>
             <div className={classes.searchResult}>
@@ -90,6 +105,9 @@ class ProductGrid extends React.Component {
                             {
                                 this.state.removeMsg && this.props.serverData && this.props.serverData.message ? this.props.serverData.message : null 
                             }
+                            {
+                                this.state.createdMsg && this.props.createdProduct ? this.props.createdProduct.message : null
+                            }
                         </span>
                         <IconButton style={{display: 'inline-block'}} color="inherit" style={{color: "white"}} onClick={this.closeSnack}>
                             <Close style={{color: 'black'}}/>
@@ -106,9 +124,12 @@ const mapStateToProps = state => ({
     serverData: state.adminReducer.serverData,
     searchCounter: state.adminReducer.searchCounter,
     itemRemoveCounter: state.adminReducer.itemRemoveCounter,
+    createdProduct: state.adminReducer.createdProduct,
+    productCreatedCounter: state.adminReducer.productCreatedCounter,
 });
 const mapDispatchToProps = dispatch => ({
     findItems: query => dispatch(findItems(query)),
+    clearSearchResult: () => dispatch(clearSearchResult()),
 });
 
 export default compose(

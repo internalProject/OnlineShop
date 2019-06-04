@@ -10,7 +10,9 @@ const initialAdmin = {
     searchCounter: 0,
     itemRemoveCounter: 0,
     productEdited: 0,
+    productCreatedCounter: 0,
     searchResult: { items: [], message: '',},
+    createdProduct: null,
 };
 
 export default function adminReducer(state = initialAdmin, action) {
@@ -42,6 +44,12 @@ export default function adminReducer(state = initialAdmin, action) {
                     message: 'There are no items with these names.',
                 },
                 searchCounter: ++state.searchCounter,
+            }
+        case 'CLEAR_SEARCH_RESULT': 
+            return {...state,
+                searchResult: {...state.searchResult,
+                    items: [],
+                }
             }
         case 'ITEM_REMOVED_OK':
             return {
@@ -87,6 +95,14 @@ export default function adminReducer(state = initialAdmin, action) {
                         items: [...updatedItems],
                     },
                 }   
+            }
+        case 'NEW_PRODUCT_CREATED':
+            return {...state,
+                createdProduct: {
+                    product: action.data.product,
+                    message: `${action.data.product.name} has been created successfully!`,
+                },
+                productCreatedCounter: ++state.productCreatedCounter,
             }
     }
     return state;

@@ -1,4 +1,4 @@
-import {toAdmin, findItemsByQuery, removeItemFromStore, updateProduct} from './helpers.js';
+import {toAdmin, findItemsByQuery, removeItemFromStore, updateProduct, createNewProduct} from './helpers.js';
 
 export const getIntoAdmin = adminCreds => async dispatch => {
     let serverResponse = await toAdmin(adminCreds);
@@ -20,6 +20,10 @@ export const findItems = query => async dispatch => {
     }
 };
 
+export const clearSearchResult = () => dispatch => {
+    dispatch({type: 'CLEAR_SEARCH_RESULT'});
+}
+
 export const removeItem = itemId => async dispatch => {
     let serverResponse = await removeItemFromStore(itemId);
     if (serverResponse.data.status === 'ok') {
@@ -36,3 +40,13 @@ export const saveChanges = newData => async dispatch => {
         dispatch({type: "PRODUCT_UPDATED_SUCCESSFULLY", data: serverResponse.data[1][0]})
     }
 }
+
+export const createrProductInDB = productData => async dispatch => {
+    let serverResponse = await createNewProduct(productData);
+    if (serverResponse.status === 200) {
+        dispatch({type: 'NEW_PRODUCT_CREATED', data: serverResponse.data, });
+    } else {
+        dispatch({type: 'FAIL_ON_PRODUCT_CREATION', data: serverResponse.data});
+    }
+}
+
