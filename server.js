@@ -76,10 +76,6 @@ const  urlencodedParser = bodyParser.urlencoded({ extended: false });
 app.use(express.static(path.join(__dirname, 'client/dist')));
 app.use(cors());
 
-app.get('*', (req,res) =>{
-    res.sendFile(path.join(__dirname+'/client/dist/index.html'));
-});
-
 app.post('/sign-up', jsonParser, (req, res) => {
   console.log('check address'),
   console.dir(req.body.address);
@@ -90,7 +86,7 @@ app.post('/sign-up', jsonParser, (req, res) => {
   })
   .then( findedUsers => {
     if (findedUsers.length === 0) {
-      User.create({...req.body, roleId: 2}).then(data=> {
+      User.create({...req.body, roleId: 2, disabled: false, }).then(data=> {
         console.log('success');
         res.send({
           message: `user ${req.body.name} was created`,
@@ -208,6 +204,8 @@ app.post('/update-user', jsonParser, (req, res) => {
     name: req.body.name,
     email: req.body.email,
     address: req.body.address,
+    role: req.body.role,
+    disabled: req.body.disabled,
   }, {returning: true, where: {id: req.body.id}},)
   .then( user => {
     res.json(safeStringify(user));
@@ -288,7 +286,30 @@ app.post('/create-new-product', jsonParser, (req, res) => {
   })
   .then( addedProduct => res.json({product: addedProduct, status: 'created'}) )
   .catch( fail => res.json(fail) );
+});
+
+app.get('/get-all-users', jsonParser, (req, res) => {
+  User.findAll()
+  .then( users => { 
+    // let modifiedUsers = users.map(u => {
+    //   let newUser = {};
+
+    //   for (let f in u) {
+    //    if (f === 'password')  continue
+    //    else newUser[f] = u[f];
+    //   }
+    //   console.log('new user', newUser);
+    //   return newUser;
+    // });
+    // console.log('modified users', modifiedUsers);
+    res.json({users}); 
+  })
+  .catch( fail => res.json(fail) )
 })
+
+app.get('*', (req,res) =>{
+  res.sendFile(path.join(__dirname+'/client/dist/index.html'));
+});
 
 function dateToPropperFormat(date) {
   return  date.replace('T', '   ').slice(0, date.indexOf('.'));

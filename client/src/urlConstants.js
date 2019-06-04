@@ -11,7 +11,7 @@ const urls = {
     DELETE_PRODUCT_BY_ID: '/delete-product-by-id',
     UPDATE_PRODUCT: '/update-product',
     CREATE_NEW_PRODUCT: '/create-new-product',
-
+    GET_ALL_USERS: '/get-all-users',
 };
 
 export default urls;

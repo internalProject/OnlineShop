@@ -13,6 +13,7 @@ const initialAdmin = {
     productCreatedCounter: 0,
     searchResult: { items: [], message: '',},
     createdProduct: null,
+    users: null,
 };
 
 export default function adminReducer(state = initialAdmin, action) {
@@ -104,6 +105,15 @@ export default function adminReducer(state = initialAdmin, action) {
                 },
                 productCreatedCounter: ++state.productCreatedCounter,
             }
+        case 'ALL_USERS':
+            return {...state,
+                users: action.data,
+            }
+        case 'FAIL_ON_GETTING_USERS': {
+            return {...state,
+                serverData: {message: 'Error on getting users.', error: action.data, },
+            }
+        }
     }
     return state;
 }

@@ -19,5 +19,8 @@ module.exports.userModel = DataTypes => {
         roleId: {
             type: DataTypes.INTEGER,
         },
+        disabled: {
+            type: DataTypes.BOOLEAN,
+        }
     }
 };

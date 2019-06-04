@@ -1,4 +1,4 @@
-import {toAdmin, findItemsByQuery, removeItemFromStore, updateProduct, createNewProduct} from './helpers.js';
+import {toAdmin, findItemsByQuery, removeItemFromStore, updateProduct, createNewProduct, getUsers} from './helpers.js';
 
 export const getIntoAdmin = adminCreds => async dispatch => {
     let serverResponse = await toAdmin(adminCreds);
@@ -47,6 +47,15 @@ export const createrProductInDB = productData => async dispatch => {
         dispatch({type: 'NEW_PRODUCT_CREATED', data: serverResponse.data, });
     } else {
         dispatch({type: 'FAIL_ON_PRODUCT_CREATION', data: serverResponse.data});
+    }
+}
+
+export const getAllUsers = () => async dispatch => {
+    let serverResponse = await getUsers();
+    if (serverResponse.status === 200) {
+        dispatch({type: 'ALL_USERS', data: serverResponse.data.users, });
+    } else;{
+        dispatch({type: 'FAIL_ON_GETTING_USERS', data: serverResponse.data,});
     }
 }
 

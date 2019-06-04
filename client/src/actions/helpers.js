@@ -70,3 +70,8 @@ export const createNewProduct = async productData => {
     let serverResponse = await axios.post(urls.CREATE_NEW_PRODUCT, productData);
     return serverResponse;
 }
+
+export const getUsers = async () => {
+    let serverResponse = await axios.get(urls.GET_ALL_USERS);
+    return serverResponse;
+}
