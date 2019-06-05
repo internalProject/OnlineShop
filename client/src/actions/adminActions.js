@@ -1,4 +1,13 @@
-import {toAdmin, findItemsByQuery, removeItemFromStore, updateProduct, createNewProduct, getUsers} from './helpers.js';
+import {
+    toAdmin,
+    findItemsByQuery,
+    removeItemFromStore,
+    updateProduct,
+    createNewProduct,
+    getUsers,
+    switchUserStatus,
+    getUserOrdersByAdmin,
+} from './helpers.js';
 
 export const getIntoAdmin = adminCreds => async dispatch => {
     let serverResponse = await toAdmin(adminCreds);
@@ -59,3 +68,20 @@ export const getAllUsers = () => async dispatch => {
     }
 }
 
+export const alternateUserStatus = userId => async dispatch => {
+    let serverResponse = await switchUserStatus(userId);
+    if (serverResponse.status === 200 && serverResponse.data.success ) {
+        dispatch({type: 'USER_STATUS_CHANGED', data: serverResponse.data.updatedUser, });
+    } else {
+        console.log('fail');
+    }
+}
+
+export const getAllUserOrders = userId => async dispatch => {
+    let serverResponse = await getUserOrdersByAdmin(userId);
+    if (serverResponse.status === 200 && serverResponse.data.status === 'ok') {
+        dispatch({type: 'USER_ORDERS_GOTTEN', data: serverResponse.data.orders, });
+    } else {
+        console.log('fail');
+    }
+}

@@ -122,6 +122,7 @@ app.post('/sign-in', jsonParser, (req, res) => {
           password: user.password,
           id: user.id,
           address: user.address,
+          disabled: user.disabled,
         }, isUserExists: true,}));
       }
       if (user.password !== req.body.password && user.email === req.body.email) {
@@ -306,6 +307,49 @@ app.get('/get-all-users', jsonParser, (req, res) => {
   })
   .catch( fail => res.json(fail) )
 })
+
+app.post('/switch-user-status', jsonParser, (req, res) => {
+  User.findOne({where: {
+    id: req.body.userId
+  }})
+  .then( user => {
+    return User.update({
+    disabled: !user.disabled,
+  }, {returning: true, where: {id: user.id}}); 
+  })
+  .then( updatedUser => {
+    res.json({
+      updatedUser: updatedUser[1][0],
+      success: true,
+    }); 
+  })
+  .catch( fail => res.json(fail) )
+});
+
+app.post('/all-user-orders', jsonParser, (req, res) => {
+  Order.findAll({where: {userId: req.body.userId,}})
+  .then(orders => {
+
+    let restoredOrders = orders.map(
+      order => {
+      // ---------------- order restoring ----------------
+      let productsForAdding = OrderDetail.findAll( {where: { orderId: order.id }} )
+        .then(product_idNq_pair => {
+          let products = Promise.all( product_idNq_pair.map( p => Product.findOne( {where: {id: p.productId}} ).then(prod => Promise.resolve({quantity: p.quantity, product: prod})) ) ) //p это объект id+q который нужно превратить в q+prod
+          .then(extra => extra);
+          return products;
+        })
+          .then(final => final)
+    let assembledOrder = productsForAdding.then( restoredProducts => Promise.resolve({id: order.id, date: order.date, products: restoredProducts}) );
+    return assembledOrder;
+      // ---------------- ---------------- ----------------
+    }
+    )
+    Promise.all(restoredOrders).then( responseForUser => res.json({orders: responseForUser, status: 'ok', }) );
+  })
+})
+
+// --------------------------------------------------------------------------
 
 app.get('*', (req,res) =>{
   res.sendFile(path.join(__dirname+'/client/dist/index.html'));

@@ -3,6 +3,8 @@ import {compose} from 'redux';
 import {connect} from 'react-redux';
 import {withRouter} from 'react-router';
 import {withStyles, IconButton, Button} from '@material-ui/core';
+import {Snackbar, SnackbarContent,} from '@material-ui/core';
+import Close from '@material-ui/icons/Close';
 import {Info, Add, Remove,} from '@material-ui/icons';
 import DeleteIcon from '@material-ui/icons/Delete';
 import styles from './styles.js';
@@ -23,9 +25,9 @@ class Grid extends React.Component{
     constructor(props) {
         super(props);
 
-        // this.state = {
-        //     continueClicked: false,
-        // }
+        this.state = {
+            isBanSnackOpen: false,
+        }
     }
 
     hideDescription = item => e => {
@@ -109,6 +111,10 @@ class Grid extends React.Component{
         this.props.removeFromCart(itemId);
     }
 
+    closeBanSnack = () => {
+        this.setState({isBanSnackOpen: false,});
+    }
+
     clearCart = () => {
         this.props.clearCart();
     }
@@ -116,6 +122,10 @@ class Grid extends React.Component{
     goToOrderAddress = () => {
         if (!this.props.isLoggedIn) {
             // this.state.continueClicked = this.setState({continueClicked: !this.state.continueClicked});
+            return;
+        }
+        if (this.props.user.disabled) {
+            this.setState({isBanSnackOpen: true,});
             return;
         }
         this.props.history.push('/order-address');
@@ -188,6 +198,22 @@ class Grid extends React.Component{
                     </div>: 
                     null
                 }
+                <Snackbar
+                open={this.state.isBanSnackOpen}
+                onClose={this.closeBanSnack}
+                autoHideDuration={6000}
+                anchorOrigin={{vertical: 'top', horizontal: 'center'}}
+                >
+                    <SnackbarContent
+                        classes={{root: classes.errorSnack}}
+                        message={<div>
+                            <span>{'You are not able to make orders!'}</span>
+                            <IconButton style={{display: 'inline-block'}} color="inherit" style={{color: "white"}} onClick={this.closeBanSnack}>
+                                <Close/>
+                            </IconButton>
+                        </div>}
+                    />
+                </Snackbar>
             </div>
             
         </div>);
@@ -197,6 +223,7 @@ class Grid extends React.Component{
 const mapStateToProps = state => ({
     items: state.cartReducer.picked,
     isLoggedIn: state.userReducer.isLoggedIn,
+    user: state.userReducer.user,
 });
 const mapDispatchToProps = dispatch => ({
     pickOne: item => dispatch(pickOne(item)),

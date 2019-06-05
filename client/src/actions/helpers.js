@@ -75,3 +75,13 @@ export const getUsers = async () => {
     let serverResponse = await axios.get(urls.GET_ALL_USERS);
     return serverResponse;
 }
+
+export const switchUserStatus =  async userId => {
+    let serverResponse = await axios.post(urls.SWITCH_USER_STATUS, {userId});
+    return serverResponse;
+}
+
+export const getUserOrdersByAdmin = async userId => {
+    let serverResponse = await axios.post(urls.ALL_USER_ORDERS_BY_ADMIN, {userId});
+    return serverResponse;
+}

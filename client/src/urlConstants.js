@@ -12,6 +12,8 @@ const urls = {
     UPDATE_PRODUCT: '/update-product',
     CREATE_NEW_PRODUCT: '/create-new-product',
     GET_ALL_USERS: '/get-all-users',
+    SWITCH_USER_STATUS: '/switch-user-status',
+    ALL_USER_ORDERS_BY_ADMIN: '/all-user-orders',
 };
 
 export default urls;

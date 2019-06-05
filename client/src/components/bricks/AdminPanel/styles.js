@@ -15,6 +15,9 @@ const styles = theme => ({
         display: 'flex',
         justifyContent: 'space-between',
         backgroundColor: '#333',
+        ['@media (max-width: 650px)']: {
+            flexDirection: 'column',
+        },
     },
     linkList: {
         listStyleType: 'none',

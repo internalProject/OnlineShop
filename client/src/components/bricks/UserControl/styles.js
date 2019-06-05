@@ -1,14 +1,27 @@
 const styles = {
+    wrapperAligner: {
+        display: 'flex',
+        justifyContent: 'center',
+        ['@media (max-width: 1000px)']: {
+            display: 'block',
+        },
+    },
     tableWrapper: {
         padding: '10px',
         backgroundColor: 'white',
         color: '#444',
-        maxWidth: '1000px',
         margin: '20px',
+        maxWidth: '1000px',
         borderRadius: '5px',
     },
     table: {
+        maxWidth: '1000px',
         overflow: 'scroll',
+    },
+    tableHead: {
+        ['@media (max-width: 1000px)']: {
+            display: 'none',
+        },
     },
     tableRow: {
         padding: '8px',
@@ -17,36 +30,89 @@ const styles = {
         borderBottom: '1px solid #444',
         '&:not(:last-child)': {
             borderBottom: '1px solid #eee',
+            margin: '15px 0px',
+        },
+        ['@media (max-width: 1000px)']: {
+            flexDirection: 'column',
         },
     },
+    tRowPair: {
+        display: 'flex',
+        justifyContent: 'space-between',
+        '&:nth-of-type(2n)': {
+            backgroundColor: '#eee',
+        },
+        '&:last-child': {
+            margin: '30px 0px',
+        },
+    },
+    leftCol: {
+        width: '30% !important', // or important or have to create new class to replace colName, colId ... classes. (important - laconic)
+    },
+    rightCol: {
+        width: '70% !important',
+    },
     colId: {
-        width: '8%',
+        width: '100px',
         margin: '0px 8px',
+        height: '30px',
+        paddingTop: '4px',
     },
     colName: {
-        width: '20%',
+        width: '150px',
         margin: '0px 8px',
+        height: '30px',
+        paddingTop: '4px',
+        overflow: 'hidden',
+        textOverflow: 'ellipsis',
     },
     colEmail: {
-        width: '20%',
+        width: '150px',
         margin: '0px 8px',
+        height: '30px',
+        paddingTop: '4px',
+        overflow: 'hidden',
+        textOverflow: 'ellipsis',
     },
     colAddress: {
-        width: '20%',
+        width: '150px',
         margin: '0px 8px',
+        height: '30px',
+        paddingTop: '4px',
+        overflow: 'hidden',
+        textOverflow: 'ellipsis',
     },
     colRole: {
-        width: '10%',
+        width: '150px',
         margin: '0px 8px',
+        height: '30px',
+        paddingTop: '4px',
     },
-    colDisable: {
-        width: '10%',
+    colDisabled: {
+        width: '200px',
         margin: '0px 8px',
+        height: '30px',
+        paddingTop: '4px',
+    },
+    vertAlign: {
+        marginTop: '-13px',
     },
     colOrders: {
-        width: '8%',
+        width: '100px',
         margin: '0px 8px',
-    }
+        height: '30px',
+        paddingTop: '4px',
+    },
+    ordersBtnAlign: {
+        marginTop: '-20px',
+    },
+    '@global': {
+        'p > li': { // this is how to set general css rules
+            color: 'yellow',
+            backgroundColor: 'green',
+        },
+    },
+
 }
 
 export default styles;

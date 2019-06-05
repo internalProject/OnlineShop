@@ -14,6 +14,7 @@ const initialAdmin = {
     searchResult: { items: [], message: '',},
     createdProduct: null,
     users: null,
+    userOrders: null,
 };
 
 export default function adminReducer(state = initialAdmin, action) {
@@ -109,11 +110,21 @@ export default function adminReducer(state = initialAdmin, action) {
             return {...state,
                 users: action.data,
             }
-        case 'FAIL_ON_GETTING_USERS': {
+        case 'FAIL_ON_GETTING_USERS':
             return {...state,
                 serverData: {message: 'Error on getting users.', error: action.data, },
             }
-        }
+        case 'USER_STATUS_CHANGED':
+            return {...state,
+                users: [...state.users.map( u => {
+                    if (u.id === action.data.id) return action.data;
+                    return u;
+                })]
+            }
+        case 'USER_ORDERS_GOTTEN':
+            return {...state,
+                userOrders: [...action.data],
+            }
     }
     return state;
 }

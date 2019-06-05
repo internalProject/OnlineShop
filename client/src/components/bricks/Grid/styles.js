@@ -103,6 +103,11 @@ const styles = theme => ({
         padding: '0px 20px', 
         color: 'white',
     },
+    errorSnack: {
+        backgroundColor: 'red',
+        fontWeight: '600',
+        color: 'white',
+    },
 })
 
 export default styles;

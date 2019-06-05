@@ -10,6 +10,7 @@ const styles = {
         height: '0px',
         transition: '0.5s height',
         overflow: 'hidden',
+        zIndex: '2',
 
         ['@media (max-width: 816px)']: {
             top: '46px',

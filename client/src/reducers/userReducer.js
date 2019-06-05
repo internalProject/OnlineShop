@@ -73,13 +73,11 @@ const userReducer = (state = initialUserState, action) => {
             }}
         case 'AFTER_USER_UPDATE':
             return {...state,
-                user: {
-                    ...state.user, ...action.data,
-                },
-                serverData: {
+                user: {...action.data, },
+                serverData: {...state.serverData,
                     message: `User ${action.data.name} has updated successfully at ${dateToPropperFormat(new Date().toISOString())}.`,
                     status: 'success',
-                }
+                },
             }
         case 'FAIL_ON_USER_UPDATE':
             return {
