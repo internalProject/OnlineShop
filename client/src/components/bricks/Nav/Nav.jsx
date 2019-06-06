@@ -39,10 +39,12 @@ class Nav extends React.Component {
                 <Link className={classes.link} to="/profile">PROFILE
                 </Link>
             </li>
+            {this.props.user && (this.props.user.roleId === 1) ?
             <li className={classes.navLi}>
                 <Link className={classes.link} to="/admin">ADMIN
                 </Link>
             </li>
+            : null}
         </ul>
         <div className={classes.loggedUserShell}>{this.props.isUserLoggedIn ? <UserBtn/> : <Unregistered/>}</div>
     </div>)

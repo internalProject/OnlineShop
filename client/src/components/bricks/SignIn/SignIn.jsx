@@ -7,7 +7,7 @@ import {compose} from 'redux';
 import {withRouter} from 'react-router';
 import {withStyles} from '@material-ui/core';
 import styles from './styles.js';
-import {tryToLogin, } from '../../../actions/userActions.js';
+import {tryToLogin, clearSignInMsg, } from '../../../actions/userActions.js';
 import {Formik, Form, Field} from 'formik';
 
 let userInformed = false;
@@ -41,6 +41,7 @@ class SignIn extends React.Component {
 
     closeLoginDialog = () => {
         this.setState({isDialogOpen: false});
+        this.props.clearSignInMsg();
     }
 
     openDLoginDialog = () => {
@@ -50,7 +51,6 @@ class SignIn extends React.Component {
     closeSnack = () => {
         this.setState({isSnackOpen: false});
         userInformed = true;
-
     }
 
     validate = values => {
@@ -107,10 +107,7 @@ class SignIn extends React.Component {
                             classes={{root: classes.error}}
                             message={<div>
                                 <span>
-                                    {
-                                        // userCreatedSuccessfully ? registrationStatusMessages.success : registrationStatusMessages.fail
-                                        'Wrong Password!'
-                                    }
+                                    {'Wrong Password!'}
                                 </span>
                                 <IconButton style={{display: 'inline-block'}} color="inherit" style={{color: "white"}} onClick={this.closeSnack}>
                                     <Close/>
@@ -128,6 +125,7 @@ class SignIn extends React.Component {
 
 const mapStateToProps = state => ({
     user: state.userReducer.user.user,
+    serverData: state.userReducer.serverData,
     isLoggedIn: state.userReducer.isLoggedIn,
     wrongPassword: state.userReducer.wrongPassword,
     tryToLoginCounter: state.userReducer.tryToLoginCounter,
@@ -136,6 +134,7 @@ const mapStateToProps = state => ({
 
 const mapDispatchToProps = dispatch => ({
     tryToLogin: usersCredentials => dispatch(tryToLogin(usersCredentials)),
+    clearSignInMsg: () => dispatch(clearSignInMsg()),
 });
 
 

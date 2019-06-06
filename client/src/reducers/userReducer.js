@@ -7,6 +7,7 @@ const initialUserState = {
         email: '',
         address: '',
         password: '',
+        roleId: '',
         orders: [],
     },
     isLoggedIn: false,
@@ -51,7 +52,13 @@ const userReducer = (state = initialUserState, action) => {
         case 'USER_HAS_REGISTRED':
             return {...state, isLoggedIn: action.data};
         case 'EXIT':
-            return {...state, isLoggedIn: action.data};
+            return {...state,
+                isLoggedIn: action.data,
+                userSearchingResult: {
+                    hasUserFound: false,
+                    message: '',
+                },
+            };
         case 'USER_IS_EXISTS':
             return {
                 ...state,
@@ -60,6 +67,16 @@ const userReducer = (state = initialUserState, action) => {
                 userSearchingResult: {message: 'Welcome!', hasUserFound: true,},
                 wrongPassword: false,
             };
+        case 'USER_IS_BANNED':
+            return {
+                ...state,
+                user: {...state.user, ...action.data.user.user},
+                isLoggedIn: action.data.isLoggedIn,
+                userSearchingResult: {message: 'Yor are banned!', hasUserFound: true,},
+                wrongPassword: false,
+            }
+        case 'CLEAR_SIGN_IN_MSG':
+            return {...state, userSearchingResult: {...state.userSearchingResult, message: ''}};
         case 'WRONG_PASSWORD':
             return {...state, wrongPassword: true, tryToLoginCounter: ++state.tryToLoginCounter,};
         case 'USER_IS_NOT_EXISTS':

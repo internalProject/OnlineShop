@@ -12,12 +12,16 @@ import styles from './styles.js';
 import withSizes from 'react-sizes';
 import cn from 'classnames';
 
+const classAtribs = ['colId', 'colName', 'colEmail', 'colAddress', 'colRole', 'colDisabled', 'colOrders'];
+const strValues = ['Id', 'Name', 'em@il', 'Address', 'Role', 'Disabled', 'Orders'];
+
 class UserControl extends React.Component {
     constructor(props) {
         super(props)
 
         this.state = {
             isOrdersDialogOpen: false,
+            indexFlag: null,
         }
     }
     
@@ -30,12 +34,13 @@ class UserControl extends React.Component {
     }
 
     closeOrdersDialog = () => {
-        this.setState({isOrdersDialogOpen: false,});
+        this.setState({indexFlag: null,});
     }
 
-    openOrderDialog = () => {
-        this.setState({isOrdersDialogOpen: true})
+    openOrderDialog = value => {
+        this.setState({indexFlag: value})
     }
+
 
     render = () => {
         const {classes} = this.props;
@@ -48,13 +53,9 @@ class UserControl extends React.Component {
                 <div className={classes.table}>
                     <div className={classes.tableHead}>
                         <div className={classes.tableRow}>
-                            <div className={classes.colId}>Id</div>
-                            <div className={classes.colName}>Name</div>
-                            <div className={classes.colEmail}>em@il</div>
-                            <div className={classes.colAddress}>Address</div>
-                            <div className={classes.colRole}>Role</div>
-                            <div className={classes.colDisabled}>Disabled</div>
-                            <div className={classes.colOrders}>Orders</div>
+                            {classAtribs.map( (v, i) => { 
+                                return <div key={i} className={classes[classAtribs[i]]}>{strValues[i]}</div>; 
+                            }) }
                         </div>
                     </div>
                     <div className={classes.tableBody}>
@@ -62,7 +63,7 @@ class UserControl extends React.Component {
                         this.props.users ? 
                             (this.props.isLarge ? 
                                 this.props.users.map( (user, index) => {
-                                    return <div key={index} className={classes.tableRow}>
+                                    return <div key={user.id} className={classes.tableRow}>
                                         <div className={classes.colId}>{user.id}</div>
                                         <div className={classes.colName}>{user.name}</div>
                                         <div className={classes.colEmail}>{user.email}</div>
@@ -77,10 +78,10 @@ class UserControl extends React.Component {
                                             </FormGroup>
                                         </div>
                                         <div className={cn(classes.colOrders, classes.ordersBtnAlign)}>
-                                            <IconButton onClick={this.openOrderDialog}><UnfoldMore /></IconButton>
+                                            <IconButton onClick={() => this.openOrderDialog(index)}><UnfoldMore /></IconButton>
                                             <UserOrdersDialog
-                                                isOrdersDialogOpen={this.state.isOrdersDialogOpen}
-                                                closeOrdersDialog={this.closeOrdersDialog}
+                                                isOrdersDialogOpen={(this.state.indexFlag !== null) && (this.state.indexFlag === index) ? true : false} // indexFlag !== null && indexFlag === index ? true : false
+                                                closeOrdersDialog={() => this.closeOrdersDialog(index)}
                                                 user={user}
                                             />
                                         </div>
@@ -88,7 +89,7 @@ class UserControl extends React.Component {
                                 })
                                 :
                                 this.props.users.map( (user, index) => {
-                                    return <div key={index} className={classes.tableRow}>
+                                    return <div key={user.id} className={classes.tableRow}>
                                         <div className={classes.tRowPair}>
                                             <div className={cn(classes.colId, classes.leftCol)}>Id</div>
                                             <div className={cn(classes.colId, classes.rightCol)}>{user.id}</div>
@@ -123,10 +124,10 @@ class UserControl extends React.Component {
                                         <div className={classes.tRowPair}>
                                             <div className={cn(classes.colOrders, classes.leftCol)}>Orders</div>
                                             <div className={cn(classes.colOrders, classes.rightCol)}>
-                                                <IconButton onClick={this.openOrderDialog}><UnfoldMore /></IconButton>
+                                                <IconButton onClick={() => this.openOrderDialog(index)}><UnfoldMore /></IconButton>
                                                 <UserOrdersDialog
-                                                    isOrdersDialogOpen={this.state.isOrdersDialogOpen}
-                                                    closeOrdersDialog={this.closeOrdersDialog}
+                                                    isOrdersDialogOpen={(this.state.indexFlag !== null) && (this.state.indexFlag === index) ? true : false} // indexFlag !== null && indexFlag === index ? true : false
+                                                    closeOrdersDialog={() => this.closeOrdersDialog(index)}
                                                     user={user}
                                                 />
                                             </div>

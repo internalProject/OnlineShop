@@ -1,6 +1,7 @@
 var cors = require('cors');
 var express = require('express');
 var app = express();
+var lodash = require('lodash');
 const Sequelize = require('sequelize');
 const userModel = require('./alter models/user.js').userModel,
 orderModel = require('./alter models/order.js').orderModel,
@@ -123,6 +124,7 @@ app.post('/sign-in', jsonParser, (req, res) => {
           id: user.id,
           address: user.address,
           disabled: user.disabled,
+          roleId: user.roleId,
         }, isUserExists: true,}));
       }
       if (user.password !== req.body.password && user.email === req.body.email) {
@@ -243,16 +245,36 @@ app.post('/search-stock-items', jsonParser, (req, res) => {
 
   idKeys = idKeys.map(k => parseFloat(k, 10) );
 
-  Product.findAll({where: {
-    [Op.or]: { // NOTE IT! necessary for multiple search
-      id: { [Op.in]: idKeys}, // search based on array of values - idKeys
-      name: {[Op.in]: allSearchhKeys} // search based on array of values - allSearchKeys
-    } 
-  },
-  raw: true, // this remove duplicates
-})
-  .then( items => res.json(items) )
-  .catch( fail => res.json(fail) )
+  let promiseSearchList = allSearchhKeys.map(v => Product.findAll({
+      where: {
+        name: {
+          [Op.substring]: `%${v}%`
+        }
+      }
+    } ) );
+
+  promiseSearchList.push(Product.findAll({where: {
+      [Op.or]: { // NOTE IT! necessary for multiple search
+        id: { [Op.in]: idKeys}, // search based on array of values - idKeys
+        name: {[Op.in]: allSearchhKeys}, // search based on array of values - allSearchKeys
+      },
+    },
+    raw: true, // this remove duplicates
+  }));
+
+  Promise.all(promiseSearchList)
+  .then( items => res.json(lodash.uniqBy(lodash.union(...items), 'id')) );
+
+  // Product.findAll({where: {
+  //     [Op.or]: { // NOTE IT! necessary for multiple search
+  //       id: { [Op.in]: idKeys}, // search based on array of values - idKeys
+  //       name: {[Op.in]: allSearchhKeys}, // search based on array of values - allSearchKeys
+  //     },
+  //   },
+  //   raw: true, // this remove duplicates
+  // })
+  // .then( items => res.json(items) )
+  // .catch( fail => res.json(fail) )
 });
 
 app.post('/delete-product-by-id', jsonParser, (req, res) => {

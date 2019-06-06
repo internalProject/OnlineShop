@@ -57,6 +57,11 @@ export const tryToLogin = userCredentials => async dispatch => {
     if (user.wrongPassword) {
         dispatch({type: 'WRONG_PASSWORD'});
     }
+    if (user.user.disabled) {
+        dispatch({type: 'USER_IS_BANNED', data: {user: user, isLoggedIn: false}});
+        ls.set('ws-name, user.user.name');
+        return;
+    }
     if (user.isUserExists === true) {
         dispatch({type: 'USER_IS_EXISTS', data: {user: user, isLoggedIn: true}});
         ls.set('ws-name', user.user.name);
@@ -64,6 +69,10 @@ export const tryToLogin = userCredentials => async dispatch => {
         dispatch({type: 'USER_IS_NOT_EXISTS'});
     }
     
+}
+
+export const clearSignInMsg = () => dispatch => {
+    dispatch({type: 'CLEAR_SIGN_IN_MSG'});
 }
 
 export const getUserData = userName => async dispatch => {
