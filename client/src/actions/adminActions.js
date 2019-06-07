@@ -18,8 +18,8 @@ export const getIntoAdmin = adminCreds => async dispatch => {
     }
 }
 
-export const findItems = query => async dispatch => {
-    let serverResponse = await findItemsByQuery(query);
+export const findItems = searchState => async dispatch => {
+    let serverResponse = await findItemsByQuery(searchState);
     if (serverResponse.status === 200 && serverResponse.data !== null) {
         if (serverResponse.data.length === 0) {
             dispatch( {type: "ITEMS_NOT_FOUND"} );

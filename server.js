@@ -224,7 +224,9 @@ app.post('/admin', jsonParser, (req, res) => {
 });
 
 app.post('/search-stock-items', jsonParser, (req, res) => {
-  let allSearchhKeys = req.body.query.split(' ');
+  console.log('req.body.searchState __ ',req.body.searchState);
+  console.log('OFFSET __ ',req.body.searchState.offset);
+  let allSearchhKeys = req.body.searchState.term.split(' ');
   let idKeys = allSearchhKeys.filter(key => {
     // check for not chars+integers
     if (
@@ -245,25 +247,28 @@ app.post('/search-stock-items', jsonParser, (req, res) => {
 
   idKeys = idKeys.map(k => parseFloat(k, 10) );
 
-  let promiseSearchList = allSearchhKeys.map(v => Product.findAll({
-      where: {
-        name: {
-          [Op.substring]: `%${v}%`
+  if (req.body.searchState.fieldBy === 'names') {
+    let promiseSearchList = allSearchhKeys.map(v => {
+      if (v.length < 3) return;
+  
+      return Product.findAll( {
+        where: {
+          name: {
+            [Op.substring]: `%${v}%`
+          }
         }
+      } ); } );
+    
+    Promise.all(promiseSearchList)
+    .then( items => res.json(lodash.uniqBy(lodash.union(...items), 'id')) );
+  } else {
+    Product.findAll({where: {
+      id: {
+        [Op.in]: idKeys,
       }
-    } ) );
-
-  promiseSearchList.push(Product.findAll({where: {
-      [Op.or]: { // NOTE IT! necessary for multiple search
-        id: { [Op.in]: idKeys}, // search based on array of values - idKeys
-        name: {[Op.in]: allSearchhKeys}, // search based on array of values - allSearchKeys
-      },
-    },
-    raw: true, // this remove duplicates
-  }));
-
-  Promise.all(promiseSearchList)
-  .then( items => res.json(lodash.uniqBy(lodash.union(...items), 'id')) );
+    } } )
+    .then( items => res.json(items));
+  }
 
   // Product.findAll({where: {
   //     [Op.or]: { // NOTE IT! necessary for multiple search

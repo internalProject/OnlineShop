@@ -38,6 +38,7 @@ export default function adminReducer(state = initialAdmin, action) {
         case 'SEARCHED_ITEMS':
             return {...state,
                 searchResult: {...state.searchResult, items: [...action.data]},
+                searchCounter: ++state.searchCounter,
             }
         case 'ITEMS_NOT_FOUND': 
             return {
@@ -51,7 +52,8 @@ export default function adminReducer(state = initialAdmin, action) {
             return {...state,
                 searchResult: {...state.searchResult,
                     items: [],
-                }
+                },
+                searchCounter: ++state.searchCounter,
             }
         case 'ITEM_REMOVED_OK':
             return {

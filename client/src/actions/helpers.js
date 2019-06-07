@@ -51,8 +51,8 @@ export const isAdmin = async userId => {
     return serverResponse.data.isAccessAllowed;
 }
 
-export const findItemsByQuery = async query => {
-    let items = await axios.post(urls.SEARCH_STOCK_ITEMS, {query});
+export const findItemsByQuery = async searchState => {
+    let items = await axios.post(urls.SEARCH_STOCK_ITEMS, {searchState});
     return items;
 }
 

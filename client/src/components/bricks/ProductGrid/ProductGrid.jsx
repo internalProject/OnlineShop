@@ -1,13 +1,16 @@
 import React from 'react';
 import {compose} from 'redux';
 import {connect} from 'react-redux';
-import {withStyles, IconButton, Button, Snackbar, SnackbarContent,} from '@material-ui/core';
+import {makeStyles} from '@material-ui/styles';
+import {withStyles, TextField, IconButton, Button, Snackbar, SnackbarContent,} from '@material-ui/core';
 import Search from '@material-ui/icons/Search';
 import Close from '@material-ui/icons/Close';
+import {NavigateBefore, NavigateNext} from '@material-ui/icons';
 import {findItems, clearSearchResult, } from '../../../actions/adminActions.js';
 import ProductRow from '../ProductRow';
 import AddNewProduct from '../AddNewProduct';
-import styles from './styles.js';
+import styles, {root} from './styles.js';
+import cn from 'classnames';
 
 class ProductGrid extends React.Component {
     constructor(props) {
@@ -20,10 +23,17 @@ class ProductGrid extends React.Component {
             searchMsg: false,
             createdMsg: false,
             newProductFormState: false,
+            changeSelect: 'names',
+            offset: 0,
+            btnsForDisplay: [],
         };
         this.searchBarRef =  React.createRef();
     }
     
+    componentDidMount = () => {
+        this.findItemsByQuery(this.state.offset);
+    }
+
     componentDidUpdate = prevProps => {
         if ( (this.props.searchCounter !== prevProps.searchCounter) && this.props.searchResult.message !== '' ) {
             this.setState({isSnackOpen: true, searchMsg: true, removeMsg: false, createdMsg: false, })
@@ -34,14 +44,21 @@ class ProductGrid extends React.Component {
         if ( (this.props.productCreatedCounter !== prevProps.productCreatedCounter) && this.props.createdProduct !== null ) {
             this.setState({isSnackOpen: true, removeMsg: false, searchMsg: false, createdMsg: true, })
         }
+        if (this.props.searchCounter !== prevProps.searchCounter) {
+            var newArray = new Array(Math.ceil(this.props.searchResult.items.length / 3));
+            for (let i = 0; i < newArray.length; i++) {
+                newArray[i] = i+1;
+            }
+            this.setState({btnsForDisplay: newArray});
+        }
     }
 
     setQuery = e => {
         this.setState({searchTerm: e.target.value, });
     }
 
-    findItemsByQuery = () => {
-        this.props.findItems(this.state.searchTerm);
+    findItemsByQuery = (offset) => {
+        this.props.findItems({term: this.state.searchTerm, fieldBy: this.state.changeSelect, offset: this.state.offset});
     }
 
     closeSnack = () => {
@@ -61,13 +78,34 @@ class ProductGrid extends React.Component {
         this.searchBarRef.current.value = '';
     }
 
+    changeSelect = e => {
+        this.setState({changeSelect: e.target.value})
+    }
+
+    seePrev = () => {
+        this.setState({offset: this.state.offset - 3});
+    }
+
+    seeNext = () => {
+        this.setState({offset: this.state.offset + 3});
+    }
+
     render = () => {
         const {classes} = this.props;
+        
+        let pagingButtons = this.state.btnsForDisplay.map( (empty, index) => {  return <Button key={index} style={{color: 'white'}} onClick={() => this.setState({offset: 3 * index})}>{index + 1}</Button>; } )
 
         return <div className={classes.page}>
             <div className={classes.searchBar}>
                 <div className={classes.searchContainer}>
-                    <label htmlFor="searchField">Search product by ID or Name: </label>
+                    <label>
+                        Select search field:
+                        <select className={classes.searchSelect} defaultValue="names" value={this.state.selectValue} onChange={this.changeSelect}>
+                            <option value="names">Names</option>
+                            <option value="id">id</option>
+                        </select>
+                    </label>
+                    {/* <label htmlFor="searchField">Search product by ID or Name: </label> */}
                     <input ref={this.searchBarRef} id="searchField" onChange={this.setQuery} className={classes.searchField} type="text"/>
                     <IconButton style={{color: 'white'}} onClick={this.findItemsByQuery}>
                         <Search className={classes.searchIcon}/>
@@ -84,9 +122,20 @@ class ProductGrid extends React.Component {
             <div className={classes.searchResult}>
                 {
                     this.props.searchResult && this.props.searchResult.items ? 
-                    this.props.searchResult.items.map( item => <ProductRow key={item.id} item={item} /> )
+                    this.props.searchResult.items.slice(this.state.offset, this.state.offset+3).map( item => <ProductRow key={item.id} item={item} /> )
                     : null
                 }
+            </div>
+            <div className={classes.paging}>
+                <IconButton disabled={
+                    this.state.offset === 0 ?
+                    true : false
+                } className={classes.pagingBtn} onClick={this.seePrev}><NavigateBefore /></IconButton>
+                {pagingButtons}
+                <IconButton disabled={
+                    this.state.offset + 3 >= this.props.searchResult.items.length ?
+                    true : false
+                } className={classes.pagingBtn} onClick={this.seeNext}><NavigateNext /></IconButton>
             </div>
 
             <Snackbar
