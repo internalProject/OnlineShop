@@ -31,11 +31,11 @@ class ProductGrid extends React.Component {
     }
     
     componentDidMount = () => {
-        this.findItemsByQuery(this.state.offset);
+        this.findItemsByQuery( );
     }
 
     componentDidUpdate = prevProps => {
-        if ( (this.props.searchCounter !== prevProps.searchCounter) && this.props.searchResult.message !== '' ) {
+        if ( (this.props.searchCounter !== prevProps.searchCounter) && this.props.searchResult.message !== '' && (this.props.searchResult.items.length === 0) ) {
             this.setState({isSnackOpen: true, searchMsg: true, removeMsg: false, createdMsg: false, })
         }
         if ( (this.props.itemRemoveCounter !== prevProps.itemRemoveCounter) && this.props.serverData.message !== '') {
@@ -43,13 +43,17 @@ class ProductGrid extends React.Component {
         }
         if ( (this.props.productCreatedCounter !== prevProps.productCreatedCounter) && this.props.createdProduct !== null ) {
             this.setState({isSnackOpen: true, removeMsg: false, searchMsg: false, createdMsg: true, })
+            this.findItemsByQuery();
         }
-        if (this.props.searchCounter !== prevProps.searchCounter) {
+        if (
+                (this.props.searchCounter !== prevProps.searchCounter) ||
+                (this.props.itemRemoveCounter !== prevProps.itemRemoveCounter)
+            ) {
             var newArray = new Array(Math.ceil(this.props.searchResult.items.length / 3));
             for (let i = 0; i < newArray.length; i++) {
                 newArray[i] = i+1;
             }
-            this.setState({btnsForDisplay: newArray});
+            this.setState({btnsForDisplay: newArray, offset: 0});
         }
     }
 
@@ -57,8 +61,8 @@ class ProductGrid extends React.Component {
         this.setState({searchTerm: e.target.value, });
     }
 
-    findItemsByQuery = (offset) => {
-        this.props.findItems({term: this.state.searchTerm, fieldBy: this.state.changeSelect, offset: this.state.offset});
+    findItemsByQuery = () => {
+        this.props.findItems({term: this.state.searchTerm.trim(), fieldBy: this.state.changeSelect,});
     }
 
     closeSnack = () => {
@@ -75,7 +79,8 @@ class ProductGrid extends React.Component {
 
     clearSearchResultAndBar = () => {
         this.props.clearSearchResult();
-        this.searchBarRef.current.value = '';
+        // this.searchBarRef.current.value = '';
+        this.setState({searchTerm: ''});
     }
 
     changeSelect = e => {
@@ -93,7 +98,12 @@ class ProductGrid extends React.Component {
     render = () => {
         const {classes} = this.props;
         
-        let pagingButtons = this.state.btnsForDisplay.map( (empty, index) => {  return <Button key={index} style={{color: 'white'}} onClick={() => this.setState({offset: 3 * index})}>{index + 1}</Button>; } )
+        let pagingButtons = this.state.btnsForDisplay.map( (empty, index) => {  return <Button
+            key={index}
+            className={cn(this.state.offset / 3 === index ? classes.currentPage : null )}
+            style={{color: 'white'}}
+            onClick={() => this.setState({offset: 3 * index})}
+            >{index + 1}</Button>; } )
 
         return <div className={classes.page}>
             <div className={classes.searchBar}>
@@ -106,7 +116,7 @@ class ProductGrid extends React.Component {
                         </select>
                     </label>
                     {/* <label htmlFor="searchField">Search product by ID or Name: </label> */}
-                    <input ref={this.searchBarRef} id="searchField" onChange={this.setQuery} className={classes.searchField} type="text"/>
+                    <input value={this.state.searchTerm} ref={this.searchBarRef} id="searchField" onChange={this.setQuery} className={classes.searchField} type="text"/>
                     <IconButton style={{color: 'white'}} onClick={this.findItemsByQuery}>
                         <Search className={classes.searchIcon}/>
                     </IconButton>

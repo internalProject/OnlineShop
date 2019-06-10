@@ -4,6 +4,10 @@ const styles = {
         display: 'flex',
         flexDirection: 'column',
         justifyContent: 'space-between',
+        ['@media (max-width: 510px)']: {
+            height: 'auto',
+            paddingTop: '50px',
+        },
     },
     searchBar: {
         margin: '20px',
@@ -20,6 +24,10 @@ const styles = {
     createNewProduct: {
         display: 'inline-block',
         float: 'right',
+        ['@media (max-width: 510px)']: {
+            float:'initial',
+            paddingTop: '15px',
+        },
     },
     searchSelect: {
         padding: '3px 15px',
@@ -48,6 +56,9 @@ const styles = {
         display: 'inline-block',
         color: 'white',
         fontSize: 'em',
+    },
+    currentPage: {
+        backgroundColor: '#333',
     },
 }
 

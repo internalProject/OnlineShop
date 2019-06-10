@@ -15,15 +15,16 @@ import {
 // };
 
 export const isLoggedIn = () => async dispatch => {
-    let name = ls.get('ws-name');
-    // let name = localStorage.getItem('ws-name');
-    if (name && name.length !== undefined && name.length > 1) {
+    // let name = ls.get('name');
+    let name = localStorage.getItem('ws-name');
+    if (name && name.length && ( (name !== undefined) && name !== null) ) {
+        name = name.replace(/\"/g, '');
         let serverResponse = await getUserDataFromDb(name);
         let user = JSON.parse(serverResponse.data);
         user = user.user.dataValues;
-        return ({type: 'USER_IS_LOGGED_IN', data: {isLoggedIn: true, user}});
+        return dispatch({type: 'USER_IS_LOGGED_IN', data: {isLoggedIn: true, user}});
     }
-    return ({type: 'USER_IS_LOGGED_IN', data: false});
+    return dispatch({type: 'USER_IS_LOGGED_IN', data: {isLoggedIn: false} });
 }
 
 export const createUser = user => async dispatch => {
@@ -59,12 +60,12 @@ export const tryToLogin = userCredentials => async dispatch => {
     }
     if (user.user.disabled) {
         dispatch({type: 'USER_IS_BANNED', data: {user: user, isLoggedIn: false}});
-        ls.set('ws-name, user.user.name');
+        ls.set('ws-name', user.user.name.replace("\"", ""));
         return;
     }
     if (user.isUserExists === true) {
         dispatch({type: 'USER_IS_EXISTS', data: {user: user, isLoggedIn: true}});
-        ls.set('ws-name', user.user.name);
+        ls.set('ws-name', user.user.name.replace("\"", ""));
     } else {
         dispatch({type: 'USER_IS_NOT_EXISTS'});
     }

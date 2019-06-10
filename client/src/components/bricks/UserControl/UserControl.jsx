@@ -7,7 +7,7 @@ import {FormGroup, FormControlLabel, Switch} from '@material-ui/core';
 import AdminPanel from '../AdminPanel';
 import UserOrdersDialog from '../UserOrdersDialog';
 import {UnfoldMore} from '@material-ui/icons'
-import {getAllUsers, alternateUserStatus, } from '../../../actions/adminActions.js';
+import {getAllUsers, alternateUserStatus, getAllUserOrders, } from '../../../actions/adminActions.js';
 import styles from './styles.js';
 import withSizes from 'react-sizes';
 import cn from 'classnames';
@@ -22,6 +22,7 @@ class UserControl extends React.Component {
         this.state = {
             isOrdersDialogOpen: false,
             indexFlag: null,
+            // ordersOfUserWithId: null,
         }
     }
     
@@ -78,7 +79,7 @@ class UserControl extends React.Component {
                                             </FormGroup>
                                         </div>
                                         <div className={cn(classes.colOrders, classes.ordersBtnAlign)}>
-                                            <IconButton onClick={() => this.openOrderDialog(index)}><UnfoldMore /></IconButton>
+                                            <IconButton onClick={() => {this.props.getAllUserOrders(user.id); this.openOrderDialog(index)}}><UnfoldMore /></IconButton>
                                             <UserOrdersDialog
                                                 isOrdersDialogOpen={(this.state.indexFlag !== null) && (this.state.indexFlag === index) ? true : false} // indexFlag !== null && indexFlag === index ? true : false
                                                 closeOrdersDialog={() => this.closeOrdersDialog(index)}
@@ -124,7 +125,7 @@ class UserControl extends React.Component {
                                         <div className={classes.tRowPair}>
                                             <div className={cn(classes.colOrders, classes.leftCol)}>Orders</div>
                                             <div className={cn(classes.colOrders, classes.rightCol)}>
-                                                <IconButton onClick={() => this.openOrderDialog(index)}><UnfoldMore /></IconButton>
+                                                <IconButton onClick={() => {this.props.getAllUserOrders(user.id); this.openOrderDialog(index)}}><UnfoldMore /></IconButton>
                                                 <UserOrdersDialog
                                                     isOrdersDialogOpen={(this.state.indexFlag !== null) && (this.state.indexFlag === index) ? true : false} // indexFlag !== null && indexFlag === index ? true : false
                                                     closeOrdersDialog={() => this.closeOrdersDialog(index)}
@@ -151,6 +152,7 @@ const mapStateToProps = state => ({
 const mapDispatchToProps = dispatch => ({
     getAllUsers: () => dispatch(getAllUsers()),
     alternateUserStatus: userId => dispatch(alternateUserStatus(userId)),
+    getAllUserOrders: (id) => dispatch(getAllUserOrders(id)),
 });
 
 const mapSizeToProps = ({width}) => ({

@@ -103,7 +103,6 @@ class SignUp extends React.Component {
             actions.setSubmitting(false);
             
 
-            console.dir(good);
             ls.set('ws-name', values.name);
             // localStorage.setItem('ws-name', values.name);
             this.props.userHasRegistred();

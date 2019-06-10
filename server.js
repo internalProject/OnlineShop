@@ -225,7 +225,14 @@ app.post('/admin', jsonParser, (req, res) => {
 
 app.post('/search-stock-items', jsonParser, (req, res) => {
   console.log('req.body.searchState __ ',req.body.searchState);
-  console.log('OFFSET __ ',req.body.searchState.offset);
+  console.log('TERM __ length',req.body.searchState.term.length);
+  if (req.body.searchState.term.length === 0) {
+    Product.findAll()
+    .then( items => res.json(items) )
+    .catch( fail => res.json(fail) );
+    return;
+  }
+
   let allSearchhKeys = req.body.searchState.term.split(' ');
   let idKeys = allSearchhKeys.filter(key => {
     // check for not chars+integers
@@ -269,17 +276,6 @@ app.post('/search-stock-items', jsonParser, (req, res) => {
     } } )
     .then( items => res.json(items));
   }
-
-  // Product.findAll({where: {
-  //     [Op.or]: { // NOTE IT! necessary for multiple search
-  //       id: { [Op.in]: idKeys}, // search based on array of values - idKeys
-  //       name: {[Op.in]: allSearchhKeys}, // search based on array of values - allSearchKeys
-  //     },
-  //   },
-  //   raw: true, // this remove duplicates
-  // })
-  // .then( items => res.json(items) )
-  // .catch( fail => res.json(fail) )
 });
 
 app.post('/delete-product-by-id', jsonParser, (req, res) => {
@@ -318,18 +314,7 @@ app.post('/create-new-product', jsonParser, (req, res) => {
 
 app.get('/get-all-users', jsonParser, (req, res) => {
   User.findAll()
-  .then( users => { 
-    // let modifiedUsers = users.map(u => {
-    //   let newUser = {};
-
-    //   for (let f in u) {
-    //    if (f === 'password')  continue
-    //    else newUser[f] = u[f];
-    //   }
-    //   console.log('new user', newUser);
-    //   return newUser;
-    // });
-    // console.log('modified users', modifiedUsers);
+  .then( users => {
     res.json({users}); 
   })
   .catch( fail => res.json(fail) )

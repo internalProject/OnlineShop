@@ -8,10 +8,19 @@ const styles = theme => ({
         border: '1px dashed #ccc',
         margin: '10px',
         borderRadius: '25px',
+        ['@media (max-width: 510px)']: {
+            width: 'auto',
+            height: 'auto',
+            flexDirection: 'column'
+        },
     },
     id: {
         width: '10%',
         paddingTop: '50px',
+        ['@media (max-width: 510px)']: {
+            paddingTop: '0px',
+            fontSize: '1.7em',
+        },
     },
     name: {
         width: '20%',
@@ -19,6 +28,13 @@ const styles = theme => ({
         paddingLeft: '6px',
         paddingTop: '50px',
         color: '#ff9800',
+        ['@media (max-width: 510px)']: {
+            width: 'auto',
+            borderLeft: 'initial',
+            paddingTop: '0px',
+            alignSelf: 'center',
+            fontSize: '2em',
+        },
     },
     description: {
         width: '55%',
@@ -26,10 +42,23 @@ const styles = theme => ({
         overflowY: 'auto',
         padding: '10px',
         borderLeft: `2px solid ${theme.secondary.gray}`,
+        ['@media (max-width: 510px)']: {
+            width: 'auto',
+            borderLeft: 'initial',
+            fontSize: '1.2e',
+        }
+    },
+    itemControlSet: {
+        display: 'flex',
+        flexDirection: 'column',
+        justifyContent: 'space-around',
+        ['@media (max-width: 510px)']: {
+            flexDirection: 'row',
+        },
     },
     editBtn: {
         color: 'white',
-        width: '15%',
+        display: 'block',
     },
     dialog: {
         width: '400px',

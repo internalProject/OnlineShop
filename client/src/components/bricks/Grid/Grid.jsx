@@ -26,7 +26,7 @@ class Grid extends React.Component{
         super(props);
 
         this.state = {
-            isBanSnackOpen: false,
+            isBlockSnackOpen: false,
         }
     }
 
@@ -112,7 +112,7 @@ class Grid extends React.Component{
     }
 
     closeBanSnack = () => {
-        this.setState({isBanSnackOpen: false,});
+        this.setState({isBlockSnackOpen: false,});
     }
 
     clearCart = () => {
@@ -121,11 +121,10 @@ class Grid extends React.Component{
 
     goToOrderAddress = () => {
         if (!this.props.isLoggedIn) {
-            // this.state.continueClicked = this.setState({continueClicked: !this.state.continueClicked});
             return;
         }
-        if (this.props.user.disabled) {
-            this.setState({isBanSnackOpen: true,});
+        if (this.props.user.disabled || this.props.user.roleId === 1) {
+            this.setState({isBlockSnackOpen: true,});
             return;
         }
         this.props.history.push('/order-address');
@@ -199,7 +198,7 @@ class Grid extends React.Component{
                     null
                 }
                 <Snackbar
-                open={this.state.isBanSnackOpen}
+                open={this.state.isBlockSnackOpen}
                 onClose={this.closeBanSnack}
                 autoHideDuration={6000}
                 anchorOrigin={{vertical: 'top', horizontal: 'center'}}
@@ -224,6 +223,7 @@ const mapStateToProps = state => ({
     items: state.cartReducer.picked,
     isLoggedIn: state.userReducer.isLoggedIn,
     user: state.userReducer.user,
+    serverData: state.adminReducer.serverData,
 });
 const mapDispatchToProps = dispatch => ({
     pickOne: item => dispatch(pickOne(item)),

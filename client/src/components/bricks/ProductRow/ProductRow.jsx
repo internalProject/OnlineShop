@@ -4,6 +4,7 @@ import {connect} from 'react-redux';
 import {withStyles, IconButton, Button, Snackbar, SnackbarContent, } from '@material-ui/core';
 import {Dialog, DialogActions, DialogContent, DialogTitle, DialogContentText} from '@material-ui/core';
 import Edit from '@material-ui/icons/Edit';
+import { DeleteForever } from '@material-ui/icons';
 import Close from '@material-ui/icons/Close';
 import {Formik, Form, Field} from 'formik';
 import styles from './styles.js';
@@ -111,9 +112,14 @@ class ProductRow extends React.Component {
                 <div className={classes.id}>{this.props.item.id}</div>
                 <div className={classes.name}>{this.props.item.name}</div>
                 <div className={classes.description}>{this.props.item.description}</div>
-                <IconButton className={classes.editBtn} onClick={this.openEditModal}>
-                    <Edit />
-                </IconButton>
+                <div className={classes.itemControlSet}>
+                    <IconButton className={classes.editBtn} onClick={this.openEditModal}>
+                        <Edit />
+                    </IconButton>
+                    <IconButton className={classes.editBtn} onClick={this.tryToRemove}>
+                        <DeleteForever />
+                    </IconButton>
+                </div>
             </div>) 
             : null}
             

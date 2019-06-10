@@ -17,16 +17,6 @@ class UserOrdersDialog extends React.Component {
 
         }
     }
-
-    componentDidMount = () => {
-        this.props.getAllUserOrders(this.props.user.id);
-    }
-
-    componentDidUpdate = prevProps => {
-        if (this.props.user.id !== prevProps.user.id) {
-            this.props.getAllUserOrders(this.props.user.id);
-        }
-    }
     
     render = () => {
     const {classes} = this.props;

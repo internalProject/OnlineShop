@@ -23,6 +23,9 @@ const styles = theme => ({
         listStyleType: 'none',
         display: 'flex',
         backgroundColor: '#333',
+        ['@media (max-width: 510px)']: {
+            flexDirection: 'column',
+        },
     },
     adminLink: {
         padding: '8px',
