@@ -3,12 +3,12 @@ var express = require('express');
 var app = express();
 var lodash = require('lodash');
 const Sequelize = require('sequelize');
-const userModel = require('./alter models/user.js').userModel,
-orderModel = require('./alter models/order.js').orderModel,
-orderDetailModel = require('./alter models/orderDetail.js').orderDetailModel,
-productModel = require('./alter models/product.js').productModel,
-roleModel = require('./alter models/role.js').roleModel;
-
+const userModel = require('./serverSources/alter models/user.js').userModel,
+orderModel = require('./serverSources/alter models/order.js').orderModel,
+orderDetailModel = require('./serverSources/alter models/orderDetail.js').orderDetailModel,
+productModel = require('./serverSources/alter models/product.js').productModel,
+roleModel = require('./serverSources/alter models/role.js').roleModel;
+// var establishedModels = require('./dbPresets.js').models;
  
 const path = require('path');
 const bodyParser = require('body-parser');
@@ -73,6 +73,8 @@ Product.belongsToMany(Order, {through: OrderDetail, as: 'orderDetails', foreignK
 sequelize.sync();
 const jsonParser = bodyParser.json();
 const  urlencodedParser = bodyParser.urlencoded({ extended: false });
+
+// require('./test.js')(app, jsonParser, establishedModels);
 
 app.use(express.static(path.join(__dirname, 'client/dist')));
 app.use(cors());

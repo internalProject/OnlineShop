@@ -4,7 +4,6 @@ import {connect} from 'react-redux';
 import {withStyles} from '@material-ui/core';
 import styles from './style.js';
 import cn from 'classnames';
-import { orderDetailModel } from '../../../../../alter models/orderDetail.js';
 
 const dateToPropperFormat = date => {
     return  date.replace('T', '   ').slice(0, date.indexOf('.'));
