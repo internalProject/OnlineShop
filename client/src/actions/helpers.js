@@ -85,3 +85,12 @@ export const getUserOrdersByAdmin = async userId => {
     let serverResponse = await axios.post(urls.ALL_USER_ORDERS_BY_ADMIN, {userId});
     return serverResponse;
 }
+
+export const ping = async () => {
+    let serverResponse = await axios.get('/aksu');
+}
+
+export const getAllItems = async () => {
+    let serverResponse = await axios.get(urls.GET_TOTAL_ITEMS);
+    return serverResponse;
+}

@@ -9,7 +9,12 @@ import Close from '@material-ui/icons/Close';
 import {Formik, Form, Field} from 'formik';
 import styles from './styles.js';
 import {removeItem,saveChanges, } from '../../../actions/adminActions.js';
+import request from 'superagent';
+import {Image} from 'cloudinary-react';
 import cn from 'classnames';
+
+const PRESET_NAME = 'zelospreset';
+const CLOUDINARY_UPLOAD_URL = 'https://api.cloudinary.com/v1_1/zelos/upload'
 
 class ProductRow extends React.Component {
     constructor(props) {
@@ -22,7 +27,11 @@ class ProductRow extends React.Component {
             isEditModalOpen: false,
             isSnackOpen: false,
             disabledForm: false,
+            uploadedFile: null,
+            uploadedImageMsg: 'Image upload successfully!',
+            uploadedStatus: false,
         }
+        this.cloudinaryRef = React.createRef();
     }
 
     // TODO: 
@@ -100,7 +109,25 @@ class ProductRow extends React.Component {
     }
 
     closeSnack = () => {
-        this.setState({isSnackOpen: false});
+        this.setState({isSnackOpen: false, uploadedImageMsg: '', uploadedStatus: false,});
+    }
+
+    uploadImage = (e) => {
+        let upload = request.post(CLOUDINARY_UPLOAD_URL)
+        .field('upload_preset', PRESET_NAME)
+        .field('file', this.cloudinaryRef.current.files[0])
+        .field('folder', 'military')
+        .field('public_id', this.cloudinaryRef.current.files[0].name.slice(0, this.cloudinaryRef.current.files[0].name.indexOf('.')));
+
+        upload.end((err, response) => {
+            if (err) {
+                this.setState({isSnackOpen: true, uploadedStatus: true, uploadedImageMsg: 'Fail on image upload!'})
+            }
+
+            if (response.body.secure_url !== '') {
+                this.setState({isSnackOpen: true, uploadedStatus: true,})
+            }
+        });
     }
      
     render = () => {
@@ -110,7 +137,10 @@ class ProductRow extends React.Component {
             this.props.item ?
             (<div className={classes.item}>
                 <div className={classes.id}>{this.props.item.id}</div>
-                <div className={classes.name}>{this.props.item.name}</div>
+                <div className={classes.name}>
+                    <div className={classes.innerName}>{this.props.item.name}</div>
+                    <Image crop="scale" className={classes.cloudImage} cloudName="zelos" publicId={`military/${this.props.item.name}`} />                    
+                </div>
                 <div className={classes.description}>{this.props.item.description}</div>
                 <div className={classes.itemControlSet}>
                     <IconButton className={classes.editBtn} onClick={this.openEditModal}>
@@ -150,6 +180,11 @@ class ProductRow extends React.Component {
                                 <textarea {...field} name="description" className={classes.descrArea} value={values.description}></textarea>
                                 {errors && errors.description && <div className={classes.error}>{errors.description}</div>}
                             </>) }  />
+                            <input name="file" type="file"
+                                className="cloudinary-fileupload"
+                                onChange={this.uploadImage}
+                                ref={this.cloudinaryRef}
+                            />
                         </DialogContent>
                         <DialogActions className={classes.modalControls}>
                             <Button className={classes.toBlock} onClick={this.tryToRemove} variant="contained" color="secondary">Remove</Button>
@@ -189,7 +224,10 @@ class ProductRow extends React.Component {
                     message={<div>
                         <span>
                             {
-                                this.props.serverData && this.props.serverData.message ? this.props.serverData.message : null                                
+                                this.props.serverData && this.props.serverData.message && this.state.uploadedStatus ? this.props.serverData.message : null                             
+                            }
+                            {
+                                this.state.uploadedStatus ? this.state.uploadedImageMsg : ''
                             }
                         </span>
                         <IconButton style={{display: 'inline-block'}} color="inherit" style={{color: "white"}} onClick={this.closeSnack}>

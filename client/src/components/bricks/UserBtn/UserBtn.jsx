@@ -26,14 +26,6 @@ class UserBtn extends React.Component {
         }))
     }
 
-    componentDidMount = () => {
-        console.log(this.props);
-    }
-
-    componentDidUpdate = prevProps => {
-        console.log(this.props);
-    }
-
     render = () => {
         const {classes} = this.props;
 

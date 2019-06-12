@@ -5,7 +5,8 @@ import {
     getUserDataFromDb,
     fetchAllUserOrders,
     updateUserOnServer,
-    isAdmin
+    isAdmin,
+    getAllItems,
 } from './helpers.js';
 
 // export const getUserData = () => async dispatch => {
@@ -104,3 +105,9 @@ export const checkAccess = userId => async dispatch => {
 
 }
 
+export const getItems = () => async dispatch => {
+    let  serverResponse = await getAllItems();
+    if (serverResponse.status === 200) {
+        dispatch({type: 'ALL_ITEMS', data: {items: serverResponse.data.items, }, });
+    }
+}

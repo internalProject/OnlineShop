@@ -14,6 +14,7 @@ const urls = {
     GET_ALL_USERS: '/get-all-users',
     SWITCH_USER_STATUS: '/switch-user-status',
     ALL_USER_ORDERS_BY_ADMIN: '/all-user-orders',
+    GET_TOTAL_ITEMS: '/get-total',
 };
 
 export default urls;

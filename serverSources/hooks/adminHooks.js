@@ -146,3 +146,7 @@ module.exports = function (app, jsonParser, models) {
     })
   })
 }
+
+function dateToPropperFormat(date) {
+  return  date.replace('T', '   ').slice(0, date.indexOf('.'));
+}

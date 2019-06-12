@@ -5,8 +5,14 @@ import {withStyles} from '@material-ui/core';
 import Header from '../bricks/Header';
 import BestSellers from '../bricks/BestSellers';
 import styles from './styles.js';
+import {pingServer, } from '../../actions/ctrlActions.js';
+import {Image, Transformation, } from 'cloudinary-react';
 
 const Home = props =>{
+
+    const ping = async () => {
+        
+    }
 
     const {classes} = props;
 
@@ -29,6 +35,7 @@ const mapStateToProps = state => ({
 });
 
 const mapDispatchToProps = dispatch => ({
+    pingServer: () => dispatch(pingServer()),
 })
 
 export default compose(

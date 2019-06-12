@@ -133,4 +133,15 @@ module.exports = function (app, jsonParser, models) {
         } )
         .catch(fail => res.json(fail));
       });
+
+      app.get('/get-total', jsonParser, (req, res) => {
+        models.Product.findAll()
+        .then( items => res.json({items}))
+        .catch( fail => res.json(fail));
+      })
+}
+
+
+function dateToPropperFormat(date) {
+  return  date.replace('T', '   ').slice(0, date.indexOf('.'));
 }

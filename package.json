@@ -13,11 +13,13 @@
     "chance": "^1.0.18",
     "cors": "^2.8.5",
     "express": "^4.16.4",
+    "fs": "0.0.1-security",
     "json-stringify-safe": "^5.0.1",
     "lodash": "^4.17.11",
     "path": "^0.12.7",
     "pg": "^7.9.0",
     "pg-hstore": "^2.3.2",
+    "promise-fs": "^2.1.0",
     "sequelize": "^5.6.0"
   }
 }

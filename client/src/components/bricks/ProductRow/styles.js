@@ -25,16 +25,26 @@ const styles = theme => ({
     name: {
         width: '20%',
         borderLeft: `2px solid ${theme.secondary.gray}`,
+        display: 'flex',
+        flexDirection: 'column',
         paddingLeft: '6px',
-        paddingTop: '50px',
+        // paddingTop: '50px',
         color: '#ff9800',
         ['@media (max-width: 510px)']: {
             width: 'auto',
             borderLeft: 'initial',
             paddingTop: '0px',
-            alignSelf: 'center',
+            flexDirection: 'row',
+            justifyContent: 'space-around',
             fontSize: '2em',
         },
+    },
+    cloudImage: {
+        display: 'block',
+        width: '85px',
+    },
+    innerName: {
+        marginBottom: '5px',
     },
     description: {
         width: '55%',
