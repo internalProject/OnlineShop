@@ -131,6 +131,16 @@ export default function adminReducer(state = initialAdmin, action) {
                 userOrders: [...action.data],
                 userOrdersCounter: ++state.userOrdersCounter,
             }
+        case 'SORT_PRODUCTS':
+            return {...state,
+                searchResult: {
+                    items: [...state.searchResult.items].sort( (a, b) => {
+                        if (a[action.data] > b[action.data]) return 1;
+                        if (a[action.data] < b[action.data]) return -1;
+                        return 0;
+                    })
+                }
+            }
     }
     return state;
 }

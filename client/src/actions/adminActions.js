@@ -86,3 +86,7 @@ export const getAllUserOrders = userId => async dispatch => {
     }
 }
 
+export const sortProducts = option => dispatch => {
+    dispatch({type: 'SORT_PRODUCTS', data: option});
+}
+

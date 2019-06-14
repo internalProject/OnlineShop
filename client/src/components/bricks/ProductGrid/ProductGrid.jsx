@@ -6,7 +6,7 @@ import {withStyles, TextField, IconButton, Button, Snackbar, SnackbarContent,} f
 import Search from '@material-ui/icons/Search';
 import Close from '@material-ui/icons/Close';
 import {NavigateBefore, NavigateNext} from '@material-ui/icons';
-import {findItems, clearSearchResult, } from '../../../actions/adminActions.js';
+import {findItems, clearSearchResult, sortProducts} from '../../../actions/adminActions.js';
 import ProductRow from '../ProductRow';
 import AddNewProduct from '../AddNewProduct';
 import styles, {root} from './styles.js';
@@ -26,6 +26,7 @@ class ProductGrid extends React.Component {
             changeSelect: 'names',
             offset: 0,
             btnsForDisplay: [],
+            sortOption: 'id',
         };
         this.searchBarRef =  React.createRef();
     }
@@ -34,7 +35,7 @@ class ProductGrid extends React.Component {
         this.findItemsByQuery( );
     }
 
-    componentDidUpdate = prevProps => {
+    componentDidUpdate = (prevProps, prevState) => {
         if ( (this.props.searchCounter !== prevProps.searchCounter) && this.props.searchResult.message !== '' && (this.props.searchResult.items.length === 0) ) {
             this.setState({isSnackOpen: true, searchMsg: true, removeMsg: false, createdMsg: false, })
         }
@@ -54,6 +55,12 @@ class ProductGrid extends React.Component {
                 newArray[i] = i+1;
             }
             this.setState({btnsForDisplay: newArray, offset: 0});
+        }
+        if ( (this.props.searchResult.items.length > 0) && (prevProps.searchResult.items.length === 0) ) {
+            this.props.sortProducts(this.state.sortOption);
+        }
+        if ( this.state.searchTerm === '' && (prevState.searchTerm !== '') ) {
+            this.findItemsByQuery();
         }
     }
 
@@ -94,6 +101,11 @@ class ProductGrid extends React.Component {
     seeNext = () => {
         this.setState({offset: this.state.offset + 3});
     }
+    
+    sortProducts = e => {
+        this.setState({sortOption: e.target.value});
+        this.props.sortProducts(e.target.value);
+    }
 
     render = () => {
         const {classes} = this.props;
@@ -123,6 +135,12 @@ class ProductGrid extends React.Component {
                     <Button variant="contained" size="small" onClick={this.clearSearchResultAndBar}>Clear Searh Result</Button>
 
                     <Button className={classes.createNewProduct} variant="contained" size="medium" color="primary" onClick={this.openNewPropductForm}>Create New Product</Button>
+                    <label>Sort products by: 
+                        <select className={classes.searchSelect} defaultValue="id" onChange={this.sortProducts}>
+                            <option value="id">Id</option>
+                            <option value="name">Name</option>
+                        </select>
+                    </label>
                 </div>
             </div>
             <div className={classes.addNewProduct}>
@@ -189,6 +207,7 @@ const mapStateToProps = state => ({
 const mapDispatchToProps = dispatch => ({
     findItems: query => dispatch(findItems(query)),
     clearSearchResult: () => dispatch(clearSearchResult()),
+    sortProducts: option => dispatch(sortProducts(option)),
 });
 
 export default compose(

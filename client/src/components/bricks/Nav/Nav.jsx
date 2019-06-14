@@ -31,10 +31,12 @@ class Nav extends React.Component {
             <li className={classes.navLi}>
                 <Link className={classes.link} to="/cart">CART</Link>
             </li>
+            {this.props.user && (this.props.user.roleId === 2) ?
             <li className={classes.navLi}>
                 <Link className={classes.link} to="/my-orders">MY ORDERS
                 </Link>
             </li>
+            :null}
             <li className={classes.navLi}>
                 <Link className={classes.link} to="/profile">PROFILE
                 </Link>

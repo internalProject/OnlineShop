@@ -39,9 +39,11 @@ const UserProfileFrame = props => {
                         <Link className={classes.liContent} to="/cart"><div>Cart</div></Link> 
                         {/* apply classes.menuLi for this Link */}
                     </li>
+                    {props.user && (props.user.roleId === 2) ?
                     <li className={classes.menuLi}>
                         <Link className={classes.liContent} to="/my-orders">My Orders</Link>
                     </li>
+                    : null }
                     <hr/>
                     <li className={classes.menuLi}>
                         <IconButton className={classes.liContent} style={{color: 'white'}} onClick={props.exit}><span className={classes.logoutText}>Log out                    </span>  

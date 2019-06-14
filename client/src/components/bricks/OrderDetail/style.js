@@ -5,6 +5,7 @@ const styles = theme => ({
         width: '500px',
         border: `1px solid ${theme.secondary.gray}`,
         margin: '15px 0px',
+        backgroundColor: '#333',
     },
     pair: {
         display: 'flex',
@@ -24,11 +25,11 @@ const styles = theme => ({
         color: theme.secondary.gray,
     },
     fieldName: {
-        width: '25%',
+        width: '50%',
         borderRight: `1px dashed ${theme.secondary.gray}`,
     },
     fieldValue: {
-        width: '75%',
+        width: '50%',
         color: theme.item.headerColor,
         padding: '4px',
         paddingLeft: '10px',
